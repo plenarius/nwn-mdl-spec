@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
-// mdl-spec adapter for Moonglow Toolset's mg-mdl crate.
+// nwn-mdl-spec adapter for Moonglow Toolset's mg-mdl crate.
 //   mgconf compile   <in.mdl> <out.mdl>   mg_mdl::compile::compile_named; a
 //                                         supermodel is looked up next to the input
 //   mgconf decompile <in.mdl> <out.mdl>   mg_mdl::decompile

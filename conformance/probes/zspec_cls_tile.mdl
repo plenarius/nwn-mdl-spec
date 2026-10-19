@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_cls_tile (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_cls_tile (CC0-1.0)
 # Classification keyword value 'TILE'.
 newmodel zspec_cls_tile
 setsupermodel zspec_cls_tile NULL

@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_skin (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_skin (CC0-1.0)
 # A skinned mesh weighted to two bones of its own model (a whole model,
 # not a body part). The engine's compilemodel needs a creature using the
 # model on screen to compile a skin, so this probe has no golden yet.

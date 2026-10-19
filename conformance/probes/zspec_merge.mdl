@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_merge (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_merge (CC0-1.0)
 # Vertex merging (face corners -> GPU vertices). Every node has explicit
 # normals so the normals are equal where the key says they should be.
 #  shared:  two faces sharing an edge; different smoothing groups and

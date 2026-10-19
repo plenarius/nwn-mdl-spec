@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: CC0-1.0
-"""mdl-spec conformance runner (standard library only).
+"""nwn-mdl-spec conformance runner (standard library only).
 
   mdlconf.py run --impl NAME --cmd 'COMMAND' [--only PROBE ...] [--json OUT]
       Run an implementation through the suite. COMMAND is called as

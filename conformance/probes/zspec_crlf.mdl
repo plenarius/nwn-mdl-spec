@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_crlf (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_crlf (CC0-1.0)
 # The same model as zspec_dummy with CRLF line endings.
 newmodel zspec_crlf
 setsupermodel zspec_crlf NULL

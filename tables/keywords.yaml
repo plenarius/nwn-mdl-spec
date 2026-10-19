@@ -20,7 +20,7 @@
 #                   most the controller's width (MDL-CTRL-030); `<word>key`
 #                   and `<word>bezierkey` are its key lists
 #          list<T>  a counted or endlist-terminated list (MDL-ASCII-050)
-schema: mdl-spec/keywords/1
+schema: nwn-mdl-spec/keywords/1
 build: 89.8193.37-17
 parsers:
   - {id: top, function: "unnamed dispatcher called per top-level line", address: 0x446330}

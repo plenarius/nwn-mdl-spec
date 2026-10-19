@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_bezier2 (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_bezier2 (CC0-1.0)
 # Bezier keys cmbez01 does not cover: positionbezierkey, light
 # shadowradius and verticaldisplacement, emitter colorMid, sizeStart_y and
 # percentEnd. Also a bezier key list on a geometry node (one key).

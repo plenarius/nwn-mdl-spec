@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_cls_gui (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_cls_gui (CC0-1.0)
 # Classification keyword value 'gui' and 'ignorefog 0'.
 newmodel zspec_cls_gui
 setsupermodel zspec_cls_gui NULL

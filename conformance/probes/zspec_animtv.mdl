@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_animtv (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_animtv (CC0-1.0)
 # An animmesh with 4 verts and 5 tverts, one vertex split by its UV: how the
 # sets are laid out per GPU vertex and what the tvert sets are divided by.
 newmodel zspec_animtv

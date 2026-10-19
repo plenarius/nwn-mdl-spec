@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_cls_item (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_cls_item (CC0-1.0)
 # Classification keyword value 'item'.
 newmodel zspec_cls_item
 setsupermodel zspec_cls_item NULL

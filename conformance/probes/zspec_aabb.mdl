@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_aabb (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_aabb (CC0-1.0)
 # AABB walkmesh: face materials and an authored tree (preorder, leaf -1 = inner node).
 newmodel zspec_aabb
 setsupermodel zspec_aabb NULL

@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_anim (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_anim (CC0-1.0)
 # Linear animation keys on a dummy (positionkey with a count, orientationkey
 # closed by endlist, scalekey with a count, an empty line inside and a
 # trailing endlist) and on a trimesh (alphakey, selfillumcolorkey). Events,

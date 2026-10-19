@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_nodetypes (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_nodetypes (CC0-1.0)
 # Node type words: camera, an unknown type ('patch'), and mixed case
 # ('TriMesh', 'DUMMY').
 newmodel zspec_nodetypes

@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_tsort24 (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_tsort24 (CC0-1.0)
 # Child order with 24 children (dummies and meshes with transparency hints
 # -1 to 7): past 16, std::sort is not stable.
 newmodel zspec_tsort24

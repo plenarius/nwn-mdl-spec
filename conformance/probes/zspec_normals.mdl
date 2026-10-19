@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_normals (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_normals (CC0-1.0)
 # Normal generation from smoothing groups (no normals in the file).
 #  smooth:     a pyramid, one smoothing group.
 #  backtoback: two faces on the same vertices with opposite winding, same

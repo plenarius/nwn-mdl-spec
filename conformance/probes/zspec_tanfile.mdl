@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_tanfile (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_tanfile (CC0-1.0)
 # Normals and tangents given in the file with a normal-mapped hint: are
 # they stored as written (not regenerated)? The tangents are deliberately
 # not what generation would give.

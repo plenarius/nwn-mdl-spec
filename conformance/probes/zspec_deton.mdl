@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_deton (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_deton (CC0-1.0)
 # A bare detonate line on a geometry emitter: its column byte.
 newmodel zspec_deton
 setsupermodel zspec_deton NULL

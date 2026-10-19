@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_dummy (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_dummy (CC0-1.0)
 # Model header fields and the base node: position, orientation, scale,
 # wirecolor, inheritcolor.
 newmodel zspec_dummy

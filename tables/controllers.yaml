@@ -13,7 +13,7 @@
 # keyword: the engine's ASCII spelling (matched case-insensitively);
 # `<keyword>key` and `<keyword>bezierkey` are the key-list forms.
 # default: the value a decompiler may omit (only where known).
-schema: mdl-spec/controllers/1
+schema: nwn-mdl-spec/controllers/1
 build: 89.8193.37-17
 controllers:
   - {id: 8, name: position, applies: base, columns: 3, keyword: position, static: true, key: true, bezier: true, default: [0, 0, 0], status: confirmed, evidence: "zspec_dummy, zspec_anim, zspec_bezier2", note: "positionkey, positionbezierkey"}

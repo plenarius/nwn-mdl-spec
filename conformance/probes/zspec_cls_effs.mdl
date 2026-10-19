@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_cls_effs (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_cls_effs (CC0-1.0)
 # Classification keyword value 'Effects'.
 newmodel zspec_cls_effs
 setsupermodel zspec_cls_effs NULL

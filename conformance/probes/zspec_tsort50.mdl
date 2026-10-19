@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_tsort50 (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_tsort50 (CC0-1.0)
 # Child order with 50 children (see zspec_tsort24).
 newmodel zspec_tsort50
 setsupermodel zspec_tsort50 NULL

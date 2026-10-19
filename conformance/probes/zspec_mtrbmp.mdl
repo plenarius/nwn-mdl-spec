@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_mtrbmp (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_mtrbmp (CC0-1.0)
 # No renderhint and no materialname: the bitmap names a material
 # (zspec_mtrbmp.mtr, renderhint NormalAndSpecMapped). Is the bitmap
 # looked up as a material?

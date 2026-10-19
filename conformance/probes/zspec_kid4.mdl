@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_kid4 (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_kid4 (CC0-1.0)
 # Numbering against the supermodel zspec_super of nodes it lacks, declared out
 # of tree order: children of a matched node (extra, lone) and nodes under an
 # unmatched parent (deep_a, deep_b, deeper, lone_c), whose numbers show

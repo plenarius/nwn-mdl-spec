@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_aabbdeg (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_aabbdeg (CC0-1.0)
 # AABB walkmesh whose second face repeats a vertex (degenerate after merging). Is the face removed, and is the authored tree re-indexed?
 newmodel zspec_aabbdeg
 setsupermodel zspec_aabbdeg NULL

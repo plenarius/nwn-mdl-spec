@@ -2,7 +2,7 @@
 # here, never copied. `mdlconf.py stock` extracts each from the user's own
 # install (data/nwn_base.key), decompiles it with the implementation and
 # compares the ASCII with the runner's decode of the same binary.
-schema: mdl-spec/stock/1
+schema: nwn-mdl-spec/stock/1
 build: 89.8193.37-17
 models:
   - {resref: tcn01_a15_01, producer: bioware, why: "1.69 water mesh (Plane452): the EE tangent slots hold a bump-map stream that is not tangents", rules: [MDL-BIN-048]}

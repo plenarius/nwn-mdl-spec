@@ -1,7 +1,7 @@
 # Render hint: the u32 at mesh header +116 (node +228) (CC0-1.0).
 # Values are what SharedMaterial::ExtractRenderHint (0x4c5410) returns for
 # the mesh's `renderhint` word, compared case-insensitively.
-schema: mdl-spec/render_hints/1
+schema: nwn-mdl-spec/render_hints/1
 build: 89.8193.37-17
 values:
   - {value: 0, ascii: "(none given, or any other word)", tangents: false, status: confirmed, evidence: "zspec_hints hint_bogus, zspec_trimesh"}

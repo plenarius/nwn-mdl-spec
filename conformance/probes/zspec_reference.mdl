@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_reference (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_reference (CC0-1.0)
 # Reference nodes: refModel and reattachable, and one with defaults.
 newmodel zspec_reference
 setsupermodel zspec_reference NULL

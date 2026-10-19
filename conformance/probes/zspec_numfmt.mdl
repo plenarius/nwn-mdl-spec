@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_numfmt (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_numfmt (CC0-1.0)
 # Well-formed number and keyword forms: exponents, a leading + or -, a
 # leading or trailing decimal point, leading zeros, tabs between values,
 # a comment after the values, and keywords in any case. (zspec_numbers

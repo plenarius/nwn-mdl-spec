@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_hint_mesh (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_hint_mesh (CC0-1.0)
 # renderhint NormalAndSpecMapped on the mesh: the hint field, generated
 # normals and generated tangents with handedness.
 newmodel zspec_hint_mesh

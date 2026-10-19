@@ -1,7 +1,7 @@
 # Node content flags: the u32 at node header +108 (CC0-1.0). Format: README.md.
 # The flags are the only reliable node type tag in a binary; the function
 # pointers at node +0 hold runtime values in EE output (MDL-BIN-030).
-schema: mdl-spec/node_flags/1
+schema: nwn-mdl-spec/node_flags/1
 build: 89.8193.37-17
 bits:
   - {bit: 0x001, name: header, header_bytes: 112, note: "set on every node"}

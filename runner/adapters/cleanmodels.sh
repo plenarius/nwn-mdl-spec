@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: CC0-1.0
-# mdl-spec adapter for cleanmodels (https://github.com/plenarius/cleanmodels).
+# nwn-mdl-spec adapter for cleanmodels (https://github.com/plenarius/cleanmodels).
 #   cleanmodels.sh compile|decompile <in.mdl> <out.mdl>
 # Set CLEANMODELS to the binary if it is not on PATH. cleanmodels searches
 # the input's own folder for materials and supermodels, which is where the

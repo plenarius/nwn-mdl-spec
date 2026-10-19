@@ -1,7 +1,7 @@
 # Model classification: the byte at model header +114 (CC0-1.0).
 # classification(char*) (0x446440) compares the word case-insensitively;
 # any word not listed leaves the byte 0.
-schema: mdl-spec/classification/1
+schema: nwn-mdl-spec/classification/1
 build: 89.8193.37-17
 values:
   - {value: 0, ascii: "(anything else: gui, item, other, tiles, ...)", status: confirmed, evidence: "zspec_cls_gui, zspec_cls_item, zspec_cls_tiles"}

@@ -1,4 +1,4 @@
-# mdl-spec conformance probe zspec_emitter (CC0-1.0)
+# nwn-mdl-spec conformance probe zspec_emitter (CC0-1.0)
 # Emitter: every header field and flag (two emitters with complementary
 # flag patterns) and every static controller the parser knows, including
 # the three-stop values (colorMid, alphaMid, sizeMid, sizeMid_y,
