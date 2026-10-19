@@ -4,9 +4,9 @@
 # See spec/binary.md for the rules this encodes and their evidence.
 #
 # Written in a plain YAML style (one flow mapping per field) so the suite's
-# standard-library checker (ksy/check_ksy.py) can read it. It has not been
-# compiled with kaitai-struct-compiler yet (none on the machine it was
-# written on); check_ksy.py decodes every golden with it.
+# standard-library checker (ksy/check_ksy.py) can read it. Compiled with
+# kaitai-struct-compiler 0.10 and 0.11 (style warnings only); see README.md
+# for how it is checked.
 meta:
   id: nwn_mdl
   title: Neverwinter Nights Enhanced Edition binary model
@@ -54,7 +54,7 @@ types:
     doc: "112 bytes, at the start of the model header and of every animation header (MDL-BIN-010)."
     seq:
       - {id: function_pointers, type: u4, repeat: expr, repeat-expr: 2, doc: "runtime values in EE output; ignore"}
-      - {id: name, type: str, size: 64, terminator: 0, encoding: ASCII}
+      - {id: name, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
       - {id: root_node_offset, type: u4}
       - {id: node_count, type: u4, doc: "MDL-NODE-030"}
       - {id: runtime_array1, type: array_def}
@@ -78,7 +78,7 @@ types:
       - {id: bmax, type: vec3}
       - {id: radius, type: f4}
       - {id: animation_scale, type: f4}
-      - {id: supermodel_name, type: str, size: 64, terminator: 0, encoding: ASCII}
+      - {id: supermodel_name, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
     instances:
       animation_list: {pos: "12 + animations.offset", type: animation_ref, repeat: expr, repeat-expr: animations.count}
   animation_ref:
@@ -92,14 +92,14 @@ types:
       - {id: geometry, type: geometry_header}
       - {id: length, type: f4}
       - {id: transtime, type: f4}
-      - {id: animroot, type: str, size: 64, terminator: 0, encoding: ASCII}
+      - {id: animroot, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
       - {id: events, type: array_def}
     instances:
       event_list: {pos: "12 + events.offset", type: event, repeat: expr, repeat-expr: events.count}
   event:
     seq:
       - {id: time, type: f4}
-      - {id: name, type: str, size: 32, terminator: 0, encoding: ASCII}
+      - {id: name, type: str, size: 32, terminator: 0, encoding: ISO-8859-1}
   node_ref:
     seq:
       - {id: offset, type: u4}
@@ -111,7 +111,7 @@ types:
       - {id: function_pointers, type: u4, repeat: expr, repeat-expr: 6, doc: "runtime values in EE output; ignore (MDL-BIN-030)"}
       - {id: inherit_color, type: u4}
       - {id: part_number, type: s4, doc: "MDL-NODE-010"}
-      - {id: name, type: str, size: 32, terminator: 0, encoding: ASCII}
+      - {id: name, type: str, size: 32, terminator: 0, encoding: ISO-8859-1}
       - {id: geometry_pointer, type: u4, doc: "runtime; ignore"}
       - {id: parent_pointer, type: u4, doc: "runtime; ignore; rebuild parents from children"}
       - {id: children, type: array_def}
@@ -167,7 +167,7 @@ types:
     seq:
       - {id: offset, type: u4}
     instances:
-      value: {pos: "12 + offset", type: strz, encoding: ASCII}
+      value: {pos: "12 + offset", type: strz, encoding: ISO-8859-1}
   emitter_header:
     doc: "216 bytes (MDL-BIN-041)."
     seq:
@@ -177,11 +177,11 @@ types:
       - {id: x_grid, type: u4, doc: "uninitialised when the ASCII has no xgrid (MDL-BIN-052)"}
       - {id: y_grid, type: u4}
       - {id: spawn_type, type: u4}
-      - {id: update, type: str, size: 32, terminator: 0, encoding: ASCII}
-      - {id: render, type: str, size: 32, terminator: 0, encoding: ASCII}
-      - {id: blend, type: str, size: 32, terminator: 0, encoding: ASCII}
-      - {id: texture, type: str, size: 64, terminator: 0, encoding: ASCII}
-      - {id: chunk_name, type: str, size: 16, terminator: 0, encoding: ASCII}
+      - {id: update, type: str, size: 32, terminator: 0, encoding: ISO-8859-1}
+      - {id: render, type: str, size: 32, terminator: 0, encoding: ISO-8859-1}
+      - {id: blend, type: str, size: 32, terminator: 0, encoding: ISO-8859-1}
+      - {id: texture, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
+      - {id: chunk_name, type: str, size: 16, terminator: 0, encoding: ISO-8859-1}
       - {id: two_sided_tex, type: u4}
       - {id: loop, type: u4}
       - {id: render_order, type: u2}
@@ -190,7 +190,7 @@ types:
   reference_header:
     doc: "68 bytes (MDL-BIN-042)."
     seq:
-      - {id: ref_model, type: str, size: 64, terminator: 0, encoding: ASCII}
+      - {id: ref_model, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
       - {id: reattachable, type: u4}
   mesh_header:
     doc: "512 bytes (MDL-BIN-043)."
@@ -210,10 +210,10 @@ types:
       - {id: render, type: u4}
       - {id: transparency_hint, type: u4}
       - {id: render_hint, type: u4, doc: "tables/render_hints.yaml"}
-      - {id: texture0, type: str, size: 64, terminator: 0, encoding: ASCII}
-      - {id: texture1, type: str, size: 64, terminator: 0, encoding: ASCII}
-      - {id: texture2, type: str, size: 64, terminator: 0, encoding: ASCII}
-      - {id: texture3, type: str, size: 64, terminator: 0, encoding: ASCII, doc: "the materialname"}
+      - {id: texture0, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
+      - {id: texture1, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
+      - {id: texture2, type: str, size: 64, terminator: 0, encoding: ISO-8859-1}
+      - {id: texture3, type: str, size: 64, terminator: 0, encoding: ISO-8859-1, doc: "the materialname"}
       - {id: tile_fade, type: u4}
       - {id: vertex_indices, type: array_def}
       - {id: leftover_faces, type: array_def}

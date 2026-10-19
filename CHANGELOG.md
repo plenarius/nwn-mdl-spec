@@ -40,4 +40,8 @@ Corrections after the first draft:
   identity); any other count is skipped. Readers must use the column count;
   MDL-CTRL-021 now says nwnmdlcomp's 0x19 bezier controllers are skipped in
   game. The runner compares a short controller through those initial values.
+- The `.ksy` compiles with kaitai-struct-compiler 0.10 and 0.11; strings
+  are ISO-8859-1 (old files hold bytes above 127); `check_ksy.py
+  --generated DIR` checks a generated parser, which decodes every golden and
+  all 25,597 base-game binaries identically (ksy/README.md).
 - Reports rerun on the 46 probes.

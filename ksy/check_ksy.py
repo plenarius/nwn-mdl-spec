@@ -9,6 +9,9 @@ checked without kaitai-struct-compiler. Expressions are translated to
 Python and evaluated with no builtins.
 
   check_ksy.py [golden.mdl ...]     (default: conformance/goldens/*.mdl)
+  check_ksy.py --generated DIR [golden.mdl ...]
+      the same check with the parser kaitai-struct-compiler generated into
+      DIR (`kaitai-struct-compiler -t python --outdir DIR nwn_mdl.ksy`)
 """
 import glob
 import math
@@ -135,9 +138,15 @@ class Reader:
         return root
 
 
+def opt(obj, name):
+    """A conditional field: generated Kaitai parsers leave it unset when its
+    `if` is false, where the interpreter sets None."""
+    return getattr(obj, name, None)
+
+
 def walk(node, out):
     out.append(node)
-    for ref in node.child_list or []:
+    for ref in opt(node, 'child_list') or []:
         walk(ref.node, out)
 
 
@@ -148,9 +157,9 @@ def near(a, b):
     return a == b or (math.isnan(a) and math.isnan(b)) or abs(a - b) <= 1e-6 * max(1, abs(a), abs(b))
 
 
-def check(path, ksy):
+def check(path, ksy, generated=None):
     data = open(path, 'rb').read()
-    root = Reader(ksy, data).read_root(ksy)
+    root = generated.from_bytes(data) if generated else Reader(ksy, data).read_root(ksy)
     view = mdlview.read_binary(data)
     problems = []
 
@@ -172,32 +181,39 @@ def check(path, ksy):
         eq(p + ' number', kn.part_number, vn['number'])
         eq(p + ' controllers', [(c.type, c.rows, c.column_byte) for c in kn.controller_list],
            [(c['id'], len(c['keys']), c['colbyte']) for c in vn['controllers']])
-        if kn.mesh is not None:
+        if opt(kn, 'mesh') is not None:
             me, vm = kn.mesh, vn['mesh']
             eq(p + ' vertex_count', me.vertex_count, vm['vertex_count'])
             eq(p + ' faces', [list(f.vertices) for f in me.face_list], [f['v'] for f in vm['faces']])
             eq(p + ' render_hint', me.render_hint, vm['renderhint'])
             eq(p + ' textures', [me.texture0, me.texture1, me.texture2, me.texture3], vm['textures'])
-            if me.positions is not None:
-                eq(p + ' positions', [mdlview.nums([v.x, v.y, v.z]) for v in me.positions], vm['vertices']['position'])
-            if me.tangents is not None:
+            if opt(me, 'positions') is not None:
+                eq(p + ' positions', [mdlview.nums([v.x, v.y, v.z]) for v in me.positions],
+                   vm['vertices'].get('position', []))
+            # The view leaves out a stream in the tangent slot that is not
+            # tangents (1.69 water's bump-map stream, MDL-BIN-048); the .ksy
+            # describes the slot, not what it holds.
+            if opt(me, 'tangents') is not None and 'tangent' in vm['vertices']:
                 eq(p + ' tangents', [mdlview.nums([v.x, v.y, v.z]) for v in me.tangents], vm['vertices']['tangent'])
-            if me.index_list0 is not None:
+            if opt(me, 'index_list0') is not None:
                 eq(p + ' index list', list(me.index_list0), vm['index_lists'][0] if vm['index_lists'] else [])
-            eq(p + ' header bytes', me._size, 512)
-        if kn.light is not None:
+            if hasattr(me, '_size'):  # the interpreter's; generated parsers have none
+                eq(p + ' header bytes', me._size, 512)
+        if opt(kn, 'light') is not None:
             eq(p + ' light priority', kn.light.light_priority, vn['light']['lightpriority'])
             eq(p + ' flare textures', [t.value for t in kn.light.flare_texture_list], vn['light']['texturenames'])
-            eq(p + ' light header bytes', kn.light._size, 92)
-        if kn.emitter is not None:
+            if hasattr(kn.light, '_size'):
+                eq(p + ' light header bytes', kn.light._size, 92)
+        if opt(kn, 'emitter') is not None:
             eq(p + ' emitter', [kn.emitter.update, kn.emitter.render, kn.emitter.blend, kn.emitter.flags],
                [vn['emitter'][k] for k in ('update', 'render', 'blend', 'flags')])
-            eq(p + ' emitter header bytes', kn.emitter._size, 216)
-        if kn.reference is not None:
+            if hasattr(kn.emitter, '_size'):
+                eq(p + ' emitter header bytes', kn.emitter._size, 216)
+        if opt(kn, 'reference') is not None:
             eq(p + ' refmodel', kn.reference.ref_model, vn['reference']['refmodel'])
-        if kn.dangly is not None:
+        if opt(kn, 'dangly') is not None:
             eq(p + ' constraints', mdlview.nums(kn.dangly.constraint_list), vn['dangly']['constraints'])
-        if kn.aabb is not None:
+        if opt(kn, 'aabb') is not None:
             entries = []
 
             def tree(e):
@@ -219,7 +235,7 @@ def check(path, ksy):
         for kn, vn in zip(an, va['nodes']):
             eq('anim node %s controllers' % kn.name, [(c.type, c.rows, c.column_byte) for c in kn.controller_list],
                [(c['id'], len(c['keys']), c['colbyte']) for c in vn['controllers']])
-            if kn.anim is not None and kn.anim.vertex_sets is not None:
+            if opt(kn, 'anim') is not None and opt(kn.anim, 'vertex_sets') is not None:
                 nv, sets = kn.mesh.vertex_count, kn.anim.vertex_set_count
                 setmajor = [mdlview.nums([kn.anim.vertex_sets[v * sets + s].x, kn.anim.vertex_sets[v * sets + s].y,
                                           kn.anim.vertex_sets[v * sets + s].z]) for s in range(sets) for v in range(nv)]
@@ -228,12 +244,20 @@ def check(path, ksy):
 
 
 def main():
+    args = sys.argv[1:]
+    generated = None
+    if args[:1] == ['--generated']:
+        # A parser kaitai-struct-compiler generated from nwn_mdl.ksy
+        # (`-t python --outdir DIR`); needs the kaitaistruct runtime.
+        sys.path.insert(0, args[1])
+        from nwn_mdl import NwnMdl
+        generated, args = NwnMdl, args[2:]
     ksy = miniyaml.load(os.path.join(HERE, 'nwn_mdl.ksy'))
-    files = sys.argv[1:] or sorted(glob.glob(os.path.join(ROOT, 'conformance', 'goldens', '*.mdl')))
+    files = args or sorted(glob.glob(os.path.join(ROOT, 'conformance', 'goldens', '*.mdl')))
     bad = 0
     for f in files:
         try:
-            problems = check(f, ksy)
+            problems = check(f, ksy, generated)
         except Exception as e:  # noqa: BLE001 - report and go on
             problems = ['decode failed: %s' % e]
         name = os.path.basename(f)
@@ -244,7 +268,8 @@ def main():
                 print('    ' + p)
         else:
             print('%-20s ok' % name)
-    print('%d of %d goldens decode identically with nwn_mdl.ksy' % (len(files) - bad, len(files)))
+    print('%d of %d files decode identically with nwn_mdl.ksy (%s)' % (
+        len(files) - bad, len(files), 'kaitai-struct-compiler parser' if generated else 'interpreter'))
     sys.exit(1 if bad else 0)
 
 
