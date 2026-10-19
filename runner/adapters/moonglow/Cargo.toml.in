@@ -1,0 +1,8 @@
+[package]
+name = "mgconf"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+mg-mdl = { path = "@MOONGLOW@/crates/mg-mdl" }
