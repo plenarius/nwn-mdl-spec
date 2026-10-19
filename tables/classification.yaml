@@ -1,0 +1,12 @@
+# Model classification: the byte at model header +114 (CC0-1.0).
+# classification(char*) (0x446440) compares the word case-insensitively;
+# any word not listed leaves the byte 0.
+schema: mdl-spec/classification/1
+build: 89.8193.37-17
+values:
+  - {value: 0, ascii: "(anything else: gui, item, other, tiles, ...)", status: confirmed, evidence: "zspec_cls_gui, zspec_cls_item, zspec_cls_tiles"}
+  - {value: 1, ascii: [effect, effects], status: confirmed, evidence: "zspec_cls_effs, zspec_reference"}
+  - {value: 2, ascii: [tile], status: confirmed, evidence: "zspec_cls_tile, zspec_aabb"}
+  - {value: 4, ascii: [character], status: confirmed, evidence: "zspec_dummy"}
+  - {value: 8, ascii: [door], status: confirmed, evidence: "zspec_cls_door"}
+# Only "effects" has a plural form. "tiles", "characters" and "doors" give 0.

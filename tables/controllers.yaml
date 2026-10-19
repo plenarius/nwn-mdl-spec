@@ -1,0 +1,96 @@
+# NWN:EE binary controller IDs, by node class (CC0-1.0).
+# Format: tables/README.md. Build: 89.8193.37-17 (nwmain-linux, commit 26c6e573).
+#
+# A controller is named by (node class, id): the same id means different
+# things on different node types (100 is selfillumcolor on a mesh and
+# verticaldisplacement on a light). Resolve in the order emitter, light,
+# mesh, base, using the node flags (node_flags.yaml): emitter = 0x4,
+# light = 0x2, mesh = 0x20, base = every node.
+#
+# columns: floats per key value (detonate: 0, time-only keys). A bezier
+# key stores the value, then an in handle, then an out handle, each
+# `columns` wide (MDL-CTRL-020).
+# keyword: the engine's ASCII spelling (matched case-insensitively);
+# `<keyword>key` and `<keyword>bezierkey` are the key-list forms.
+# default: the value a decompiler may omit (only where known).
+schema: mdl-spec/controllers/1
+build: 89.8193.37-17
+controllers:
+  - {id: 8, name: position, applies: base, columns: 3, keyword: position, static: true, key: true, bezier: true, default: [0, 0, 0], status: confirmed, evidence: "zspec_dummy, zspec_anim, zspec_bezier2", note: "positionkey, positionbezierkey"}
+  - {id: 20, name: orientation, applies: base, columns: 4, keyword: orientation, static: true, key: true, bezier: true, default: [0, 0, 0, 1], status: confirmed, evidence: "zspec_dummy, zspec_orient, zspec_anim; E34 for the bezier form", note: "orientationkey; orientationbezierkey is accepted but broken (MDL-CTRL-022)"}
+  - {id: 36, name: scale, applies: base, columns: 1, keyword: scale, static: true, key: true, bezier: true, default: 1, status: confirmed, evidence: "zspec_dummy, zspec_anim, cmbez01", note: "scalekey, scalebezierkey"}
+  - {id: 100, name: selfillumcolor, applies: mesh, columns: 3, keyword: selfillumcolor, static: true, key: true, bezier: true, default: [0, 0, 0], status: confirmed, evidence: "zspec_trimesh, zspec_setfill, zspec_anim, cmbez01", note: "the misspelling setfillumcolor is NOT read by the engine (zspec_setfill)"}
+  - {id: 128, name: alpha, applies: mesh, columns: 1, keyword: alpha, static: true, key: true, bezier: true, default: 1, status: confirmed, evidence: "zspec_trimesh, zspec_anim, cmbez01, zspec_bezier2"}
+  - {id: 76, name: color, applies: light, columns: 3, keyword: color, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_light, zspec_animfx, cmbez01"}
+  - {id: 88, name: radius, applies: light, columns: 1, keyword: radius, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_light, zspec_animfx, cmbez01"}
+  - {id: 96, name: shadowradius, applies: light, columns: 1, keyword: shadowradius, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_light, zspec_animfx, zspec_bezier2"}
+  - {id: 100, name: verticaldisplacement, applies: light, columns: 1, keyword: verticaldisplacement, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_light, zspec_animfx, zspec_bezier2"}
+  - {id: 140, name: multiplier, applies: light, columns: 1, keyword: multiplier, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_light, zspec_animfx, cmbez01"}
+  - {id: 80, name: alphaEnd, applies: emitter, columns: 1, keyword: alphaEnd, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_animfx"}
+  - {id: 84, name: alphaStart, applies: emitter, columns: 1, keyword: alphaStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, cmbez01"}
+  - {id: 88, name: birthrate, applies: emitter, columns: 1, keyword: birthrate, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, cmbez01, zspec_animfx"}
+  - {id: 92, name: bounce_co, applies: emitter, columns: 1, keyword: bounce_co, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 96, name: colorEnd, applies: emitter, columns: 3, keyword: colorEnd, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 108, name: colorStart, applies: emitter, columns: 3, keyword: colorStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, cmbez01, zspec_animfx"}
+  - {id: 120, name: combinetime, applies: emitter, columns: 1, keyword: combinetime, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 124, name: drag, applies: emitter, columns: 1, keyword: drag, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 128, name: fps, applies: emitter, columns: 1, keyword: fps, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 132, name: frameEnd, applies: emitter, columns: 1, keyword: frameEnd, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 136, name: frameStart, applies: emitter, columns: 1, keyword: frameStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 140, name: grav, applies: emitter, columns: 1, keyword: grav, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 144, name: lifeExp, applies: emitter, columns: 1, keyword: lifeExp, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 148, name: mass, applies: emitter, columns: 1, keyword: mass, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 152, name: p2p_bezier2, applies: emitter, columns: 1, keyword: p2p_bezier2, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 156, name: p2p_bezier3, applies: emitter, columns: 1, keyword: p2p_bezier3, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 160, name: particleRot, applies: emitter, columns: 1, keyword: particleRot, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 164, name: randvel, applies: emitter, columns: 1, keyword: randvel, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 168, name: sizeStart, applies: emitter, columns: 1, keyword: sizeStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 172, name: sizeEnd, applies: emitter, columns: 1, keyword: sizeEnd, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 176, name: sizeStart_y, applies: emitter, columns: 1, keyword: sizeStart_y, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_bezier2, zspec_animfx"}
+  - {id: 180, name: sizeEnd_y, applies: emitter, columns: 1, keyword: sizeEnd_y, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 184, name: spread, applies: emitter, columns: 1, keyword: spread, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 188, name: threshold, applies: emitter, columns: 1, keyword: threshold, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 192, name: velocity, applies: emitter, columns: 1, keyword: velocity, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 196, name: xsize, applies: emitter, columns: 1, keyword: xsize, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 200, name: ysize, applies: emitter, columns: 1, keyword: ysize, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 204, name: blurlength, applies: emitter, columns: 1, keyword: blurlength, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 208, name: lightningDelay, applies: emitter, columns: 1, keyword: lightningDelay, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 212, name: lightningRadius, applies: emitter, columns: 1, keyword: lightningRadius, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 216, name: lightningScale, applies: emitter, columns: 1, keyword: lightningScale, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 228, name: detonate, applies: emitter, columns: 0, keyword: detonate, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_animfx", note: "keys are times only; column byte 0"}
+  - {id: 448, name: alphaMid, applies: emitter, columns: 1, keyword: alphaMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 452, name: colorMid, applies: emitter, columns: 3, keyword: colorMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_bezier2"}
+  - {id: 464, name: percentStart, applies: emitter, columns: 1, keyword: percentStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 465, name: percentMid, applies: emitter, columns: 1, keyword: percentMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_animfx"}
+  - {id: 466, name: percentEnd, applies: emitter, columns: 1, keyword: percentEnd, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_bezier2"}
+  - {id: 468, name: sizeMid, applies: emitter, columns: 1, keyword: sizeMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+  - {id: 472, name: sizeMid_y, applies: emitter, columns: 1, keyword: sizeMid_y, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
+
+# Not written by this build's compiler for any keyword. Observed in shipped
+# EE-compiled models (1,408 lights, value 1.0, per Moonglow's corpus scan).
+# The loader maps it like the other light ids (MDL-CTRL-011). Meaning unknown.
+observed:
+  - {id: 144, name: null, applies: light, columns: 1, status: observed, evidence: "zspec_light and zspec_animfx have none; Moonglow notes_models.md B.8", note: "Moonglow names it ctrl144"}
+
+# Read by no engine parser; no id exists. Older tools gave lightningsubdiv
+# id 220, which the game's compiler never writes.
+no_controller:
+  - {keyword: lightningsubdiv, applies: emitter, status: confirmed, evidence: "zspec_emitter, zspec_animfx; E37", note: "cleanmodels before v4.9.0 compiled it as 220"}
+  - {keyword: opacity, applies: emitter, status: confirmed, evidence: "zspec_emitter"}
+  - {keyword: setfillumcolor, applies: mesh, status: confirmed, evidence: "zspec_setfill", note: "a common misspelling of selfillumcolor in old exports; the engine ignores it"}
+
+# The emitter ids of the community compiler nwnmdlcomp where they differ
+# from the game's. A binary from nwnmdlcomp is read by the game with the
+# game's ids (the loader has no compiler switch, MDL-CTRL-011): its 464
+# and 468 become percentStart and sizeMid, and 480-488 match nothing.
+# Source: nwnmdlcomp NwnMdlNodes.h:168-174 (via Moonglow notes_models.md
+# B.8) and cleanmodels controllers.go. No nwnmdlcomp binary was made for
+# this suite (no nwnmdlcomp here): status inferred.
+nwnmdlcomp_emitter:
+  - {id: 464, name: alphaMid, game_id: 448, status: inferred}
+  - {id: 468, name: colorMid, game_id: 452, status: inferred}
+  - {id: 480, name: percentStart, game_id: 464, status: inferred}
+  - {id: 481, name: percentMid, game_id: 465, status: inferred}
+  - {id: 482, name: percentEnd, game_id: 466, status: inferred}
+  - {id: 484, name: sizeMid, game_id: 468, status: inferred}
+  - {id: 488, name: sizeMid_y, game_id: 472, status: inferred}

@@ -1,0 +1,33 @@
+# Node content flags: the u32 at node header +108 (CC0-1.0). Format: README.md.
+# The flags are the only reliable node type tag in a binary; the function
+# pointers at node +0 hold runtime values in EE output (MDL-BIN-030).
+schema: mdl-spec/node_flags/1
+build: 89.8193.37-17
+bits:
+  - {bit: 0x001, name: header, header_bytes: 112, note: "set on every node"}
+  - {bit: 0x002, name: light, header_bytes: 92}
+  - {bit: 0x004, name: emitter, header_bytes: 216}
+  - {bit: 0x008, name: camera, header_bytes: 0}
+  - {bit: 0x010, name: reference, header_bytes: 68}
+  - {bit: 0x020, name: mesh, header_bytes: 512}
+  - {bit: 0x040, name: skin, header_bytes: 192, note: "size as in the engine's HD parts; older files differ (MDL-BIN-061)"}
+  - {bit: 0x080, name: anim, header_bytes: 56}
+  - {bit: 0x100, name: dangly, header_bytes: 24}
+  - {bit: 0x200, name: aabb, header_bytes: 4}
+# The sub-headers follow the 112-byte node header in bit order (light,
+# emitter, reference, mesh, skin, anim, dangly, aabb).
+#
+# ASCII node type words and the flags the game's compiler writes for them.
+# Matched case-insensitively; any other word makes a plain node (dummy).
+types:
+  - {word: dummy, flags: 0x001, status: confirmed, evidence: "every golden"}
+  - {word: light, flags: 0x003, status: confirmed, evidence: zspec_light}
+  - {word: emitter, flags: 0x005, status: confirmed, evidence: zspec_emitter}
+  - {word: camera, flags: 0x009, status: confirmed, evidence: zspec_nodetypes}
+  - {word: reference, flags: 0x011, status: confirmed, evidence: zspec_reference}
+  - {word: trimesh, flags: 0x021, status: confirmed, evidence: zspec_trimesh}
+  - {word: skin, flags: 0x061, status: inferred, evidence: "ParseNode 0x447540; no golden (MDL-SKIN, pending rig)"}
+  - {word: animmesh, flags: 0x0a1, status: confirmed, evidence: zspec_animmesh}
+  - {word: danglymesh, flags: 0x121, status: confirmed, evidence: zspec_dangly}
+  - {word: aabb, flags: 0x221, status: confirmed, evidence: zspec_aabb}
+  - {word: "(any other word, e.g. patch, pwk, dwk)", flags: 0x001, status: confirmed, evidence: "zspec_nodetypes; ParseNode 0x447540"}

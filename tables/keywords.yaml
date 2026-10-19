@@ -1,0 +1,203 @@
+# ASCII keywords the engine reads, by parser (CC0-1.0). Format: README.md.
+# Build 89.8193.37-17. Read from nwmain-linux: each parser's string
+# comparisons (objdump addresses; Ghidra adds 0x100000), confirmed against
+# goldens where a probe exercises them.
+#
+# match:   nocase   strcasecmp on the line's first word (most keywords)
+#          prefix   strncasecmp on the first N characters (top level)
+#          exact    a case-SENSITIVE prefix compare (repe cmpsb): `parent`,
+#                   `node`, `endnode`, `endlist`, `event`, `animlength`, and
+#                   the `done`/`end` words that close a model or animation
+#                   tree (MDL-ASCII-011)
+# kind:    int      sscanf %d, then TRUE/FALSE (any case) -> 1/0, otherwise
+#                   the field keeps its value (MDL-ASCII-041)
+#          bool     the words true/false/1/0 (any case) only
+#          short    sscanf %hd
+#          float    sscanf %f (MDL-ASCII-040)
+#          vector   sscanf "%f %f %f"
+#          string   sscanf %s (one word)
+#          ctrl     a controller value: as many floats as the line has, at
+#                   most the controller's width (MDL-CTRL-030); `<word>key`
+#                   and `<word>bezierkey` are its key lists
+#          list<T>  a counted or endlist-terminated list (MDL-ASCII-050)
+schema: mdl-spec/keywords/1
+build: 89.8193.37-17
+parsers:
+  - {id: top, function: "unnamed dispatcher called per top-level line", address: 0x446330}
+  - {id: geometry, function: "Model::InternalParseField / MaxTree::InternalParseField", address: 0x447990}
+  - {id: animation, function: "Animation::InternalParseField", address: 0x447a40}
+  - {id: node, function: "ParseNode", address: 0x447540}
+  - {id: base, function: "MdlNode::InternalParseField", address: 0x448bb0}
+  - {id: trimesh, function: "MdlNodeTriMesh::InternalParseField", address: 0x44ced0}
+  - {id: skin, function: "MdlNodeSkin::InternalParseField", address: 0x44dbf0}
+  - {id: danglymesh, function: "MdlNodeDanglyMesh::InternalParseField", address: 0x44da00}
+  - {id: animmesh, function: "MdlNodeAnimMesh::InternalParseField", address: 0x44daf0}
+  - {id: aabb, function: "MdlNodeAABB::InternalParseField", address: 0x44dba0}
+  - {id: reference, function: "MdlNodeReference::InternalParseField", address: 0x449010}
+  - {id: camera, function: "MdlNodeCamera::InternalParseField (reads nothing of its own)", address: 0x449000}
+  - {id: light, function: "MdlNodeLight::InternalParseField", address: 0x44baf0}
+  - {id: emitter, function: "MdlNodeEmitter::InternalParseField", address: 0x449090}
+# Node parsers chain to the base parser (skin, danglymesh, animmesh and
+# aabb also to trimesh), so a node type reads its own words plus those of
+# the parsers it chains to.
+chains:
+  - {parser: trimesh, then: base}
+  - {parser: skin, then: trimesh}
+  - {parser: danglymesh, then: trimesh}
+  - {parser: animmesh, then: trimesh}
+  - {parser: aabb, then: trimesh}
+  - {parser: reference, then: base}
+  - {parser: camera, then: base}
+  - {parser: light, then: base}
+  - {parser: emitter, then: base}
+keywords:
+  # top level (prefix match: the line need only start with the word)
+  - {word: filedependancy, parser: top, match: prefix, kind: ignored, note: "only this spelling; 'filedependency' is an unknown line, which is ignored too"}
+  - {word: setsupermodel, parser: top, match: prefix, kind: "string string", note: "model name, then the supermodel or NULL"}
+  - {word: setanimationscale, parser: top, match: prefix, kind: float}
+  - {word: classification, parser: top, match: prefix, kind: string, note: "classification.yaml", status: confirmed, evidence: "zspec_cls_*"}
+  - {word: newmodel, parser: top, match: prefix, kind: string}
+  - {word: newanim, parser: top, match: prefix, kind: "string string"}
+  - {word: beginmodelgeom, parser: top, match: prefix, kind: string}
+  - {word: donemodel, parser: top, match: prefix, kind: string}
+  - {word: ignorefog, parser: top, match: prefix, kind: int, note: "fog byte = !value", status: confirmed, evidence: zspec_cls_door}
+  # inside beginmodelgeom / newanim (tree level)
+  - {word: node, parser: geometry, match: exact, kind: "type name", note: "4-byte case-sensitive prefix (0x447963)"}
+  - {word: done, parser: geometry, match: exact, kind: terminator, note: "any line starting with 'done' or 'end' ends the tree (doneanim, donemodel, endmodelgeom)"}
+  - {word: end, parser: geometry, match: exact, kind: terminator}
+  - {word: radius, parser: geometry, match: nocase, kind: float, note: "model radius; untested"}
+  - {word: bmin, parser: geometry, match: nocase, kind: vector, note: "model bounds; untested"}
+  - {word: bmax, parser: geometry, match: nocase, kind: vector, note: "model bounds; untested"}
+  - {word: length, parser: animation, match: nocase, kind: float, status: confirmed, evidence: zspec_anim}
+  - {word: transtime, parser: animation, match: nocase, kind: float, status: confirmed, evidence: zspec_anim}
+  - {word: animroot, parser: animation, match: nocase, kind: string, status: confirmed, evidence: zspec_anim}
+  - {word: event, parser: animation, match: exact, kind: "float string", status: confirmed, evidence: zspec_anim}
+  - {word: animlength, parser: animation, match: exact, kind: "string float", note: "sets length; untested"}
+  # node structure
+  - {word: endnode, parser: node, match: exact, kind: terminator, note: "7-byte case-sensitive prefix"}
+  - {word: parent, parser: base, match: exact, kind: string, note: "case-sensitive; NULL (any case) makes the node the root; 'PARENT' is not read and the node is left out of the tree", status: confirmed, evidence: "zspec_numbers n_caps"}
+  - {word: position, parser: base, match: nocase, kind: ctrl}
+  - {word: orientation, parser: base, match: nocase, kind: ctrl, note: "axis-angle, converted to a quaternion (MDL-ASCII-032)"}
+  - {word: scale, parser: base, match: nocase, kind: ctrl}
+  - {word: wirecolor, parser: base, match: nocase, kind: ignored, note: "compared, nothing stored"}
+  - {word: inheritcolor, parser: base, match: nocase, kind: int, status: confirmed, evidence: zspec_dummy}
+  # trimesh (and skin, danglymesh, animmesh, aabb)
+  - {word: verts, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: tverts, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: tverts1, parser: trimesh, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_trimesh}
+  - {word: tverts2, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: tverts3, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: texindices1, parser: trimesh, match: nocase, kind: "list<vector>", note: "per-face UV indices for tverts1; untested"}
+  - {word: texindices2, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: texindices3, parser: trimesh, match: nocase, kind: "list<vector>"}
+  - {word: colors, parser: trimesh, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_trimesh}
+  - {word: normals, parser: trimesh, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_merge}
+  - {word: tangents, parser: trimesh, match: nocase, kind: "list<vector4>", note: "x y z handedness", status: confirmed, evidence: zspec_tanfile}
+  - {word: faces, parser: trimesh, match: nocase, kind: "list<face>", note: "v1 v2 v3 smoothgroup t1 t2 t3 material (sscanf %d x8)"}
+  - {word: mirrorlist, parser: trimesh, match: nocase, kind: "list<int>", status: confirmed, evidence: "zspec_merge mirror"}
+  - {word: texture0, parser: trimesh, match: nocase, kind: string, note: "texture slot 0, the same as bitmap"}
+  - {word: bitmap, parser: trimesh, match: nocase, kind: string, note: "texture slot 0 (63 characters kept)"}
+  - {word: texture1, parser: trimesh, match: nocase, kind: string, status: confirmed, evidence: zspec_trimesh}
+  - {word: texture2, parser: trimesh, match: nocase, kind: string, status: confirmed, evidence: zspec_trimesh}
+  - {word: materialname, parser: trimesh, match: nocase, kind: string, note: "stored in texture slot 3", status: confirmed, evidence: cmtan01}
+  - {word: renderhint, parser: trimesh, match: nocase, kind: string, note: "render_hints.yaml", status: confirmed, evidence: zspec_hints}
+  - {word: diffuse, parser: trimesh, match: nocase, kind: vector, status: confirmed, evidence: "zspec_trimesh, zspec_numbers"}
+  - {word: ambient, parser: trimesh, match: nocase, kind: vector, status: confirmed, evidence: zspec_trimesh}
+  - {word: specular, parser: trimesh, match: nocase, kind: vector, status: confirmed, evidence: zspec_trimesh}
+  - {word: shininess, parser: trimesh, match: nocase, kind: float, status: confirmed, evidence: zspec_trimesh}
+  - {word: shadow, parser: trimesh, match: nocase, kind: int, status: confirmed, evidence: zspec_trimesh}
+  - {word: beaming, parser: trimesh, match: nocase, kind: int, status: confirmed, evidence: zspec_trimesh}
+  - {word: render, parser: trimesh, match: nocase, kind: int, status: confirmed, evidence: zspec_trimesh}
+  - {word: transparencyhint, parser: trimesh, match: nocase, kind: int, status: confirmed, evidence: zspec_trimesh}
+  - {word: rotatetexture, parser: trimesh, match: nocase, kind: bool, status: confirmed, evidence: zspec_trimesh}
+  - {word: tilefade, parser: trimesh, match: nocase, kind: int, status: confirmed, evidence: "zspec_trimesh, zspec_numbers"}
+  - {word: selfillumcolor, parser: trimesh, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_setfill}
+  - {word: alpha, parser: trimesh, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_trimesh}
+  - {word: bmin, parser: trimesh, match: nocase, kind: vector, note: "overwritten by the computed bounds? untested"}
+  - {word: bmax, parser: trimesh, match: nocase, kind: vector, note: "untested"}
+  - {word: vertexindicescount, parser: trimesh, match: nocase, kind: "list<int>", note: "untested"}
+  - {word: leftoverfaces, parser: trimesh, match: nocase, kind: "list<uint>", note: "untested"}
+  - {word: vertexindices, parser: trimesh, match: nocase, kind: "list<uint*>", note: "untested"}
+  - {word: weights, parser: skin, match: nocase, kind: "list<weights>", note: "bone weight pairs per vertex; empty-line rule E28"}
+  - {word: qbone_ref_inv, parser: skin, match: nocase, kind: "list<quaternion>", note: "parsed as axis-angle and converted (Parse(char const*, Quaternion&) 0x4469c0); parsed entries win over the bind (E27)"}
+  - {word: tbone_ref_inv, parser: skin, match: nocase, kind: "list<vector>"}
+  - {word: boneconstantindices, parser: skin, match: nocase, kind: "list<int>"}
+  - {word: displacement, parser: danglymesh, match: nocase, kind: float, status: confirmed, evidence: zspec_dangly}
+  - {word: period, parser: danglymesh, match: nocase, kind: float, status: confirmed, evidence: zspec_dangly}
+  - {word: tightness, parser: danglymesh, match: nocase, kind: float, status: confirmed, evidence: zspec_dangly}
+  - {word: constraints, parser: danglymesh, match: nocase, kind: "list<float>", status: confirmed, evidence: zspec_dangly}
+  - {word: sampleperiod, parser: animmesh, match: nocase, kind: float, status: confirmed, evidence: zspec_animmesh}
+  - {word: animverts, parser: animmesh, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_animmesh}
+  - {word: animtverts, parser: animmesh, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_animmesh}
+  - {word: aabb, parser: aabb, match: nocase, kind: tree, note: "Parse(char const*, AABB*&) 0x446ed0: min3 max3 face per entry, preorder", status: confirmed, evidence: zspec_aabb}
+  - {word: refModel, parser: reference, match: nocase, kind: string, status: confirmed, evidence: zspec_reference}
+  - {word: reattachable, parser: reference, match: nocase, kind: int, status: confirmed, evidence: zspec_reference}
+  # light
+  - {word: color, parser: light, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_light}
+  - {word: radius, parser: light, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_light}
+  - {word: shadowradius, parser: light, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_light}
+  - {word: verticaldisplacement, parser: light, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_light}
+  - {word: multiplier, parser: light, match: nocase, kind: ctrl, status: confirmed, evidence: zspec_light}
+  - {word: ambientonly, parser: light, match: nocase, kind: int, default: 0, status: confirmed, evidence: zspec_light}
+  - {word: shadow, parser: light, match: nocase, kind: int, default: 1, status: confirmed, evidence: zspec_light}
+  - {word: isdynamic, parser: light, match: nocase, kind: int, note: "the same field as nDynamicType", default: 1, status: confirmed, evidence: "zspec_light, zspec_numbers"}
+  - {word: nDynamicType, parser: light, match: nocase, kind: int, default: 1, status: confirmed, evidence: zspec_light}
+  - {word: affectdynamic, parser: light, match: nocase, kind: int, default: 1, status: confirmed, evidence: zspec_light}
+  - {word: lightpriority, parser: light, match: nocase, kind: int, default: 5, status: confirmed, evidence: "zspec_light, zspec_numbers"}
+  - {word: generateflare, parser: light, match: nocase, kind: int, default: 0, status: confirmed, evidence: zspec_light}
+  - {word: fadingLight, parser: light, match: nocase, kind: int, default: 1, status: confirmed, evidence: zspec_light}
+  - {word: flareradius, parser: light, match: nocase, kind: float, default: 0, status: confirmed, evidence: zspec_light}
+  - {word: texturenames, parser: light, match: nocase, kind: "list<string>", status: confirmed, evidence: zspec_light}
+  - {word: flaresizes, parser: light, match: nocase, kind: "list<float>", status: confirmed, evidence: zspec_light}
+  - {word: flarepositions, parser: light, match: nocase, kind: "list<float>", status: confirmed, evidence: zspec_light}
+  - {word: flarecolorshifts, parser: light, match: nocase, kind: "list<vector>", status: confirmed, evidence: zspec_light}
+  # emitter header (controllers are in controllers.yaml)
+  - {word: update, parser: emitter, match: nocase, kind: string, status: confirmed, evidence: zspec_emitter}
+  - {word: render, parser: emitter, match: nocase, kind: string, status: confirmed, evidence: zspec_emitter}
+  - {word: blend, parser: emitter, match: nocase, kind: string, status: confirmed, evidence: zspec_emitter}
+  - {word: texture, parser: emitter, match: nocase, kind: string, status: confirmed, evidence: zspec_emitter}
+  - {word: chunkName, parser: emitter, match: nocase, kind: string, status: confirmed, evidence: zspec_emitter}
+  - {word: spawntype, parser: emitter, match: nocase, kind: int, status: confirmed, evidence: zspec_emitter}
+  - {word: renderorder, parser: emitter, match: nocase, kind: short, status: confirmed, evidence: zspec_emitter}
+  - {word: xgrid, parser: emitter, match: nocase, kind: int, status: confirmed, evidence: zspec_emitter}
+  - {word: ygrid, parser: emitter, match: nocase, kind: int, status: confirmed, evidence: zspec_emitter}
+  - {word: loop, parser: emitter, match: nocase, kind: int, status: confirmed, evidence: zspec_emitter}
+  - {word: twosidedtex, parser: emitter, match: nocase, kind: int, status: confirmed, evidence: zspec_emitter}
+  - {word: deadspace, parser: emitter, match: nocase, kind: float, status: confirmed, evidence: zspec_emitter}
+  - {word: blastRadius, parser: emitter, match: nocase, kind: float, status: confirmed, evidence: zspec_emitter}
+  - {word: blastLength, parser: emitter, match: nocase, kind: float, status: confirmed, evidence: zspec_emitter}
+  - {word: p2p, parser: emitter, match: nocase, kind: bool, flag: 0x001, status: confirmed, evidence: zspec_emitter}
+  - {word: p2p_sel, parser: emitter, match: nocase, kind: bool, flag: 0x002, status: confirmed, evidence: zspec_emitter}
+  - {word: affectedByWind, parser: emitter, match: nocase, kind: bool, flag: 0x004, status: confirmed, evidence: zspec_emitter}
+  - {word: m_isTinted, parser: emitter, match: nocase, kind: bool, flag: 0x008, status: confirmed, evidence: zspec_emitter}
+  - {word: bounce, parser: emitter, match: nocase, kind: bool, flag: 0x010, status: confirmed, evidence: zspec_emitter}
+  - {word: random, parser: emitter, match: nocase, kind: bool, flag: 0x020, status: confirmed, evidence: zspec_emitter}
+  - {word: inherit, parser: emitter, match: nocase, kind: bool, flag: 0x040, status: confirmed, evidence: zspec_emitter}
+  - {word: inheritvel, parser: emitter, match: nocase, kind: bool, flag: 0x080, status: confirmed, evidence: zspec_emitter}
+  - {word: inherit_local, parser: emitter, match: nocase, kind: bool, flag: 0x100, status: confirmed, evidence: zspec_emitter}
+  - {word: splat, parser: emitter, match: nocase, kind: bool, flag: 0x200, status: confirmed, evidence: zspec_emitter}
+  - {word: inherit_part, parser: emitter, match: nocase, kind: bool, flag: 0x400, status: confirmed, evidence: zspec_emitter}
+# Words found in ASCII models or written by tools that no engine parser
+# reads. The engine skips them: an implementation that gives them a
+# meaning makes a model the game does not show the same way.
+not_read:
+  - {word: setfillumcolor, where: trimesh, status: confirmed, evidence: zspec_setfill, note: "misspelling of selfillumcolor; 2,387 stock ASCII files carry it (Moonglow notes B.22c)"}
+  - {word: lightningsubdiv, where: emitter, status: confirmed, evidence: "zspec_emitter, zspec_animfx (lightningsubdivkey)"}
+  - {word: opacity, where: emitter, status: confirmed, evidence: zspec_emitter}
+  - {word: ambient_only, where: light, status: confirmed, evidence: "zspec_light lamp_b"}
+  - {word: fading_light, where: light, status: confirmed, evidence: "zspec_light lamp_b"}
+  - {word: negativelight, where: light, status: confirmed, evidence: "zspec_light lamp_b (no header field changed)"}
+  - {word: lensflares, where: light, status: confirmed, evidence: "zspec_light lamp_b"}
+  - {word: n_dynamic_type, where: light, status: inferred, evidence: "absent from MdlNodeLight::InternalParseField 0x44baf0"}
+  - {word: affect_dynamic, where: light, status: inferred, evidence: "absent from 0x44baf0"}
+  - {word: texture3, where: trimesh, status: inferred, evidence: "absent from 0x44ced0 (slot 3 is materialname)"}
+  - {word: lightmapped, where: trimesh, status: inferred, evidence: "absent from 0x44ced0; the binary byte holds uninitialised data (MDL-BIN-051)"}
+  - {word: center, where: trimesh, status: inferred, evidence: "absent from 0x44ced0"}
+  - {word: gizmo, where: trimesh, status: inferred, evidence: "absent from 0x44ced0"}
+  - {word: multimaterial, where: aabb, status: inferred, evidence: "absent from 0x44ced0 and 0x44dba0"}
+  - {word: walkmesh, where: aabb, status: inferred, evidence: "absent from 0x44dba0"}
+  - {word: filedependency, where: top, status: inferred, evidence: "0x446330 knows only filedependancy"}
+  - {word: "update_sel, render_sel, blend_sel, spawntype_sel, p2p_type, m_istnited", where: emitter, status: inferred, evidence: "absent from MdlNodeEmitter::InternalParseField 0x449090"}
+  - {word: "clipu, clipv, clipw, cliph", where: animmesh, status: inferred, evidence: "absent from 0x44daf0 and 0x44ced0"}
+  - {word: "texture4 ... texture14", where: trimesh, status: inferred, evidence: "absent from 0x44ced0"}
+  - {word: PARENT, where: base, status: confirmed, evidence: "zspec_numbers n_caps", note: "parent is matched case-sensitively"}
