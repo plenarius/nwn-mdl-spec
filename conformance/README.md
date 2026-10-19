@@ -10,7 +10,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | [expected/](expected/) | the decoded, tool-neutral view of each golden, with its volatile fields listed |
 | [manifest.json](manifest.json) | each probe: what it isolates, the rules it supports, companion files, relaxations |
 | [stock.yaml](stock.yaml) | stock models tested by name (extracted from your install at run time) |
-| [reports/](reports/) | the first run's results for cleanmodels and Moonglow |
+| [reports/](reports/) | results for cleanmodels (v4.10.0, v4.9.0) and Moonglow |
 | [tools/](tools/) | `make_goldens.py` (headless golden maker), `scan_stock.py` (corpus survey) |
 
 ## The probes

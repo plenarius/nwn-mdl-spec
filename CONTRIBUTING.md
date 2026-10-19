@@ -49,7 +49,9 @@ may cite IDs in comments and tests.
 
 Engine findings are numbered `E1`, `E2`, … in
 [engine/behaviour.md](engine/behaviour.md). E1–E37 match the numbering of
-cleanmodels' `NWMAIN_FINDINGS.md`, where they were first written.
+cleanmodels' `NWMAIN_FINDINGS.md`, where they were first written; from E38
+on the numbers are this repository's own (cleanmodels' findings 38 and later
+are numbered separately).
 
 ## Pull requests
 
@@ -84,7 +86,9 @@ cleanmodels' `NWMAIN_FINDINGS.md`, where they were first written.
    and removes everything it put in `development/` (that folder outranks
    haks and override). It refuses to run if a file of the same name is
    already there.
-4. Check the golden decodes with the `.ksy`: `python3 ksy/check_ksy.py`.
+4. Check the golden decodes with the `.ksy`: `python3 ksy/check_ksy.py`
+   (CI also checks it with the parser kaitai-struct-compiler generates; see
+   [ksy/README.md](ksy/README.md)).
 5. Cite the probe from the rule it supports.
 
 Skinned meshes cannot be compiled this way: `compilemodel` refuses a model

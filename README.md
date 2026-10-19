@@ -3,9 +3,10 @@
 A shared, evidenced description of the model files (`.mdl`) of Neverwinter
 Nights: Enhanced Edition, with tests any implementation can run.
 
-**Status:** first draft, read on engine build 89.8193.37-17 (Linux
+**Status:** draft, read on engine build 89.8193.37-17 (Linux
 `nwmain-linux`, commit 26c6e573). Nothing here is official: it is what the
-game was seen to do, with the evidence for each claim.
+game was seen to do, with the evidence for each claim. 46 probes have engine
+goldens; one (a skinned mesh) is pending.
 
 ## Why
 
@@ -28,7 +29,8 @@ Comparing cleanmodels with Moonglow in October 2026 turned up bugs in both. Most
 One shared, evidenced source of truth, with tests any implementation can run, would have caught all of them. The first run of this suite
 ([conformance/reports/](conformance/reports/)) found more: default values,
 number reading, node numbering, child order and keywords the engine does not
-read, in both tools.
+read, in both tools. cleanmodels 4.10.0 was then fixed against it and passes
+every probe.
 
 ## What is here
 
@@ -62,63 +64,71 @@ MUST (the engine's behaviour, failing them fails the probe) or SHOULD
 (reported). See [runner/README.md](runner/README.md) for the contract and
 [conformance/README.md](conformance/README.md) for what each probe covers.
 
-## What to build (the plan this repository follows)
+## How it works
 
-A standalone repository in a neutral GitHub organisation, for example `nwn-formats/mdl`. Maintainers come from several projects, and no single tool owns it.
+### Specification
 
-### 1. Normative specification (Markdown)
+[spec/](spec/) is the normative text: the binary layout (headers, every node
+type, MDX streams, pointer rules), controllers and their encoding (bezier
+included), the ASCII grammar (keywords, lists, number reading, case rules),
+the conversion rules (vertex merging, normals, tangents, node numbering
+against a supermodel, child order, skin binding of body parts) and what the
+engine does with a controller at runtime. Each rule is a MUST or SHOULD
+statement with a stable ID (`MDL-SKIN-014`) that implementations can cite in
+comments and tests.
 
-- **Binary layout:** headers, node types, mesh, skin, dangly, AABB, emitter, light, animation and controller structures, MDX streams, pointer rules.
-- **ASCII grammar:** keywords, lists (counted and `endlist`), number syntax, case rules, comments, what the engine skips.
-- **Conversion rules,** both directions. For example: vertex merging, normals from smoothing groups, tangent generation, skin bone numbering, node numbering against a supermodel, bezier key layout.
-- **Rule IDs.** Each rule is a MUST/SHOULD statement with a stable ID (`MDL-SKIN-014`), so implementations can cite it in comments and tests.
+### Evidence
 
-### 2. Engine behaviour, with evidence
+Every claim about the engine names the build it was read on, its evidence (a
+function and address, an engine-compiled golden, or an in-game test) and a
+status: **confirmed**, **inferred** or **untested**. Only confirmed behaviour
+is normative; the rest is in [spec/unknown.md](spec/unknown.md).
+[engine/behaviour.md](engine/behaviour.md) has the findings themselves.
+[CONTRIBUTING.md](CONTRIBUTING.md) has the rules.
 
-Every claim about what the game does carries:
-- the engine build it was read on (e.g. 89.8193.37);
-- its evidence: function name and address, an engine-compiled golden file, or an in-game test;
-- a status: **confirmed**, **inferred** or **untested**.
+### Machine-readable data
 
-Unverified behaviour goes in a clearly marked "observed / unknown" section, never in the normative text.
+- [tables/](tables/) (YAML): controller IDs per node class with column counts
+  and defaults, the emitter IDs of the game's compiler and of nwnmdlcomp,
+  ASCII keywords per parser with aliases, render hints, node flags,
+  classification, and how cleanmodels' and Moonglow's tables were reconciled.
+  Generate your tables from these rather than copying them by hand.
+- [ksy/](ksy/): a Kaitai Struct description of the binary layout. Checked
+  with kaitai-struct-compiler 0.11 by decoding every golden and all 25,597
+  binary models of the base game.
 
-### 3. Machine-readable data
+### Conformance suite
 
-- **Binary layout:** a Kaitai Struct `.ksy`, which generates readers for about a dozen languages.
-- **Tables (YAML or JSON):**
-  - controller IDs per node type, with column counts;
-  - the emitter IDs of the game's compiler and of nwnmdlcomp;
-  - ASCII keywords and their aliases;
-  - render hint values;
-  - node type flags;
-  - classification values.
+- **Probes:** small ASCII models written for the suite (CC0), each isolating
+  one behaviour.
+- **Goldens:** the game's own compile of each probe, made headless with
+  `nwmain-linux compilemodel` ([conformance/tools/make_goldens.py](conformance/tools/make_goldens.py)),
+  twice, so fields the engine leaves uninitialised are found and not compared.
+- **Expected results as JSON:** a decoded, tool-neutral view of each golden,
+  so implementations are compared on data, not bytes.
+- **Stock-model tests by name:** behaviour seen in the game's own models,
+  extracted from your install when the tests run.
+- **Runner:** [runner/mdlconf.py](runner/mdlconf.py), standard-library
+  Python, with adapters for cleanmodels and Moonglow.
 
-  Implementations should generate their tables from these, not copy them by hand.
+### Not done yet
 
-### 4. Conformance suite
+- A golden for a skinned mesh: the engine compiles one only while a creature
+  using it is on screen, which needs an in-game rig.
+- Regenerating the goldens after a game patch in CI: it needs the game and an
+  X server, so it is a manual step (`make_goldens.py`, then `mdlconf.py
+  check-goldens`) until there is a self-hosted runner with the game.
+- The Windows build: everything here was read on the Linux build; where the
+  C library matters (how numbers are read), the Windows build's was not
+  checked.
 
-This is the most valuable part.
+### Versioning and governance
 
-- **Probe models:**
-  - small ASCII models written for the suite, licensed CC0;
-  - each probe isolates one behaviour, e.g. one per controller kind, a material-hinted tangent mesh, a skinned body part, a supermodel with repeated node names.
-- **Engine goldens:** the game's own compile of each probe. On Linux:
-  1. Put the probe in the user folder's `development/`.
-  2. Run `nwmain-linux compilemodel <resref>` on any X display (Xvfb works).
-  3. The binary appears in `modelcompiler/<resref>.mdl` within about 5 seconds.
-
-  Skinned meshes need a creature using the model on screen, so those need a small test module.
-- **Expected results as JSON:** a decoded, tool-neutral view of each golden (nodes, controllers with keys and handles, skin bone names). Implementations then compare data rather than bytes, and the suite needs no reference decompiler.
-- **Stock-model tests by name:** for behaviour seen in the game's own models. A runner extracts them from the user's install.
-- **Runner and CI:**
-  - a small runner script that any implementation can plug into through a command-line contract (`decompile <in> <out>`, `compile <in> <out>`);
-  - CI that regenerates the goldens after each game patch and reports what changed.
-
-### 5. Versioning and process
-
-- Tag the spec per engine build, with a changelog of behaviour that changed between builds.
-- A pull request that changes normative text needs evidence: a golden file, or an engine citation with the build.
-- Licensing: text CC-BY 4.0; tables, probes and goldens CC0 (goldens are the engine's output from CC0 inputs). **No Beamdog game assets in the repository.** Stock models are referenced by name only.
+The spec is tagged per engine build, with a changelog of behaviour that
+changed between builds ([CHANGELOG.md](CHANGELOG.md)). A change to
+normative text needs evidence: a golden, or an engine citation with the
+build. The repository is meant to belong to no single tool, with maintainers
+from several projects.
 
 ## Licences
 
