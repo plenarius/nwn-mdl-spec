@@ -163,7 +163,7 @@ zspec_normals      compile   FAIL
     MUST   nodes[backtoback].controllers[orientation]: not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])
     MUST   nodes[backtoback].mesh.diffuse: expected [1, 1, 1], got [0, 0, 0]
 zspec_normals      decompile PASS
-zspec_numbers      compile   PASS (28 should)
+zspec_numbers      compile   PASS (26 should)
 zspec_numbers      decompile FAIL
     MUST   nodes[n_junk].controllers[position].keys[0].v: expected [1.5], got [1.5, -2.1477333e-22, 4.5915e-41]
     MUST   nodes[n_comma].controllers[position].keys[0].v: expected [0], got [0, -2.1477333e-22, 4.5915e-41]

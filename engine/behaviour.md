@@ -541,3 +541,20 @@ and lights:
 
 *Confirmed (data); nothing is copied; the counts can be regenerated from
 any install.*
+
+## Runtime (E65, new)
+
+**E65 Column counts at runtime.** `NewController::Control` (0x498f20) reads
+the low nibble of the column byte (`movzx eax, [rdi+0xa]; and eax, 0xf`)
+and handles 1 (`GetFloatValue`, then one `movss` store at the field, 0x498fa8),
+3 (vector) and 4 (quaternion slerp); any other count returns without a
+write. The field is the one the loader mapped the id to (E36), so a count
+below the keyword's width writes only the first floats and leaves the rest
+as they are: at reset the constructors' values, `Part::Part` (0x43c800:
+position 0, orientation (1, 0, 0, 0) with w first, scale 1),
+`PartTriMesh::PartTriMesh` (0x43cb50: selfillumcolor 0, alpha 1 at +0xa0),
+`PartLight::PartLight` (0x43d1d0: colour 0 at +0x64, multiplier 1 at +0xa4),
+`PartEmitter::PartEmitter` (0x4abfe0: colorEnd +0x78, colorStart +0x84,
+colorMid +0x220, all 0). nwnmdlcomp's 0x19 (E64, MDL-CTRL-021) is therefore
+skipped. *Confirmed (code); zspec_numbers; two base-game controllers
+(`ttf02_m31_03`, `ttf02_s12_01`); on-screen effect not observed.*

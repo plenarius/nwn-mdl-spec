@@ -34,4 +34,10 @@ Corrections after the first draft:
 - MDL-MESH-062, MDL-BIN-045, E54: animmesh sets are laid out over the merged
   vertices; the texture set count divides by the tvert count (zspec_animtv).
 - MDL-ASCII-040: where glibc's sscanf ends a number.
+- MDL-CTRL-014 (new) and E65: the engine applies a controller by its column
+  count: 1, 3 or 4 floats written from the runtime field, the rest keeping
+  the runtime constructors' values (position 0, colours 0, orientation the
+  identity); any other count is skipped. Readers must use the column count;
+  MDL-CTRL-021 now says nwnmdlcomp's 0x19 bezier controllers are skipped in
+  game. The runner compares a short controller through those initial values.
 - Reports rerun on the 46 probes.

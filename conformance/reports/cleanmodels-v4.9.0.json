@@ -1918,15 +1918,7 @@
     ],
     [
      "nodes[n_comma].controllers[position]",
-     "expected 1 columns, got 3 [lenient: malformed input]"
-    ],
-    [
-     "nodes[n_comma].controllers[position].colbyte",
-     "expected 0x1, got 0x3"
-    ],
-    [
-     "nodes[n_comma].controllers[position].keys[0].v",
-     "expected [0], got [0, 0, 0] [lenient: malformed input]"
+     "expected 1 columns, got 3; the same values at runtime (MDL-CTRL-014)"
     ],
     [
      "nodes[n_comma].controllers[orientation]",

@@ -273,6 +273,29 @@ def compare_section(r, path, exp, act, defaults, profile, volatile, tol=1e-5):
             r.must(p, 'expected %s, got %s' % (ev, av))
 
 
+def runtime_padded(flags, c, keys):
+    """Each key's value padded to the controller's width with the values the
+    engine's runtime field starts with (MDL-CTRL-014): a controller with fewer
+    columns writes only its first floats. None for orientation, whose runtime
+    quaternion is held w first, or when the width is unknown."""
+    cdef = mdlview.controller_def(flags, c['id'])
+    width = cdef.get('columns') if cdef else None
+    if not width or c['name'] == 'orientation':
+        return None
+    init = cdef.get('default')
+    init = init if isinstance(init, list) else [init if init is not None else 0] * width
+    out = []
+    for k in keys:
+        v = list(k.get('v') or [])
+        out.append((k['t'], v + init[len(v):width] if len(v) < width else v[:width]))
+    return out
+
+
+def skipped_count(c):
+    """A column count the engine skips (MDL-CTRL-014), detonate aside."""
+    return c['name'] != 'detonate' and c['columns'] not in (1, 3, 4)
+
+
 def compare_controllers(r, path, exp, act, profile, flags):
     tol = 1e-5 if profile == 'compile' else 1e-4
     amap = {}
@@ -282,7 +305,9 @@ def compare_controllers(r, path, exp, act, profile, flags):
         p = '%s.controllers[%s]' % (path, c['name'])
         a = amap.pop(c['id'], None)
         if a is None:
-            if is_default(flags, c['id'], c['keys'], tol):
+            if skipped_count(c) and not c['bezier']:
+                r.should(p, 'dropped; its column count (%d) is one the engine skips (MDL-CTRL-014)' % c['columns'])
+            elif is_default(flags, c['id'], c['keys'], tol):
                 r.should(p, 'omitted; the golden has it with the default value')
             elif mdlview.controller_def(flags, c['id']) is None:
                 r.should(p, 'missing; id %d has no ASCII keyword' % c['id'])
@@ -300,6 +325,19 @@ def compare_controllers(r, path, exp, act, profile, flags):
                 if not vclose(ev, av, tol):
                     r.must('%s.keys[0].v' % p, 'expected %s, got %s' % (ev, av))
             continue
+        if c['columns'] != a.get('columns') and not c['bezier'] and len(c['keys']) == len(a['keys']):
+            # The same runtime result once both are padded with the runtime
+            # field's initial values (MDL-CTRL-014): a SHOULD, not a failure.
+            # The components only one side holds must equal the initial value
+            # exactly: anything else is a value the engine never reads.
+            pe, pa = runtime_padded(flags, c, c['keys']), runtime_padded(flags, a, a['keys'])
+            n = min(c['columns'], a.get('columns') or 0)
+            if pe is not None and pa is not None and all(
+                    close(te, ta, tol) and vclose(ve[:n], va[:n], tol) and ve[n:] == va[n:]
+                    for (te, ve), (ta, va) in zip(pe, pa)):
+                r.should(p, 'expected %d columns, got %s; the same values at runtime (MDL-CTRL-014)'
+                         % (c['columns'], a.get('columns')))
+                continue
         if profile == 'compile':
             if c['columns'] != a.get('columns'):
                 r.must(p, 'expected %d columns, got %s' % (c['columns'], a.get('columns')))

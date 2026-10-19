@@ -66,6 +66,41 @@ keys as times; a compiler SHOULD write 0 for keyed and 0xff for static
 detonate. *Confirmed: zspec_animfx (0), zspec_deton (0xff); stock
 `vwp_flash_blured` carries both; stock counts (E64).*
 
+**MDL-CTRL-014** The engine applies a controller by its column count, not
+by its keyword's width. `NewController::Control` (0x498f20) takes the low
+nibble of the column byte: 1, 3 or 4 values are read per key (three times
+that with the bezier bit, MDL-CTRL-020) and written as that many
+consecutive floats from the runtime field the id maps to (MDL-CTRL-011),
+blended with what is there (1: one `movss` store; 3: a vector; 4: a
+quaternion slerp). The field's other floats keep their values. Any other
+count (0, 2, 5-15) makes the engine skip the controller: nothing is read or
+written. Before geometry controllers are applied, once at time 0 by
+`Gob::Reset` (0x499bd0), the runtime fields hold their constructors' values:
+position (0, 0, 0), orientation the identity, scale 1 (`Part::Part`,
+0x43c800); selfillumcolor (0, 0, 0) and alpha 1 (`PartTriMesh::PartTriMesh`,
+0x43cb50); light colour (0, 0, 0) and multiplier 1 (`PartLight::PartLight`,
+0x43d1d0); the emitter colours (0, 0, 0) (`PartEmitter::PartEmitter`,
+0x4abfe0). So a one-column position holding 1.5 places the node at
+(1.5, 0, 0). The runtime orientation is held w first, so a short
+orientation controller fills w, x, … rather than the file's x, y, …
+(MDL-CTRL-022).
+
+A reader MUST read a controller's values with its column count (the stride
+of MDL-CTRL-001) and MUST NOT read its keyword's full width from the pool:
+what follows belongs to nothing, or to another controller. A decompiler MUST
+give the components a controller does not hold the runtime initial values
+above, or write only the values it holds (`position 1.5`, which the game's
+compiler turns back into the same one-column controller, MDL-CTRL-030). It
+SHOULD drop, with a warning, a controller whose count the engine skips,
+other than detonate (MDL-CTRL-012), and SHOULD warn about a 4-column
+controller on a 3-wide field, which writes past it. *Confirmed: code
+(`NewController::Control` 0x498f20, the store at 0x498fa8; the constructors
+above; `Gob::Reset` 0x499bd0); zspec_numbers (`n_junk`: one column, 1.5;
+the floats after it in the pool are not the controller's). Base game: two
+such controllers in 32,832 models, both in animations: a light colour with 4
+columns (`ttf02_m31_03`) and a position with column byte 0xff and no values
+(`ttf02_s12_01`). The effect on screen is not observed.*
+
 **MDL-CTRL-013** `lightningsubdiv` and `opacity` are not controllers: the
 emitter parser has no such keywords, static or keyed, and the game's
 compiler writes nothing for them. A compiler MUST NOT write a controller for
@@ -81,10 +116,14 @@ in handle, then the out handle. The game's compiler writes `0x10 | columns`
 zspec_bezier2; E33.*
 
 **MDL-CTRL-021** nwnmdlcomp writes the full row width instead (0x19 for a
-3-column controller). A reader SHOULD take the value width from the
-controller table, not from the column byte. *Source: nwnmdlcomp
-`NmcController.cpp:413-416` via Moonglow notes B.8; no nwnmdlcomp binary
-with bezier keys exists in the base game (E64).*
+3-column controller). The game skips such a controller: its low nibble, 9,
+is none of 1, 3 and 4 (MDL-CTRL-014), so a bezier controller compiled by
+nwnmdlcomp animates nothing in game. A reader MAY recover the keys the
+author wrote by taking the value width from the controller table, and
+SHOULD then warn that the binary's controller has no effect in game.
+*Source: nwnmdlcomp `NmcController.cpp:413-416` via Moonglow notes B.8; the
+skip from code (`NewController::Control` 0x498f20); no nwnmdlcomp binary with
+bezier keys exists in the base game (E64).*
 
 **MDL-CTRL-022** The engine has no working `orientationbezierkey`: it reads
 at most 10 floats a row, does not convert the axis-angle, and gives the

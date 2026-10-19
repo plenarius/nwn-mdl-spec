@@ -51,7 +51,7 @@ results, passes 46 compile, 45 decompile (all but zspec_numbers, below) and
 | a node under an unmatched parent numbered by its position in the tree, not its declaration index | MDL-NODE-020 | zspec_kid4 |
 | a static `detonate` line on a geometry emitter not compiled | MDL-CTRL-012 | zspec_deton |
 | `classification Tiles` → 2 (engine 0) | MDL-ASCII-021 | zspec_cls_tiles |
-| decompile reads three floats from a one-column position controller (garbage in y, z) | MDL-CTRL-030 | zspec_numbers (decompile) |
+| decompile reads three floats from a one-column position controller (what follows in the pool lands in y, z; the engine writes x only) | MDL-CTRL-014 | zspec_numbers (decompile) |
 | a 100-byte skin header read as 64 bone entries: the garbage entry makes it treat the skin as skeleton-bound and drop every bone | MDL-BIN-061, MDL-SKIN-040 | stock `tni_udoor_19` |
 
 ## Moonglow only
