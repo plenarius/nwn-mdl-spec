@@ -1,0 +1,414 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_aabbdef",
+ "build": "89.8193.37-17",
+ "golden_sha256": "b6149bd0ab51e5c985666d9bf8af441e5187e8ed99adf9315e8f0b867751cf06",
+ "volatile": [],
+ "model": {
+  "name": "zspec_aabbdef",
+  "classification": 2,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 2,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_aabbdef",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "walk",
+   "parent": "zspec_aabbdef",
+   "type": "aabb",
+   "flags": 545,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     2,
+     1,
+     0
+    ],
+    "radius": 1.118034,
+    "average": [
+     1,
+     0.5,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 0,
+    "beaming": 0,
+    "render": 0,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "NULL",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2,
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      1,
+      7,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 8,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       1,
+       1,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       2,
+       0,
+       0
+      ],
+      [
+       2,
+       1,
+       0
+      ],
+      [
+       2,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 4,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 1,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       3,
+       1
+      ]
+     },
+     {
+      "v": [
+       0,
+       2,
+       3
+      ],
+      "material": 3,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       0,
+       -1,
+       -1
+      ]
+     },
+     {
+      "v": [
+       4,
+       5,
+       6
+      ],
+      "material": 4,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       3
+      ]
+     },
+     {
+      "v": [
+       1,
+       7,
+       2
+      ],
+      "material": 7,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       2,
+       -1,
+       0
+      ]
+     }
+    ]
+   },
+   "aabb": [
+    {
+     "min": [
+      0,
+      0,
+      0
+     ],
+     "max": [
+      2,
+      1,
+      0
+     ],
+     "face": -1,
+     "plane": 1
+    },
+    {
+     "min": [
+      0,
+      0,
+      0
+     ],
+     "max": [
+      1,
+      1,
+      0
+     ],
+     "face": -1,
+     "plane": 32
+    },
+    {
+     "min": [
+      0,
+      0,
+      0
+     ],
+     "max": [
+      1,
+      1,
+      0
+     ],
+     "face": 0,
+     "plane": 0
+    },
+    {
+     "min": [
+      0,
+      0,
+      0
+     ],
+     "max": [
+      1,
+      1,
+      0
+     ],
+     "face": 1,
+     "plane": 0
+    },
+    {
+     "min": [
+      1,
+      0,
+      0
+     ],
+     "max": [
+      2,
+      1,
+      0
+     ],
+     "face": -1,
+     "plane": 32
+    },
+    {
+     "min": [
+      1,
+      0,
+      0
+     ],
+     "max": [
+      2,
+      1,
+      0
+     ],
+     "face": 2,
+     "plane": 0
+    },
+    {
+     "min": [
+      1,
+      0,
+      0
+     ],
+     "max": [
+      2,
+      1,
+      0
+     ],
+     "face": 3,
+     "plane": 0
+    }
+   ]
+  }
+ ],
+ "animations": []
+}

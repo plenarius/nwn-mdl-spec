@@ -1,0 +1,87 @@
+# mdl-spec conformance probe zspec_bezier2 (CC0-1.0)
+# Bezier keys cmbez01 does not cover: positionbezierkey, light
+# shadowradius and verticaldisplacement, emitter colorMid, sizeStart_y and
+# percentEnd. Also a bezier key list on a geometry node (one key).
+newmodel zspec_bezier2
+setsupermodel zspec_bezier2 NULL
+classification effect
+beginmodelgeom zspec_bezier2
+node dummy zspec_bezier2
+  parent NULL
+endnode
+node dummy mover
+  parent zspec_bezier2
+endnode
+node trimesh quad
+  parent zspec_bezier2
+  bitmap zspec_t0
+  alphabezierkey 1
+    0 0.5 0.125 0.25
+  endlist
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node light lamp
+  parent zspec_bezier2
+  color 1 1 1
+  radius 5
+endnode
+node emitter fx
+  parent zspec_bezier2
+  update Fountain
+  render Normal
+  blend Normal
+  texture fxpa_flare
+  birthrate 10
+endnode
+endmodelgeom zspec_bezier2
+newanim default zspec_bezier2
+  length 2
+  transtime 0
+  animroot zspec_bezier2
+  node dummy zspec_bezier2
+    parent NULL
+  endnode
+  node dummy mover
+    parent zspec_bezier2
+    positionbezierkey 2
+      0 0 0 0 0 0 0 0.5 0 0
+      2 1 2 3 0 -0.5 0 0 0 0
+    endlist
+  endnode
+  node light lamp
+    parent zspec_bezier2
+    shadowradiusbezierkey 2
+      0 2 0 1
+      2 4 -1 0
+    endlist
+    verticaldisplacementbezierkey 2
+      0 0 0 0.25
+      2 1 -0.25 0
+    endlist
+  endnode
+  node emitter fx
+    parent zspec_bezier2
+    colorMidbezierkey 2
+      0 0 1 0 0 0 0 0.25 0.25 0.25
+      2 1 1 0 0.5 0.5 0.5 0 0 0
+    endlist
+    sizeStart_ybezierkey 2
+      0 1 0 0.5
+      2 3 -0.5 0
+    endlist
+    percentEndbezierkey 2
+      0 0.5 0 0.125
+      2 1 -0.125 0
+    endlist
+  endnode
+doneanim default zspec_bezier2
+donemodel zspec_bezier2

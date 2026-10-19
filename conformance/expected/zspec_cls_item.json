@@ -1,0 +1,38 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_cls_item",
+ "build": "89.8193.37-17",
+ "golden_sha256": "62a9c40b357b60f03148e5eaa9210f481fcbadaf0eaf51ef4c0f40e8da8380f4",
+ "volatile": [],
+ "model": {
+  "name": "zspec_cls_item",
+  "classification": 0,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 1,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_cls_item",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  }
+ ],
+ "animations": []
+}

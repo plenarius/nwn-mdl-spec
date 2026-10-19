@@ -1,0 +1,83 @@
+# mdl-spec conformance probe zspec_hints (CC0-1.0)
+# renderhint values: None, NormalTangents, an unknown word, lower case.
+newmodel zspec_hints
+setsupermodel zspec_hints NULL
+classification character
+beginmodelgeom zspec_hints
+node dummy zspec_hints
+  parent NULL
+endnode
+node trimesh hint_none
+  parent zspec_hints
+  bitmap zspec_t0
+  renderhint None
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+node trimesh hint_tangents
+  parent zspec_hints
+  bitmap zspec_t0
+  renderhint NormalTangents
+  verts 4
+    -1 -1 1
+     1 -1 1
+     1  1 1
+    -1  1 1
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+node trimesh hint_bogus
+  parent zspec_hints
+  bitmap zspec_t0
+  renderhint Shiny
+  verts 4
+    -1 -1 2
+     1 -1 2
+     1  1 2
+    -1  1 2
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+node trimesh hint_lower
+  parent zspec_hints
+  bitmap zspec_t0
+  renderhint normalandspecmapped
+  verts 4
+    -1 -1 3
+     1 -1 3
+     1  1 3
+    -1  1 3
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+endmodelgeom zspec_hints
+donemodel zspec_hints

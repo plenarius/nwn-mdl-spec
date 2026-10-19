@@ -1,0 +1,249 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_light",
+ "build": "89.8193.37-17",
+ "golden_sha256": "fd9cd2cbd42e8cbf872977ec53a8244995550f4abea1d27fd726fa206e94cae7",
+ "volatile": [],
+ "model": {
+  "name": "zspec_light",
+  "classification": 2,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 3,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_light",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "lamp",
+   "parent": "zspec_light",
+   "type": "light",
+   "flags": 3,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "color",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        0.5,
+        0.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "radius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        7.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "multiplier",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "shadowradius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3
+       ]
+      }
+     ]
+    },
+    {
+     "id": 100,
+     "name": "verticaldisplacement",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5
+       ]
+      }
+     ]
+    }
+   ],
+   "light": {
+    "flareradius": 2.5,
+    "flaresizes": [
+     0.5,
+     1
+    ],
+    "flarepositions": [
+     0.25,
+     0.75
+    ],
+    "flarecolorshifts": [
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0.5,
+      0.25,
+      0
+     ]
+    ],
+    "texturenames": [
+     "fxpa_lensflare",
+     "fxpa_lensring"
+    ],
+    "lightpriority": 3,
+    "ambientonly": 1,
+    "ndynamictype": 1,
+    "affectdynamic": 0,
+    "shadow": 0,
+    "generateflare": 1,
+    "fadinglight": 1
+   }
+  },
+  {
+   "name": "lamp_b",
+   "parent": "zspec_light",
+   "type": "light",
+   "flags": 3,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        0,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "id": 76,
+     "name": "color",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.25,
+        0.5,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "radius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        4
+       ]
+      }
+     ]
+    }
+   ],
+   "light": {
+    "flareradius": 0,
+    "flaresizes": [],
+    "flarepositions": [],
+    "flarecolorshifts": [],
+    "texturenames": [],
+    "lightpriority": 5,
+    "ambientonly": 0,
+    "ndynamictype": 1,
+    "affectdynamic": 1,
+    "shadow": 1,
+    "generateflare": 0,
+    "fadinglight": 1
+   }
+  }
+ ],
+ "animations": []
+}

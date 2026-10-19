@@ -1,0 +1,352 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_numbers",
+ "build": "89.8193.37-17",
+ "golden_sha256": "3a4b77066cbb13cf38b96fd95e3c09a73d5cb559c56064f16b34ca6ead7f8c40",
+ "volatile": [],
+ "model": {
+  "name": "zspec_numbers",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 8,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_numbers",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "n_exp",
+   "parent": "zspec_numbers",
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        10,
+        -0.25,
+        3
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "n_hex",
+   "parent": "zspec_numbers",
+   "type": "dummy",
+   "flags": 1,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2,
+        16,
+        -1
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "n_junk",
+   "parent": "zspec_numbers",
+   "type": "dummy",
+   "flags": 1,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.5
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "n_comma",
+   "parent": "zspec_numbers",
+   "type": "dummy",
+   "flags": 1,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "n_light",
+   "parent": "zspec_numbers",
+   "type": "light",
+   "flags": 3,
+   "number": 7,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 88,
+     "name": "radius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "multiplier",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2
+       ]
+      }
+     ]
+    }
+   ],
+   "light": {
+    "flareradius": 0,
+    "flaresizes": [],
+    "flarepositions": [],
+    "flarecolorshifts": [],
+    "texturenames": [],
+    "lightpriority": 4,
+    "ambientonly": 0,
+    "ndynamictype": 1,
+    "affectdynamic": 1,
+    "shadow": 1,
+    "generateflare": 0,
+    "fadinglight": 1
+   }
+  },
+  {
+   "name": "n_mesh",
+   "parent": "zspec_numbers",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 6,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 128,
+     "name": "alpha",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5
+       ]
+      }
+     ]
+    }
+   ],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     0.5,
+     0.25,
+     0.125
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 7,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 4294967295,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "animations": []
+}

@@ -1,0 +1,38 @@
+# mdl-spec conformance probe zspec_aabbdeg (CC0-1.0)
+# AABB walkmesh whose second face repeats a vertex (degenerate after merging). Is the face removed, and is the authored tree re-indexed?
+newmodel zspec_aabbdeg
+setsupermodel zspec_aabbdeg NULL
+classification tile
+beginmodelgeom zspec_aabbdeg
+node dummy zspec_aabbdeg
+  parent NULL
+endnode
+node aabb walk
+  parent zspec_aabbdeg
+  bitmap NULL
+  render 0
+  shadow 0
+  verts 6
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+    2 0 0
+    2 1 0
+  tverts 1
+    0 0 0
+  faces 4
+    0 1 2 1 0 0 0 1
+    0 0 2 1 0 0 0 3
+    1 4 5 1 0 0 0 4
+    1 5 2 1 0 0 0 7
+  aabb 0 0 0 2 1 0 -1
+    0 0 0 1 1 0 -1
+      0 0 0 1 1 0 0
+      0 0 0 1 1 0 1
+    1 0 0 2 1 0 -1
+      1 0 0 2 1 0 2
+      1 0 0 2 1 0 3
+endnode
+endmodelgeom zspec_aabbdeg
+donemodel zspec_aabbdeg

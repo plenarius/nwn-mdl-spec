@@ -1,0 +1,38 @@
+# mdl-spec conformance probe zspec_aabb (CC0-1.0)
+# AABB walkmesh: face materials and an authored tree (preorder, leaf -1 = inner node).
+newmodel zspec_aabb
+setsupermodel zspec_aabb NULL
+classification tile
+beginmodelgeom zspec_aabb
+node dummy zspec_aabb
+  parent NULL
+endnode
+node aabb walk
+  parent zspec_aabb
+  bitmap NULL
+  render 0
+  shadow 0
+  verts 6
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+    2 0 0
+    2 1 0
+  tverts 1
+    0 0 0
+  faces 4
+    0 1 2 1 0 0 0 1
+    0 2 3 1 0 0 0 3
+    1 4 5 1 0 0 0 4
+    1 5 2 1 0 0 0 7
+  aabb 0 0 0 2 1 0 -1
+    0 0 0 1 1 0 -1
+      0 0 0 1 1 0 0
+      0 0 0 1 1 0 1
+    1 0 0 2 1 0 -1
+      1 0 0 2 1 0 2
+      1 0 0 2 1 0 3
+endnode
+endmodelgeom zspec_aabb
+donemodel zspec_aabb

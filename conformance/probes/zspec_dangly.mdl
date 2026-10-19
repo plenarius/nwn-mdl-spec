@@ -1,0 +1,36 @@
+# mdl-spec conformance probe zspec_dangly (CC0-1.0)
+# Danglymesh: displacement, tightness, period and per-vertex constraints.
+newmodel zspec_dangly
+setsupermodel zspec_dangly NULL
+classification character
+beginmodelgeom zspec_dangly
+node dummy zspec_dangly
+  parent NULL
+endnode
+node danglymesh flag
+  parent zspec_dangly
+  bitmap zspec_t0
+  displacement 0.5
+  tightness 2
+  period 3
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+  constraints 4
+    0
+    85
+    170
+    255
+endnode
+endmodelgeom zspec_dangly
+donemodel zspec_dangly

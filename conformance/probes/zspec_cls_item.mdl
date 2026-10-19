@@ -1,0 +1,11 @@
+# mdl-spec conformance probe zspec_cls_item (CC0-1.0)
+# Classification keyword value 'item'.
+newmodel zspec_cls_item
+setsupermodel zspec_cls_item NULL
+classification item
+beginmodelgeom zspec_cls_item
+node dummy zspec_cls_item
+  parent NULL
+endnode
+endmodelgeom zspec_cls_item
+donemodel zspec_cls_item

@@ -1,0 +1,4 @@
+// mdl-spec conformance probe material (CC0-1.0)
+renderhint NormalAndSpecMapped
+texture0 zspec_t0
+texture1 zspec_t0_n

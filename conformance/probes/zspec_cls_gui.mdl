@@ -1,0 +1,12 @@
+# mdl-spec conformance probe zspec_cls_gui (CC0-1.0)
+# Classification keyword value 'gui' and 'ignorefog 0'.
+newmodel zspec_cls_gui
+setsupermodel zspec_cls_gui NULL
+classification gui
+ignorefog 0
+beginmodelgeom zspec_cls_gui
+node dummy zspec_cls_gui
+  parent NULL
+endnode
+endmodelgeom zspec_cls_gui
+donemodel zspec_cls_gui

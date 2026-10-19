@@ -1,0 +1,1278 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_emitter",
+ "build": "89.8193.37-17",
+ "golden_sha256": "34419880ec372b19a012834caed7f20d919eb097b9bd1424095e2e5ab942c8c2",
+ "volatile": [],
+ "model": {
+  "name": "zspec_emitter",
+  "classification": 1,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 3,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 40
+ },
+ "nodes": [
+  {
+   "name": "zspec_emitter",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "fx_a",
+   "parent": "zspec_emitter",
+   "type": "emitter",
+   "flags": 5,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "alphaStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.875
+       ]
+      }
+     ]
+    },
+    {
+     "id": 448,
+     "name": "alphaMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "alphaEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "birthrate",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        11
+       ]
+      }
+     ]
+    },
+    {
+     "id": 204,
+     "name": "blurlength",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        12
+       ]
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "bounce_co",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 108,
+     "name": "colorStart",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "id": 452,
+     "name": "colorMid",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "colorEnd",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 120,
+     "name": "combinetime",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        13
+       ]
+      }
+     ]
+    },
+    {
+     "id": 124,
+     "name": "drag",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 128,
+     "name": "fps",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        14
+       ]
+      }
+     ]
+    },
+    {
+     "id": 136,
+     "name": "frameStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 132,
+     "name": "frameEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3
+       ]
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "grav",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 144,
+     "name": "lifeExp",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 208,
+     "name": "lightningDelay",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 212,
+     "name": "lightningRadius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.4375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 216,
+     "name": "lightningScale",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 148,
+     "name": "mass",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 152,
+     "name": "p2p_bezier2",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.6875
+       ]
+      }
+     ]
+    },
+    {
+     "id": 156,
+     "name": "p2p_bezier3",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.8125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 160,
+     "name": "particleRot",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.9375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 464,
+     "name": "percentStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.0625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 465,
+     "name": "percentMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 466,
+     "name": "percentEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.9375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 164,
+     "name": "randvel",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 168,
+     "name": "sizeStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 468,
+     "name": "sizeMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 172,
+     "name": "sizeEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 176,
+     "name": "sizeStart_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 472,
+     "name": "sizeMid_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 180,
+     "name": "sizeEnd_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 184,
+     "name": "spread",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.40625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 188,
+     "name": "threshold",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        15
+       ]
+      }
+     ]
+    },
+    {
+     "id": 192,
+     "name": "velocity",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 196,
+     "name": "xsize",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        16
+       ]
+      }
+     ]
+    },
+    {
+     "id": 200,
+     "name": "ysize",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        17
+       ]
+      }
+     ]
+    }
+   ],
+   "emitter": {
+    "deadspace": 0.5,
+    "blastradius": 1.5,
+    "blastlength": 2.5,
+    "xgrid": 2,
+    "ygrid": 4,
+    "spawntype": 1,
+    "update": "Fountain",
+    "render": "Billboard_to_World_Z",
+    "blend": "Lighten",
+    "texture": "fxpa_flare",
+    "chunkname": "zspec_chunk",
+    "twosidedtex": 1,
+    "loop": 0,
+    "renderorder": 2,
+    "flags": 1365
+   }
+  },
+  {
+   "name": "fx_b",
+   "parent": "zspec_emitter",
+   "type": "emitter",
+   "flags": 5,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 84,
+     "name": "alphaStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.875
+       ]
+      }
+     ]
+    },
+    {
+     "id": 448,
+     "name": "alphaMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 80,
+     "name": "alphaEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "birthrate",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        11
+       ]
+      }
+     ]
+    },
+    {
+     "id": 204,
+     "name": "blurlength",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        12
+       ]
+      }
+     ]
+    },
+    {
+     "id": 92,
+     "name": "bounce_co",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 108,
+     "name": "colorStart",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        0,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "id": 452,
+     "name": "colorMid",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        1,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "id": 96,
+     "name": "colorEnd",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 120,
+     "name": "combinetime",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        13
+       ]
+      }
+     ]
+    },
+    {
+     "id": 124,
+     "name": "drag",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 128,
+     "name": "fps",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        14
+       ]
+      }
+     ]
+    },
+    {
+     "id": 136,
+     "name": "frameStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 132,
+     "name": "frameEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3
+       ]
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "grav",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 144,
+     "name": "lifeExp",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 208,
+     "name": "lightningDelay",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 212,
+     "name": "lightningRadius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.4375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 216,
+     "name": "lightningScale",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 148,
+     "name": "mass",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 152,
+     "name": "p2p_bezier2",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.6875
+       ]
+      }
+     ]
+    },
+    {
+     "id": 156,
+     "name": "p2p_bezier3",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.8125
+       ]
+      }
+     ]
+    },
+    {
+     "id": 160,
+     "name": "particleRot",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.9375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 464,
+     "name": "percentStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.0625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 465,
+     "name": "percentMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 466,
+     "name": "percentEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.9375
+       ]
+      }
+     ]
+    },
+    {
+     "id": 164,
+     "name": "randvel",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 168,
+     "name": "sizeStart",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 468,
+     "name": "sizeMid",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 172,
+     "name": "sizeEnd",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 176,
+     "name": "sizeStart_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 472,
+     "name": "sizeMid_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        2.75
+       ]
+      }
+     ]
+    },
+    {
+     "id": 180,
+     "name": "sizeEnd_y",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3.25
+       ]
+      }
+     ]
+    },
+    {
+     "id": 184,
+     "name": "spread",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.40625
+       ]
+      }
+     ]
+    },
+    {
+     "id": 188,
+     "name": "threshold",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        15
+       ]
+      }
+     ]
+    },
+    {
+     "id": 192,
+     "name": "velocity",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        3.5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 196,
+     "name": "xsize",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        16
+       ]
+      }
+     ]
+    },
+    {
+     "id": 200,
+     "name": "ysize",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        17
+       ]
+      }
+     ]
+    }
+   ],
+   "emitter": {
+    "deadspace": 0.5,
+    "blastradius": 1.5,
+    "blastlength": 2.5,
+    "xgrid": 2,
+    "ygrid": 4,
+    "spawntype": 1,
+    "update": "Fountain",
+    "render": "Billboard_to_World_Z",
+    "blend": "Lighten",
+    "texture": "fxpa_flare",
+    "chunkname": "zspec_chunk",
+    "twosidedtex": 0,
+    "loop": 1,
+    "renderorder": 2,
+    "flags": 682
+   }
+  }
+ ],
+ "animations": []
+}

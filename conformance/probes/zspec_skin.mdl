@@ -1,0 +1,43 @@
+# mdl-spec conformance probe zspec_skin (CC0-1.0)
+# A skinned mesh weighted to two bones of its own model (a whole model,
+# not a body part). The engine's compilemodel needs a creature using the
+# model on screen to compile a skin, so this probe has no golden yet.
+newmodel zspec_skin
+setsupermodel zspec_skin NULL
+classification character
+beginmodelgeom zspec_skin
+node dummy zspec_skin
+  parent NULL
+endnode
+node dummy bone_a
+  parent zspec_skin
+  position 0 0 0
+endnode
+node dummy bone_b
+  parent bone_a
+  position 0 0 1
+endnode
+node skin body
+  parent zspec_skin
+  bitmap zspec_t0
+  verts 4
+    -0.5 0 0
+     0.5 0 0
+     0.5 0 2
+    -0.5 0 2
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+  weights 4
+    bone_a 1
+    bone_a 0.75 bone_b 0.25
+    bone_b 1
+    bone_a 0.25 bone_b 0.75
+endnode
+endmodelgeom zspec_skin
+donemodel zspec_skin

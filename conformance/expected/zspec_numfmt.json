@@ -1,0 +1,313 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_numfmt",
+ "build": "89.8193.37-17",
+ "golden_sha256": "c2ef42c474273331e7858904709584f7ac70c5afee4a6954db9ddb4c7f00630b",
+ "volatile": [],
+ "model": {
+  "name": "zspec_numfmt",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 7,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_numfmt",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "f_exp",
+   "parent": "zspec_numfmt",
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        10,
+        -0.25,
+        3
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "f_dots",
+   "parent": "zspec_numfmt",
+   "type": "dummy",
+   "flags": 1,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.5,
+        1,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "f_zeros",
+   "parent": "zspec_numfmt",
+   "type": "dummy",
+   "flags": 1,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        7,
+        0.25,
+        -0.5
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "f_tabs",
+   "parent": "zspec_numfmt",
+   "type": "dummy",
+   "flags": 1,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        2,
+        3
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "f_comment",
+   "parent": "zspec_numfmt",
+   "type": "dummy",
+   "flags": 1,
+   "number": 5,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        2,
+        3
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "f_case",
+   "parent": "zspec_numfmt",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 6,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     0.5,
+     0.5,
+     0.5
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 0,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "animations": []
+}

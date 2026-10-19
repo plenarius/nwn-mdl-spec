@@ -1,0 +1,41 @@
+# mdl-spec conformance probe zspec_tanfile (CC0-1.0)
+# Normals and tangents given in the file with a normal-mapped hint: are
+# they stored as written (not regenerated)? The tangents are deliberately
+# not what generation would give.
+newmodel zspec_tanfile
+setsupermodel zspec_tanfile NULL
+classification character
+beginmodelgeom zspec_tanfile
+node dummy zspec_tanfile
+  parent NULL
+endnode
+node trimesh quad
+  parent zspec_tanfile
+  bitmap zspec_t0
+  renderhint NormalAndSpecMapped
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  normals 4
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tangents 4
+    0 1 0 1
+    0 1 0 1
+    0 1 0 -1
+    0 1 0 -1
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+endmodelgeom zspec_tanfile
+donemodel zspec_tanfile

@@ -1,0 +1,138 @@
+# mdl-spec conformance probe zspec_merge (CC0-1.0)
+# Vertex merging (face corners -> GPU vertices). Every node has explicit
+# normals so the normals are equal where the key says they should be.
+#  shared:  two faces sharing an edge; different smoothing groups and
+#           materials, equal position/uv/normal -> the corners merge.
+#  uvsplit: same positions, different UVs on the second face -> no merge.
+#  negzero: two vertex entries, one at -0 and one at +0 -> they merge.
+#  degen:   a face whose corners are two vertex entries with identical
+#           data -> after merging the face is degenerate and removed.
+#  mirror:  mirrorlist gives the two faces different values -> no merge.
+newmodel zspec_merge
+setsupermodel zspec_merge NULL
+classification character
+beginmodelgeom zspec_merge
+node dummy zspec_merge
+  parent NULL
+endnode
+node trimesh shared
+  parent zspec_merge
+  bitmap zspec_t0
+  verts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  normals 4
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 3
+    0 2 3 2 0 2 3 5
+endnode
+node trimesh uvsplit
+  parent zspec_merge
+  bitmap zspec_t0
+  verts 4
+    0 0 1
+    1 0 1
+    1 1 1
+    0 1 1
+  normals 4
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tverts 6
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+    0.5 0 0
+    0.5 0.5 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 4 5 3 0
+endnode
+node trimesh negzero
+  parent zspec_merge
+  bitmap zspec_t0
+  verts 4
+    0 0 2
+    1 0 2
+    1 1 2
+    -0 -0 2
+  normals 4
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 0 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    3 2 1 1 3 2 1 0
+endnode
+node trimesh degen
+  parent zspec_merge
+  bitmap zspec_t0
+  verts 5
+    0 0 3
+    1 0 3
+    0 1 3
+    1 1 3
+    1 0 3
+  normals 5
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tverts 5
+    0 0 0
+    1 0 0
+    0 1 0
+    1 1 0
+    1 0 0
+  faces 3
+    0 1 2 1 0 1 2 0
+    1 4 3 1 1 4 3 0
+    1 3 2 1 1 3 2 0
+endnode
+node trimesh mirror
+  parent zspec_merge
+  bitmap zspec_t0
+  verts 4
+    0 0 4
+    1 0 4
+    1 1 4
+    0 1 4
+  normals 4
+    0 0 1
+    0 0 1
+    0 0 1
+    0 0 1
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+  mirrorlist 2
+    0
+    1
+endnode
+endmodelgeom zspec_merge
+donemodel zspec_merge

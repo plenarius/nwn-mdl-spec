@@ -1,0 +1,20 @@
+# mdl-spec conformance probe zspec_reference (CC0-1.0)
+# Reference nodes: refModel and reattachable, and one with defaults.
+newmodel zspec_reference
+setsupermodel zspec_reference NULL
+classification effect
+beginmodelgeom zspec_reference
+node dummy zspec_reference
+  parent NULL
+endnode
+node reference ref_a
+  parent zspec_reference
+  position 0 0 1
+  refModel fx_ref
+  reattachable 1
+endnode
+node reference ref_b
+  parent zspec_reference
+endnode
+endmodelgeom zspec_reference
+donemodel zspec_reference

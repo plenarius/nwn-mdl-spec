@@ -1,0 +1,420 @@
+{
+ "schema": "mdl-spec/manifest/1",
+ "build": "89.8193.37-17",
+ "probes": [
+  {
+   "name": "cmbez01",
+   "isolates": "every float and colour bezier controller on a mesh, light and emitter, and orientationbezierkey",
+   "rules": [
+    "MDL-CTRL-020",
+    "MDL-CTRL-022",
+    "MDL-CTRL-032"
+   ],
+   "golden": true,
+   "allow": [
+    {
+     "path": "animations[default].nodes[spinner].controllers[orientation]",
+     "rule": "MDL-CTRL-022",
+     "tests": [
+      "compile",
+      "decompile"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "cmtan01",
+   "isolates": "a mesh with no renderhint whose materialname names an .mtr with a normal-mapped hint",
+   "rules": [
+    "MDL-MESH-041",
+    "MDL-BIN-048"
+   ],
+   "golden": true,
+   "with": [
+    "cmtan01.mtr"
+   ]
+  },
+  {
+   "name": "zspec_aabb",
+   "isolates": "an AABB walkmesh: face materials, the authored tree, split planes, the adjacency merge",
+   "rules": [
+    "MDL-MESH-012",
+    "MDL-MESH-051",
+    "MDL-MESH-052",
+    "MDL-BIN-047"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_aabbdef",
+   "isolates": "an AABB walkmesh with no render or shadow line",
+   "rules": [
+    "MDL-MESH-060"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_aabbdeg",
+   "isolates": "an AABB walkmesh with a degenerate face: deleted, tree not re-indexed",
+   "rules": [
+    "MDL-MESH-024"
+   ],
+   "golden": true,
+   "allow": [
+    {
+     "path": "nodes[walk].mesh",
+     "rule": "MDL-MESH-024",
+     "tests": [
+      "compile"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "zspec_anim",
+   "isolates": "linear key lists (counted, endlist, empty line inside), events, transtime, animroot, a single value in an animation",
+   "rules": [
+    "MDL-CTRL-031",
+    "MDL-CTRL-035",
+    "MDL-ASCII-050",
+    "MDL-ASCII-060",
+    "MDL-NODE-040",
+    "MDL-NODE-042"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_animfx",
+   "isolates": "linear keys on a light and an emitter, detonate, lightningsubdivkey",
+   "rules": [
+    "MDL-CTRL-012",
+    "MDL-CTRL-013",
+    "MDL-CTRL-002"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_animmesh",
+   "isolates": "an animmesh animation: sample period, vertex and texture sets",
+   "rules": [
+    "MDL-BIN-045",
+    "MDL-MESH-062",
+    "MDL-ASCII-061"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_bezier2",
+   "isolates": "position, shadowradius, verticaldisplacement, colorMid, sizeStart_y and percentEnd bezier keys; a bezier key list on a geometry node",
+   "rules": [
+    "MDL-CTRL-020",
+    "MDL-CTRL-023"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_door",
+   "isolates": "classification door, ignorefog 1",
+   "rules": [
+    "MDL-ASCII-021",
+    "MDL-ASCII-022"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_effs",
+   "isolates": "classification Effects (plural)",
+   "rules": [
+    "MDL-ASCII-021"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_gui",
+   "isolates": "classification gui, ignorefog 0",
+   "rules": [
+    "MDL-ASCII-021",
+    "MDL-ASCII-022"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_item",
+   "isolates": "classification item",
+   "rules": [
+    "MDL-ASCII-021"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_tile",
+   "isolates": "classification TILE (upper case)",
+   "rules": [
+    "MDL-ASCII-021"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_cls_tiles",
+   "isolates": "classification Tiles (plural)",
+   "rules": [
+    "MDL-ASCII-021"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_crlf",
+   "isolates": "zspec_dummy with CRLF line ends",
+   "rules": [
+    "MDL-ASCII-001"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_dangly",
+   "isolates": "danglymesh displacement, tightness, period, constraints",
+   "rules": [
+    "MDL-BIN-046"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_dummy",
+   "isolates": "model header fields; position, orientation, scale, inheritcolor",
+   "rules": [
+    "MDL-BIN-011",
+    "MDL-CTRL-003",
+    "MDL-CTRL-030"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_emitter",
+   "isolates": "every emitter header field and flag, every static emitter controller, lightningsubdiv and opacity",
+   "rules": [
+    "MDL-BIN-041",
+    "MDL-CTRL-002",
+    "MDL-CTRL-013"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_hint_mesh",
+   "isolates": "renderhint NormalAndSpecMapped: generated normals and tangents",
+   "rules": [
+    "MDL-MESH-040",
+    "MDL-MESH-042",
+    "MDL-MESH-043"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_hints",
+   "isolates": "renderhint None, NormalTangents, an unknown word, lower case",
+   "rules": [
+    "MDL-MESH-040",
+    "MDL-MESH-042"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_kid",
+   "isolates": "numbering against a supermodel; a name the supermodel uses twice; a node it lacks; the node count",
+   "rules": [
+    "MDL-NODE-020",
+    "MDL-NODE-021",
+    "MDL-NODE-030",
+    "MDL-NODE-040"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_super.mdl"
+   ]
+  },
+  {
+   "name": "zspec_kid2",
+   "isolates": "the supermodel name walk: case, a duplicate name under a different parent, a name under the wrong parent",
+   "rules": [
+    "MDL-NODE-020",
+    "MDL-NODE-021"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_super.mdl"
+   ]
+  },
+  {
+   "name": "zspec_kid3",
+   "isolates": "the node count with a supermodel (second data point)",
+   "rules": [
+    "MDL-NODE-030"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_super.mdl"
+   ]
+  },
+  {
+   "name": "zspec_light",
+   "isolates": "every light header field, flares, static light controllers; light spellings the engine does not read",
+   "rules": [
+    "MDL-BIN-040",
+    "MDL-ASCII-070",
+    "MDL-CTRL-011"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_merge",
+   "isolates": "vertex merging: groups and materials, UV splits, -0, degenerate faces, mirrorlist",
+   "rules": [
+    "MDL-MESH-010",
+    "MDL-MESH-011",
+    "MDL-MESH-020",
+    "MDL-MESH-021",
+    "MDL-MESH-050"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_mtrbmp",
+   "isolates": "a mesh whose bitmap names an .mtr with a normal-mapped hint",
+   "rules": [
+    "MDL-MESH-041"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_mtrbmp.mtr"
+   ]
+  },
+  {
+   "name": "zspec_nodeorder",
+   "isolates": "nodes declared out of depth-first order: numbers and child order",
+   "rules": [
+    "MDL-NODE-010",
+    "MDL-NODE-011"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_nodetypes",
+   "isolates": "camera, an unknown type word, mixed-case type words",
+   "rules": [
+    "MDL-ASCII-030"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_normals",
+   "isolates": "normal generation from smoothing groups",
+   "rules": [
+    "MDL-MESH-031"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_numbers",
+   "isolates": "malformed numbers and words: hex floats, trailing junk, comma decimals, 1.#INF, TRUE/false, PARENT",
+   "rules": [
+    "MDL-ASCII-040",
+    "MDL-ASCII-041",
+    "MDL-ASCII-031",
+    "MDL-NODE-012"
+   ],
+   "golden": true,
+   "lenient": [
+    "compile"
+   ],
+   "note": "malformed input: the engine reading is documented (MDL-ASCII-04x), implementations may reject it or read it differently"
+  },
+  {
+   "name": "zspec_numfmt",
+   "isolates": "well-formed number forms, tabs, comments, keyword case",
+   "rules": [
+    "MDL-ASCII-001",
+    "MDL-ASCII-003",
+    "MDL-ASCII-010",
+    "MDL-ASCII-040"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_orient",
+   "isolates": "the orientation keyword: zero axis, zero angle, non-unit axis, negative and large angles",
+   "rules": [
+    "MDL-ASCII-032"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_reference",
+   "isolates": "reference nodes",
+   "rules": [
+    "MDL-BIN-042"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_setfill",
+   "isolates": "the misspelling setfillumcolor next to selfillumcolor",
+   "rules": [
+    "MDL-ASCII-070"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_skin",
+   "isolates": "a whole-model skin weighted to two bones",
+   "rules": [
+    "MDL-SKIN-001",
+    "MDL-SKIN-013"
+   ],
+   "golden": false,
+   "pending": "compilemodel refuses a skin unless a creature using the model is on screen; needs an in-game rig"
+  },
+  {
+   "name": "zspec_super",
+   "isolates": "the supermodel for zspec_kid*: a name used twice",
+   "rules": [
+    "MDL-NODE-021"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_tanfile",
+   "isolates": "tangents given in the file with a normal-mapped hint",
+   "rules": [
+    "MDL-MESH-044"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_tanmirror",
+   "isolates": "tangent generation across a UV mirror seam: vertex clones",
+   "rules": [
+    "MDL-MESH-043",
+    "MDL-BIN-049"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_transp",
+   "isolates": "child order when a child mesh has transparencyhint > 0",
+   "rules": [
+    "MDL-NODE-012",
+    "MDL-NODE-013"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_trimesh",
+   "isolates": "trimesh material fields, two UV sets, vertex colours, static selfillumcolor and alpha",
+   "rules": [
+    "MDL-BIN-043",
+    "MDL-BIN-080",
+    "MDL-MESH-060"
+   ],
+   "golden": true
+  }
+ ]
+}

@@ -1,0 +1,153 @@
+# mdl-spec conformance probe zspec_emitter (CC0-1.0)
+# Emitter: every header field and flag (two emitters with complementary
+# flag patterns) and every static controller the parser knows, including
+# the three-stop values (colorMid, alphaMid, sizeMid, sizeMid_y,
+# percentStart/Mid/End). Also 'lightningsubdiv' and 'opacity', which the
+# engine's parser may not know.
+newmodel zspec_emitter
+setsupermodel zspec_emitter NULL
+classification effect
+beginmodelgeom zspec_emitter
+node dummy zspec_emitter
+  parent NULL
+endnode
+node emitter fx_a
+  parent zspec_emitter
+  position 0 0 1
+  update Fountain
+  render Billboard_to_World_Z
+  blend Lighten
+  texture fxpa_flare
+  chunkName zspec_chunk
+  twosidedtex 1
+  loop 0
+  renderorder 2
+  spawntype 1
+  xgrid 2
+  ygrid 4
+  deadspace 0.5
+  blastRadius 1.5
+  blastLength 2.5
+  p2p 1
+  p2p_sel 0
+  affectedByWind 1
+  m_isTinted 0
+  bounce 1
+  random 0
+  inherit 1
+  inheritvel 0
+  inherit_local 1
+  splat 0
+  inherit_part 1
+  alphaStart 0.875
+  alphaMid 0.75
+  alphaEnd 0.125
+  birthrate 11
+  blurlength 12
+  bounce_co 0.375
+  colorStart 1 0 0
+  colorMid 0 1 0
+  colorEnd 0 0 1
+  combinetime 13
+  drag 0.125
+  fps 14
+  frameStart 1
+  frameEnd 3
+  grav 0.25
+  lifeExp 2.5
+  lightningDelay 0.375
+  lightningRadius 0.4375
+  lightningScale 0.5625
+  mass 0.625
+  p2p_bezier2 0.6875
+  p2p_bezier3 0.8125
+  particleRot 0.9375
+  percentStart 0.0625
+  percentMid 0.5
+  percentEnd 0.9375
+  randvel 1.25
+  sizeStart 1.5
+  sizeMid 1.75
+  sizeEnd 2.25
+  sizeStart_y 2.5
+  sizeMid_y 2.75
+  sizeEnd_y 3.25
+  spread 0.40625
+  threshold 15
+  velocity 3.5
+  xsize 16
+  ysize 17
+  lightningsubdiv 3
+  opacity 0.5
+endnode
+node emitter fx_b
+  parent zspec_emitter
+  position 0 0 1
+  update Fountain
+  render Billboard_to_World_Z
+  blend Lighten
+  texture fxpa_flare
+  chunkName zspec_chunk
+  twosidedtex 0
+  loop 1
+  renderorder 2
+  spawntype 1
+  xgrid 2
+  ygrid 4
+  deadspace 0.5
+  blastRadius 1.5
+  blastLength 2.5
+  p2p 0
+  p2p_sel 1
+  affectedByWind 0
+  m_isTinted 1
+  bounce 0
+  random 1
+  inherit 0
+  inheritvel 1
+  inherit_local 0
+  splat 1
+  inherit_part 0
+  alphaStart 0.875
+  alphaMid 0.75
+  alphaEnd 0.125
+  birthrate 11
+  blurlength 12
+  bounce_co 0.375
+  colorStart 1 0 0
+  colorMid 0 1 0
+  colorEnd 0 0 1
+  combinetime 13
+  drag 0.125
+  fps 14
+  frameStart 1
+  frameEnd 3
+  grav 0.25
+  lifeExp 2.5
+  lightningDelay 0.375
+  lightningRadius 0.4375
+  lightningScale 0.5625
+  mass 0.625
+  p2p_bezier2 0.6875
+  p2p_bezier3 0.8125
+  particleRot 0.9375
+  percentStart 0.0625
+  percentMid 0.5
+  percentEnd 0.9375
+  randvel 1.25
+  sizeStart 1.5
+  sizeMid 1.75
+  sizeEnd 2.25
+  sizeStart_y 2.5
+  sizeMid_y 2.75
+  sizeEnd_y 3.25
+  spread 0.40625
+  threshold 15
+  velocity 3.5
+  xsize 16
+  ysize 17
+  lightningsubdiv 3
+  opacity 0.5
+endnode
+endmodelgeom zspec_emitter
+donemodel zspec_emitter

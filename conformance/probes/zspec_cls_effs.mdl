@@ -1,0 +1,11 @@
+# mdl-spec conformance probe zspec_cls_effs (CC0-1.0)
+# Classification keyword value 'Effects'.
+newmodel zspec_cls_effs
+setsupermodel zspec_cls_effs NULL
+classification Effects
+beginmodelgeom zspec_cls_effs
+node dummy zspec_cls_effs
+  parent NULL
+endnode
+endmodelgeom zspec_cls_effs
+donemodel zspec_cls_effs

@@ -1,0 +1,225 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_dangly",
+ "build": "89.8193.37-17",
+ "golden_sha256": "0fd2f5e89162eb163e46e11078f57a33b3811e3fea3a76cb295b884db008559a",
+ "volatile": [],
+ "model": {
+  "name": "zspec_dangly",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 2,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_dangly",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "flag",
+   "parent": "zspec_dangly",
+   "type": "danglymesh",
+   "flags": 289,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     -1,
+     -1,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 1.4142135,
+    "average": [
+     0,
+     0,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2,
+      0,
+      2,
+      3
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 4,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       -1,
+       -1,
+       0
+      ],
+      [
+       1,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       0
+      ],
+      [
+       -1,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 2,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       1
+      ]
+     },
+     {
+      "v": [
+       0,
+       2,
+       3
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       0,
+       -1,
+       -1
+      ]
+     }
+    ]
+   },
+   "dangly": {
+    "constraints": [
+     0,
+     85,
+     170,
+     255
+    ],
+    "displacement": 0.5,
+    "tightness": 2,
+    "period": 3
+   }
+  }
+ ],
+ "animations": []
+}

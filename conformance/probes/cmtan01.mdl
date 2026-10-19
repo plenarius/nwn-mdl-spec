@@ -1,0 +1,32 @@
+# cleanmodels probe: no renderhint on the mesh, only in its material
+newmodel cmtan01
+setsupermodel cmtan01 NULL
+classification PLACEABLE
+setanimationscale 1.00
+beginmodelgeom cmtan01
+node dummy cmtan01
+  parent NULL
+endnode
+node trimesh quad
+  parent cmtan01
+  position 0 0 0
+  orientation 0 0 0 0
+  materialname cmtan01
+  bitmap tin01_bwall01
+  render 1
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+endmodelgeom cmtan01
+donemodel cmtan01

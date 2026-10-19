@@ -1,0 +1,441 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_animfx",
+ "build": "89.8193.37-17",
+ "golden_sha256": "adc1e096edd28615ab93680334eadb5d26642c38a5c89f8853cd2b492d70f922",
+ "volatile": [
+  "nodes[2].emitter.xgrid",
+  "nodes[2].emitter.ygrid"
+ ],
+ "model": {
+  "name": "zspec_animfx",
+  "classification": 1,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 3,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 40
+ },
+ "nodes": [
+  {
+   "name": "zspec_animfx",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "lamp",
+   "parent": "zspec_animfx",
+   "type": "light",
+   "flags": 3,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 76,
+     "name": "color",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        1,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "id": 88,
+     "name": "radius",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        5
+       ]
+      }
+     ]
+    },
+    {
+     "id": 140,
+     "name": "multiplier",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1
+       ]
+      }
+     ]
+    }
+   ],
+   "light": {
+    "flareradius": 0,
+    "flaresizes": [],
+    "flarepositions": [],
+    "flarecolorshifts": [],
+    "texturenames": [],
+    "lightpriority": 5,
+    "ambientonly": 0,
+    "ndynamictype": 1,
+    "affectdynamic": 1,
+    "shadow": 1,
+    "generateflare": 0,
+    "fadinglight": 1
+   }
+  },
+  {
+   "name": "fx",
+   "parent": "zspec_animfx",
+   "type": "emitter",
+   "flags": 5,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 88,
+     "name": "birthrate",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        10
+       ]
+      }
+     ]
+    },
+    {
+     "id": 144,
+     "name": "lifeExp",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1
+       ]
+      }
+     ]
+    }
+   ],
+   "emitter": {
+    "deadspace": 0,
+    "blastradius": 0,
+    "blastlength": 0,
+    "xgrid": 1106786816,
+    "ygrid": 23893,
+    "spawntype": 0,
+    "update": "Explosion",
+    "render": "Normal",
+    "blend": "Normal",
+    "texture": "fxpa_flare",
+    "chunkname": "",
+    "twosidedtex": 0,
+    "loop": 0,
+    "renderorder": 0,
+    "flags": 0
+   }
+  }
+ ],
+ "animations": [
+  {
+   "name": "impact",
+   "length": 1,
+   "transtime": 0,
+   "animroot": "zspec_animfx",
+   "events": [],
+   "node_count": 3,
+   "nodes": [
+    {
+     "name": "zspec_animfx",
+     "parent": null,
+     "type": "dummy",
+     "flags": 1,
+     "number": 0,
+     "controllers": []
+    },
+    {
+     "name": "lamp",
+     "parent": "zspec_animfx",
+     "type": "light",
+     "flags": 3,
+     "number": 1,
+     "controllers": [
+      {
+       "id": 76,
+       "name": "color",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0,
+          0,
+          1
+         ]
+        }
+       ]
+      },
+      {
+       "id": 88,
+       "name": "radius",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          5
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          10
+         ]
+        }
+       ]
+      },
+      {
+       "id": 140,
+       "name": "multiplier",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          2
+         ]
+        }
+       ]
+      },
+      {
+       "id": 96,
+       "name": "shadowradius",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          3
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          6
+         ]
+        }
+       ]
+      },
+      {
+       "id": 100,
+       "name": "verticaldisplacement",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0.5
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "fx",
+     "parent": "zspec_animfx",
+     "type": "emitter",
+     "flags": 5,
+     "number": 2,
+     "controllers": [
+      {
+       "id": 88,
+       "name": "birthrate",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          10
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          20
+         ]
+        }
+       ]
+      },
+      {
+       "id": 108,
+       "name": "colorStart",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1,
+          1,
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          1,
+          0,
+          0
+         ]
+        }
+       ]
+      },
+      {
+       "id": 80,
+       "name": "alphaEnd",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0.5
+         ]
+        }
+       ]
+      },
+      {
+       "id": 176,
+       "name": "sizeStart_y",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          2
+         ]
+        }
+       ]
+      },
+      {
+       "id": 465,
+       "name": "percentMid",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0.25
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0.75
+         ]
+        }
+       ]
+      },
+      {
+       "id": 228,
+       "name": "detonate",
+       "columns": 0,
+       "bezier": false,
+       "colbyte": 0,
+       "keys": [
+        {
+         "t": 0.25,
+         "v": []
+        },
+        {
+         "t": 0.75,
+         "v": []
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

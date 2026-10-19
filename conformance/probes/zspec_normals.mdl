@@ -1,0 +1,108 @@
+# mdl-spec conformance probe zspec_normals (CC0-1.0)
+# Normal generation from smoothing groups (no normals in the file).
+#  smooth:     a pyramid, one smoothing group.
+#  backtoback: two faces on the same vertices with opposite winding, same
+#              group (their normals cancel).
+#  sgbits:     a fan with groups 1, 3, 2 (1 and 3 share a bit, 3 and 2
+#              share a bit, 1 and 2 do not).
+#  area:       two faces of different area sharing an edge, one group.
+#  sgzero:     the same geometry with group 0.
+newmodel zspec_normals
+setsupermodel zspec_normals NULL
+classification character
+beginmodelgeom zspec_normals
+node dummy zspec_normals
+  parent NULL
+endnode
+node trimesh smooth
+  parent zspec_normals
+  bitmap zspec_t0
+  verts 5
+    -1 -1 0
+    1 -1 0
+    1 1 0
+    -1 1 0
+    0 0 1
+  tverts 5
+    -1 -1 0
+    1 -1 0
+    1 1 0
+    -1 1 0
+    0 0 0
+  faces 4
+    0 1 4 1 0 1 4 0
+    1 2 4 1 1 2 4 0
+    2 3 4 1 2 3 4 0
+    3 0 4 1 3 0 4 0
+endnode
+node trimesh backtoback
+  parent zspec_normals
+  bitmap zspec_t0
+  verts 3
+    0 0 2
+    1 0 2
+    0 1 2
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 1 1 0 2 1 0
+endnode
+node trimesh sgbits
+  parent zspec_normals
+  bitmap zspec_t0
+  verts 5
+    0 0 3
+    1 0 3
+    0.5 1 3.25
+    -0.5 1 3.5
+    -1 0 3.75
+  tverts 5
+    0 0 0
+    1 0 0
+    0.5 1 0
+    -0.5 1 0
+    -1 0 0
+  faces 3
+    0 1 2 1 0 1 2 0
+    0 2 3 3 0 2 3 0
+    0 3 4 2 0 3 4 0
+endnode
+node trimesh area
+  parent zspec_normals
+  bitmap zspec_t0
+  verts 4
+    0 0 4
+    2 0 4
+    0 1 4
+    -0.5 0 4.5
+  tverts 4
+    0 0 0
+    2 0 0
+    0 1 0
+    -0.5 0 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+node trimesh sgzero
+  parent zspec_normals
+  bitmap zspec_t0
+  verts 4
+    0 0 5
+    2 0 5
+    0 1 5
+    -0.5 0 5.5
+  tverts 4
+    0 0 0
+    2 0 0
+    0 1 0
+    -0.5 0 0
+  faces 2
+    0 1 2 0 0 1 2 0
+    0 2 3 0 0 2 3 0
+endnode
+endmodelgeom zspec_normals
+donemodel zspec_normals

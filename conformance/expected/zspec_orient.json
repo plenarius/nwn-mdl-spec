@@ -1,0 +1,206 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_orient",
+ "build": "89.8193.37-17",
+ "golden_sha256": "54acdbe6531c0dc766512e82de08bae1f173235bd6fd64189867158ab6a1018b",
+ "volatile": [],
+ "model": {
+  "name": "zspec_orient",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 7,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_orient",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "o_zero_axis",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.47942555,
+        0,
+        0,
+        0.87758255
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "o_zero_angle",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "o_unnorm",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        0.70710677,
+        0.7071068
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "o_diag",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0.70710677,
+        0.70710677,
+        0,
+        -4.371139e-08
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "o_neg",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 5,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        -0.47942555,
+        0.87758255
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "o_big",
+   "parent": "zspec_orient",
+   "type": "dummy",
+   "flags": 1,
+   "number": 6,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 20,
+     "name": "orientation",
+     "columns": 4,
+     "bezier": false,
+     "colbyte": 4,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        -0.35078323,
+        0,
+        -0.9364567
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "animations": []
+}

@@ -1,0 +1,25 @@
+# mdl-spec conformance probe zspec_dummy (CC0-1.0)
+# Model header fields and the base node: position, orientation, scale,
+# wirecolor, inheritcolor.
+newmodel zspec_dummy
+setsupermodel zspec_dummy NULL
+classification Character
+setanimationscale 2.5
+beginmodelgeom zspec_dummy
+node dummy zspec_dummy
+  parent NULL
+endnode
+node dummy child_a
+  parent zspec_dummy
+  position 1 2 3
+  orientation 0 0 1 1.5707963
+  scale 2
+  wirecolor 1 0 0
+  inheritcolor 1
+endnode
+node dummy child_b
+  parent child_a
+  position -0.5 0.25 0
+endnode
+endmodelgeom zspec_dummy
+donemodel zspec_dummy

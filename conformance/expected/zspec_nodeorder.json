@@ -1,0 +1,83 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_nodeorder",
+ "build": "89.8193.37-17",
+ "golden_sha256": "96724d0fabdd43e236dbe441fddb73cd5b351ef43b90c38ca947a8b4c05807cc",
+ "volatile": [],
+ "model": {
+  "name": "zspec_nodeorder",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 6,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_nodeorder",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "a",
+   "parent": "zspec_nodeorder",
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "a1",
+   "parent": "a",
+   "type": "dummy",
+   "flags": 1,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "a2",
+   "parent": "a",
+   "type": "dummy",
+   "flags": 1,
+   "number": 5,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "b",
+   "parent": "zspec_nodeorder",
+   "type": "dummy",
+   "flags": 1,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "b1",
+   "parent": "b",
+   "type": "dummy",
+   "flags": 1,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": []
+  }
+ ],
+ "animations": []
+}

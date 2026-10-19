@@ -1,0 +1,80 @@
+# mdl-spec conformance probe zspec_anim (CC0-1.0)
+# Linear animation keys on a dummy (positionkey with a count, orientationkey
+# closed by endlist, scalekey with a count, an empty line inside and a
+# trailing endlist) and on a trimesh (alphakey, selfillumcolorkey). Events,
+# transtime, animroot, and a second animation with a single value.
+newmodel zspec_anim
+setsupermodel zspec_anim NULL
+classification character
+beginmodelgeom zspec_anim
+node dummy zspec_anim
+  parent NULL
+endnode
+node dummy arm
+  parent zspec_anim
+  position 0 0 1
+endnode
+node trimesh blade
+  parent arm
+  bitmap zspec_t0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+endmodelgeom zspec_anim
+newanim swing zspec_anim
+  length 2
+  transtime 0.25
+  animroot arm
+  event 0.5 hit
+  event 1.5 snd_footstep
+  node dummy zspec_anim
+    parent NULL
+  endnode
+  node dummy arm
+    parent zspec_anim
+    positionkey 3
+      0 0 0 1
+      1 0 0 2
+      2 0 0 1
+    orientationkey
+      0 0 0 1 0
+      1 0 0 1 1.5707963
+      2 0 0 1 3.1415927
+    endlist
+    scalekey 2
+      0 1
+
+      2 2
+    endlist
+  endnode
+  node trimesh blade
+    parent arm
+    alphakey 2
+      0 1
+      2 0
+    selfillumcolorkey 2
+      0 0 0 0
+      2 1 0.5 0.25
+  endnode
+doneanim swing zspec_anim
+newanim idle zspec_anim
+  length 1
+  transtime 0
+  animroot zspec_anim
+  node dummy zspec_anim
+    parent NULL
+  endnode
+  node dummy arm
+    parent zspec_anim
+    position 0 0 1.5
+  endnode
+doneanim idle zspec_anim
+donemodel zspec_anim

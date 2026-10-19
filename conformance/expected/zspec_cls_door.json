@@ -1,0 +1,38 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_cls_door",
+ "build": "89.8193.37-17",
+ "golden_sha256": "e0eba231f602ac296c8e1bc885594fa1cef653a11427c8b26f5ec3f745d24a50",
+ "volatile": [],
+ "model": {
+  "name": "zspec_cls_door",
+  "classification": 8,
+  "fog": 0,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 1,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_cls_door",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  }
+ ],
+ "animations": []
+}

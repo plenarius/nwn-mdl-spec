@@ -1,0 +1,12 @@
+# mdl-spec conformance probe zspec_cls_door (CC0-1.0)
+# Classification keyword value 'door' and 'ignorefog 1'.
+newmodel zspec_cls_door
+setsupermodel zspec_cls_door NULL
+classification door
+ignorefog 1
+beginmodelgeom zspec_cls_door
+node dummy zspec_cls_door
+  parent NULL
+endnode
+endmodelgeom zspec_cls_door
+donemodel zspec_cls_door

@@ -1,0 +1,38 @@
+# mdl-spec conformance probe zspec_nodetypes (CC0-1.0)
+# Node type words: camera, an unknown type ('patch'), and mixed case
+# ('TriMesh', 'DUMMY').
+newmodel zspec_nodetypes
+setsupermodel zspec_nodetypes NULL
+classification character
+beginmodelgeom zspec_nodetypes
+node dummy zspec_nodetypes
+  parent NULL
+endnode
+node camera cam
+  parent zspec_nodetypes
+  position 0 -5 2
+endnode
+node patch odd
+  parent zspec_nodetypes
+  position 1 0 0
+endnode
+node DUMMY upper
+  parent zspec_nodetypes
+  position 2 0 0
+endnode
+node TriMesh mixed
+  parent upper
+  bitmap zspec_t0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+endmodelgeom zspec_nodetypes
+donemodel zspec_nodetypes

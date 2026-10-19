@@ -1,0 +1,4 @@
+// cleanmodels probe: a material whose render hint gives its meshes tangents
+renderhint NormalAndSpecMapped
+texture0 tin01_bwall01
+texture1 tin01_bwall01_n

@@ -1,0 +1,30 @@
+# mdl-spec conformance probe zspec_mtrbmp (CC0-1.0)
+# No renderhint and no materialname: the bitmap names a material
+# (zspec_mtrbmp.mtr, renderhint NormalAndSpecMapped). Is the bitmap
+# looked up as a material?
+newmodel zspec_mtrbmp
+setsupermodel zspec_mtrbmp NULL
+classification character
+beginmodelgeom zspec_mtrbmp
+node dummy zspec_mtrbmp
+  parent NULL
+endnode
+node trimesh quad
+  parent zspec_mtrbmp
+  bitmap zspec_mtrbmp
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+endmodelgeom zspec_mtrbmp
+donemodel zspec_mtrbmp

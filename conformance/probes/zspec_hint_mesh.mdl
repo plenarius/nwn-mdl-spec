@@ -1,0 +1,30 @@
+# mdl-spec conformance probe zspec_hint_mesh (CC0-1.0)
+# renderhint NormalAndSpecMapped on the mesh: the hint field, generated
+# normals and generated tangents with handedness.
+newmodel zspec_hint_mesh
+setsupermodel zspec_hint_mesh NULL
+classification character
+beginmodelgeom zspec_hint_mesh
+node dummy zspec_hint_mesh
+  parent NULL
+endnode
+node trimesh quad
+  parent zspec_hint_mesh
+  bitmap zspec_t0
+  renderhint NormalAndSpecMapped
+  verts 4
+    -1 -1 0
+     1 -1 0
+     1  1 0
+    -1  1 0
+  tverts 4
+    0 0 0
+    1 0 0
+    1 1 0
+    0 1 0
+  faces 2
+    0 1 2 1 0 1 2 0
+    0 2 3 1 0 2 3 0
+endnode
+endmodelgeom zspec_hint_mesh
+donemodel zspec_hint_mesh

@@ -1,0 +1,11 @@
+# mdl-spec conformance probe zspec_cls_tile (CC0-1.0)
+# Classification keyword value 'TILE'.
+newmodel zspec_cls_tile
+setsupermodel zspec_cls_tile NULL
+classification TILE
+beginmodelgeom zspec_cls_tile
+node dummy zspec_cls_tile
+  parent NULL
+endnode
+endmodelgeom zspec_cls_tile
+donemodel zspec_cls_tile

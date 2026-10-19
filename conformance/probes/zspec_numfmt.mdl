@@ -1,0 +1,52 @@
+# mdl-spec conformance probe zspec_numfmt (CC0-1.0)
+# Well-formed number and keyword forms: exponents, a leading + or -, a
+# leading or trailing decimal point, leading zeros, tabs between values,
+# a comment after the values, and keywords in any case. (zspec_numbers
+# holds the malformed forms.)
+newmodel zspec_numfmt
+setsupermodel zspec_numfmt NULL
+classification character
+beginmodelgeom zspec_numfmt
+node dummy zspec_numfmt
+  parent NULL
+endnode
+node dummy f_exp
+  parent zspec_numfmt
+  position 1e1 -2.5E-1 +3
+endnode
+node dummy f_dots
+  parent zspec_numfmt
+  position .5 1. -0
+endnode
+node dummy f_zeros
+  parent zspec_numfmt
+  position 007 0.250 -000.5
+endnode
+node dummy f_tabs
+  parent zspec_numfmt
+	position	1	2	3
+endnode
+node dummy f_comment
+  parent zspec_numfmt
+  position 1 2 3 # a comment after the values
+  # a comment line inside a node
+endnode
+node trimesh f_case
+  parent zspec_numfmt
+  Bitmap zspec_t0
+  DIFFUSE 0.5 0.5 0.5
+  TransparencyHint +2
+  Shadow 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+endmodelgeom zspec_numfmt
+donemodel zspec_numfmt
