@@ -325,22 +325,29 @@ def _skin(b, base, nv, node_names):
     s['qbone_ref_inv'] = [nums(b.fs(b.mptr(qptr) + 16 * i, 4)) for i in range(min(qcount, 4096))]
     s['tbone_ref_inv'] = [nums(b.fs(b.mptr(tptr) + 12 * i, 3)) for i in range(min(tcount, 4096))]
     s['bone_nodes'] = [b.i16(base + 64 + 2 * i) for i in range(64)]
-    weights = []
+    weights, dropped = [], []
     if wptr is not None and bptr is not None and b.ok(wptr, 16 * nv) and b.ok(bptr, 8 * nv):
         for i in range(nv):
             w = b.fs(wptr + 16 * i, 4)
             r = [b.i16(bptr + 8 * i + 2 * j) for j in range(4)]
             infl = []
             for j in range(4):
-                # The renderer skips a slot whose weight is not > 0 or whose
-                # bone maps to no tree position (E25), so such a slot is no
-                # influence at all.
+                # The loader copies the 64-entry bone list from skin +64
+                # (0x4bd400) and the renderer skips a slot whose weight is not
+                # > 0 or whose tree position is outside the tree (E25), so
+                # such a slot is no influence at all.
                 if w[j] > 0 and 0 <= r[j] < 64:
                     node = s['bone_nodes'][r[j]]
                     if 0 <= node < len(node_names):
                         infl.append([node_names[node], num(w[j])])
+                    elif node >= len(node_names):
+                        dropped.append(i)
             weights.append(infl)
     s['weights'] = weights
+    if dropped:
+        # vertices that lost an influence to a bone list entry past the tree
+        # (seen in files with the 100-byte skin header, MDL-BIN-061)
+        s['out_of_tree'] = sorted(set(dropped))
     return s
 
 
@@ -904,6 +911,9 @@ def _finish_mesh(nd):
     mesh['vertex_count'] = len(v['position'])
     if weights is not None:
         nd['skin']['weights'] = corner_w
+    cons = nd.get('dangly', {}).get('constraints')
+    if cons is not None:  # per corner, like every other vertex attribute
+        nd['dangly']['constraints'] = [cons[f[k]] if 0 <= f[k] < len(cons) else 0 for f in faces for k in range(3)]
 
 
 def _read_tree(lines, nodes_out, anim):

@@ -323,12 +323,17 @@ golden yet: `compilemodel` needs a creature on screen to compile a skin.*
 some EE files: a 17-entry bone list and one more word used as an 18th slot,
 `c_halaster`, `tni_udoor_19`) and 320 bytes (older EE builds: 256 bytes after the
 arrays, the bone list at their start and zeros after it, `c_golemerald`,
-`c_kocrachn`). No field tells them apart. A reader
-MUST find the skin's data through its offsets and MUST NOT index the bone
-list with a bone that no vertex references. Nothing follows the skin header
-in a node, so a reader need not know its size. *Inferred from data (first
-data offset after each skin node, measured in the named stock files; not
-copied here).*
+`c_kocrachn`). No field tells them apart. The loader
+copies 64 bone list entries from skin +64 whatever the file's layout, so in
+a 100-byte file entries 17 onwards are whatever follows (in
+`tni_udoor_19`, entry 17 reads 109, outside its 46-node tree, while the
+bone map puts that bone at position 6). A reader MUST find the skin's data
+through its offsets and MUST NOT index the bone list with a bone that no
+vertex references. Nothing follows the skin header in a node, so a reader
+need not know its size. *Sizes inferred from data (first data offset after
+each skin node, measured in the named stock files; not copied here); the
+64-entry copy confirmed in code (the loader's skin branch, 0x4bd400, copies
+node +0x2b0..+0x32f to the runtime +0x320).*
 
 ## Animations
 

@@ -27,7 +27,7 @@ A claim about the engine carries:
 
 Only confirmed behaviour goes into normative text (MUST, SHOULD). Inferred
 and untested behaviour goes into [spec/unknown.md](spec/unknown.md) or is
-marked as such in [engine/findings.md](engine/findings.md), and is never
+marked as such in [engine/behaviour.md](engine/behaviour.md), and is never
 promoted without new evidence.
 
 ## Rule IDs
@@ -48,7 +48,7 @@ marked withdrawn, with the reason, and a new ID replaces it. Implementations
 may cite IDs in comments and tests.
 
 Engine findings are numbered `E1`, `E2`, … in
-[engine/findings.md](engine/findings.md). E1–E37 match the numbering of
+[engine/behaviour.md](engine/behaviour.md). E1–E37 match the numbering of
 cleanmodels' `NWMAIN_FINDINGS.md`, where they were first written.
 
 ## Pull requests

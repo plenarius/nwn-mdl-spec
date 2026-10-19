@@ -33,7 +33,7 @@ Any YAML library reads the same data (the files are checked against PyYAML).
   meaning unknown). See [CONTRIBUTING.md](../CONTRIBUTING.md).
 - `evidence`: probe names (`zspec_*`, `cmbez01`, `cmtan01` in
   `conformance/probes/`), engine findings (`E12`, in
-  [engine/findings.md](../engine/findings.md)) or addresses (objdump
+  [engine/behaviour.md](../engine/behaviour.md)) or addresses (objdump
   addresses in `nwmain-linux`; Ghidra adds 0x100000).
 - `applies` (controllers): the node class whose id space the entry belongs
   to. A node's classes, most specific first: `emitter` (flag 0x4), `light`

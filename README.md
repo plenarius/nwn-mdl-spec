@@ -71,7 +71,7 @@ A standalone repository in a neutral GitHub organisation, for example `nwn-forma
 - **Binary layout:** headers, node types, mesh, skin, dangly, AABB, emitter, light, animation and controller structures, MDX streams, pointer rules.
 - **ASCII grammar:** keywords, lists (counted and `endlist`), number syntax, case rules, comments, what the engine skips.
 - **Conversion rules,** both directions. For example: vertex merging, normals from smoothing groups, tangent generation, skin bone numbering, node numbering against a supermodel, bezier key layout.
-- **Rule IDs.** Each rule is a MUST/SHOULD statement with a stable ID (`MDL-SKIN-004`), so implementations can cite it in comments and tests.
+- **Rule IDs.** Each rule is a MUST/SHOULD statement with a stable ID (`MDL-SKIN-014`), so implementations can cite it in comments and tests.
 
 ### 2. Engine behaviour, with evidence
 

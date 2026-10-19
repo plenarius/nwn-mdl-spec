@@ -1,0 +1,2608 @@
+{
+ "impl": "cleanmodels-v4.9.0",
+ "build": "89.8193.37-17",
+ "results": [
+  {
+   "probe": "cmbez01",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 1.7320508"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation]",
+     "expected bezier keys, got linear [allowed: MDL-CTRL-022]"
+    ]
+   ]
+  },
+  {
+   "probe": "cmbez01",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[spark].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spinner].controllers[position]",
+     "omitted; the golden has it with the default value"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation]",
+     "missing (id 20, 2 key(s)) [allowed: MDL-CTRL-022]"
+    ]
+   ]
+  },
+  {
+   "probe": "cmtan01",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ]
+   ]
+  },
+  {
+   "probe": "cmtan01",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[quad].controllers[position]",
+     "omitted; the golden has it with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabb",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[walk].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[walk].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[walk].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.2311072"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.125, 0.5, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabb",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_aabbdef",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[walk].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[walk].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[walk].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[walk].mesh.render",
+     "expected 0, got 1"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.2311072"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.125, 0.5, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabbdef",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_aabbdeg",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0] [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0] [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.shininess",
+     "expected 1, got 0 [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.triangles",
+     "expected 3 drawn triangles, got 4 [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.face_count",
+     "expected 3, got 4 [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.position",
+     "5 corner(s) differ; first: triangle 1 corner 0: expected [1, 0, 0], got [0, 0, 0] [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.vertex_order",
+     "same triangles, different vertex numbering or order"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.3552618"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.2857143, 0.42857143, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabbdeg",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_anim",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[blade].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[blade].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[blade].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[blade].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.8660254"
+    ],
+    [
+     "nodes[blade].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_anim",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_animfx",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lamp].light.lightpriority",
+     "expected 5, got 0"
+    ],
+    [
+     "nodes[lamp].light.ndynamictype",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.affectdynamic",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.shadow",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.fadinglight",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[fx].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0"
+    ],
+    [
+     "nodes[lamp].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animfx",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[fx].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animmesh",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[water].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[water].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[water].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[water].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[water].mesh.shadow",
+     "expected 1, got 0"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animverts",
+     "expected [[-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0], [-1, -1, 0.25], [1, -1, 0.25], [1, 1, 0.5], [-1, 1, 0.5], [-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0]], got [[-1, -1, 0], [-1, 1, 0], [1, 1, 0.5], [1, -1, 0], [1, -1, 0], [-1, -1, 0.25], [-1, 1, 0.5], [1, 1, 0], [1, 1, 0], [1, -1, 0.25], [-1, -1, 0], [-1, 1, 0]]"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animtverts",
+     "expected [[0, 0], [1, 0], [1, 1], [0, 1], [0.25, 0], [1.25, 0], [1.25, 1], [0.25, 1], [0.5, 0], [1.5, 0], [1.5, 1], [0.5, 1]], got [[0, 0], [0, 1], [1.25, 1], [1.5, 0], [1, 0], [0.25, 0], [0.25, 1], [1.5, 1], [1, 1], [1.25, 0], [0.5, 0], [0.5, 1]]"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[water].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animmesh",
+   "test": "decompile",
+   "status": "fail",
+   "must": [
+    [
+     "animations[animloop01].nodes[water].animmesh.animverts",
+     "expected [[-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0], [-1, -1, 0.25], [1, -1, 0.25], [1, 1, 0.5], [-1, 1, 0.5], [-1, -1, 0], [1, -1, 0], [1, 1, 0], [-1, 1, 0]], got [[-1, -1, 0], [-1, -1, 0.25], [-1, -1, 0], [1, -1, 0], [1, -1, 0.25], [1, -1, 0], [1, 1, 0], [1, 1, 0.5], [1, 1, 0], [-1, 1, 0], [-1, 1, 0.5], [-1, 1, 0]]"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animtverts",
+     "expected [[0, 0], [1, 0], [1, 1], [0, 1], [0.25, 0], [1.25, 0], [1.25, 1], [0.25, 1], [0.5, 0], [1.5, 0], [1.5, 1], [0.5, 1]], got [[0, 0], [0.25, 0], [0.5, 0], [1, 0], [1.25, 0], [1.5, 0], [1, 1], [1.25, 1], [1.5, 1], [0, 1], [0.25, 1], [0.5, 1]]"
+    ]
+   ],
+   "should": []
+  },
+  {
+   "probe": "zspec_bezier2",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[mover].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[quad].controllers[alpha]",
+     "missing (id 128, 1 key(s))"
+    ],
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lamp].light.lightpriority",
+     "expected 5, got 0"
+    ],
+    [
+     "nodes[lamp].light.ndynamictype",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.affectdynamic",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.shadow",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp].light.fadinglight",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[fx].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0.70710677"
+    ],
+    [
+     "nodes[mover].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lamp].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_bezier2",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[quad].controllers[alpha]",
+     "expected bezier keys, got linear [allowed: MDL-CTRL-023]"
+    ],
+    [
+     "nodes[fx].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_door",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_door",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_effs",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_effs",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_gui",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_gui",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_item",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_item",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_tile",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_tile",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_tiles",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "model.classification",
+     "expected 0, got 2"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_tiles",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_crlf",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[child_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.8708287"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_crlf",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_dangly",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[flag].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[flag].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[flag].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[flag].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[flag].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_dangly",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_dummy",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[child_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.8708287"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_dummy",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_emitter",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[fx_a].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[fx_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0.5"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_emitter",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_hint_mesh",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_hint_mesh",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_hints",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hint_none].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hint_none].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_none].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_none].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[hint_tangents].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hint_tangents].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_tangents].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_tangents].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[hint_bogus].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hint_bogus].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_bogus].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_bogus].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[hint_lower].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hint_lower].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_lower].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[hint_lower].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 2.0615528"
+    ],
+    [
+     "nodes[hint_none].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_tangents].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_tangents].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 1]"
+    ],
+    [
+     "nodes[hint_bogus].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_bogus].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 2]"
+    ],
+    [
+     "nodes[hint_lower].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_lower].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 3]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_hints",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[extra].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand].number",
+     "expected 2, got -1"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.5"
+    ],
+    [
+     "nodes[extra].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid2",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[Arm].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[Arm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid2",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid3",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid3",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_light",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lamp_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lamp_b].light.lightpriority",
+     "expected 5, got 0"
+    ],
+    [
+     "nodes[lamp_b].light.ambientonly",
+     "expected 0, got 1"
+    ],
+    [
+     "nodes[lamp_b].light.affectdynamic",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[lamp_b].light.shadow",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 0, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_light",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_merge",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[shared].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[shared].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[shared].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[shared].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[uvsplit].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[uvsplit].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[uvsplit].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[uvsplit].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[negzero].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[negzero].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[negzero].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[negzero].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[degen].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[degen].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[degen].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[degen].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[mirror].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[mirror].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[mirror].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[mirror].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 4]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 2.1213202"
+    ],
+    [
+     "nodes[shared].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[uvsplit].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[uvsplit].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 1]"
+    ],
+    [
+     "nodes[negzero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[negzero].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 2]"
+    ],
+    [
+     "nodes[negzero].mesh.radius",
+     "expected 0.9013878, got 0.745356"
+    ],
+    [
+     "nodes[negzero].mesh.average",
+     "expected [0.5, 0.25, 2], got [0.6666667, 0.33333334, 2]"
+    ],
+    [
+     "nodes[degen].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[degen].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 3]"
+    ],
+    [
+     "nodes[degen].mesh.radius",
+     "expected 0.84852815, got 0.70710677"
+    ],
+    [
+     "nodes[degen].mesh.average",
+     "expected [0.6, 0.4, 3], got [0.5, 0.5, 3]"
+    ],
+    [
+     "nodes[degen].mesh.faces.normal",
+     "1 face(s) differ; first face 1: expected [1, 0, 0], got [0, 0, 1]"
+    ],
+    [
+     "nodes[degen].mesh.faces.distance",
+     "1 face(s) differ; first face 1: expected -1, got -3"
+    ],
+    [
+     "nodes[mirror].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[mirror].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 4]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_merge",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_mtrbmp",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_mtrbmp",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_nodeorder",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[a].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[a1].number",
+     "expected 3, got 2"
+    ],
+    [
+     "nodes[a1].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[a2].number",
+     "expected 5, got 3"
+    ],
+    [
+     "nodes[a2].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[b].number",
+     "expected 2, got 4"
+    ],
+    [
+     "nodes[b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[b1].number",
+     "expected 4, got 5"
+    ],
+    [
+     "nodes[b1].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[a1].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[a2].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[b1].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_nodeorder",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_nodetypes",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[cam].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[odd].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[upper].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[mixed].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[mixed].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[mixed].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[mixed].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -5, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [3, 1, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 3.5"
+    ],
+    [
+     "nodes[mixed].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_nodetypes",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_normals",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[smooth].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[smooth].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[smooth].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[smooth].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[backtoback].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[backtoback].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[backtoback].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[backtoback].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[sgbits].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[sgbits].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[sgbits].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[sgbits].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[area].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[area].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[area].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[area].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[sgzero].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[sgzero].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[sgzero].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[sgzero].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 5.5]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 3.2882366"
+    ],
+    [
+     "nodes[smooth].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[backtoback].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[backtoback].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 2]"
+    ],
+    [
+     "nodes[sgbits].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[sgbits].mesh.bmin",
+     "expected [-1, 0, 0], got [-1, 0, 3]"
+    ],
+    [
+     "nodes[area].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[area].mesh.bmin",
+     "expected [-0.5, 0, 0], got [-0.5, 0, 4]"
+    ],
+    [
+     "nodes[sgzero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[sgzero].mesh.bmin",
+     "expected [-0.5, 0, 0], got [-0.5, 0, 5]"
+    ],
+    [
+     "nodes[sgzero].mesh.radius",
+     "expected 1.6488632, got 1.7834113"
+    ],
+    [
+     "nodes[sgzero].mesh.average",
+     "expected [0.375, 0.25, 5.125], got [0.25, 0.33333334, 5.0833335]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_normals",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_numbers",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -0.25, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [10, 1, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 5.2574353"
+    ],
+    [
+     "nodes.tree",
+     "node order differs: expected ['zspec_numbers', 'n_exp', 'n_hex', 'n_junk', 'n_comma', 'n_light', 'n_mesh'], got ['zspec_numbers', 'n_exp', 'n_hex', 'n_junk', 'n_comma', 'n_caps', 'n_mesh', 'n_light'] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_exp].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_hex].controllers[position].keys[0].v",
+     "expected [2, 16, -1], got [0, 0, 0] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_hex].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_junk].controllers[position]",
+     "expected 1 columns, got 3 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_junk].controllers[position].colbyte",
+     "expected 0x1, got 0x3"
+    ],
+    [
+     "nodes[n_junk].controllers[position].keys[0].v",
+     "expected [1.5], got [0, 0, 0] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_junk].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_comma].controllers[position]",
+     "expected 1 columns, got 3 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_comma].controllers[position].colbyte",
+     "expected 0x1, got 0x3"
+    ],
+    [
+     "nodes[n_comma].controllers[position].keys[0].v",
+     "expected [0], got [0, 0, 0] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_comma].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].controllers[radius].keys[0].v",
+     "expected [1], got [0] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[n_light].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].light.lightpriority",
+     "expected 4, got 5 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].light.ndynamictype",
+     "expected 1, got 0 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].light.affectdynamic",
+     "expected 1, got 0 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].light.shadow",
+     "expected 1, got 0 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_light].light.fadinglight",
+     "expected 1, got 0 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_mesh].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[n_mesh].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255]) [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_mesh].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0] [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_mesh].mesh.shininess",
+     "expected 7, got 0 [lenient: malformed input]"
+    ],
+    [
+     "nodes[n_mesh].mesh.transparencyhint",
+     "expected 2, got 3 [lenient: malformed input]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_numbers",
+   "test": "decompile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[n_junk].controllers[position].keys[0].v",
+     "expected [1.5], got [1.5, -2.1477333e-22, 4.5915e-41]"
+    ],
+    [
+     "nodes[n_comma].controllers[position].keys[0].v",
+     "expected [0], got [0, -2.1477333e-22, 4.5915e-41]"
+    ]
+   ],
+   "should": []
+  },
+  {
+   "probe": "zspec_numfmt",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[f_exp].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_dots].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_zeros].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_tabs].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_comment].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_case].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[f_case].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[f_case].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -0.25, -0.5]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [10, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 5.415545"
+    ],
+    [
+     "nodes[f_case].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_numfmt",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_orient",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[o_zero_axis].controllers[orientation].keys[0].v",
+     "expected [0.47942555, 0, 0, 0.87758255], got [0, 0, 0, 0.87758255]"
+    ],
+    [
+     "nodes[o_unnorm].controllers[orientation].keys[0].v",
+     "expected [0, 0, 0.70710677, 0.7071068], got [0, 0, 1.4142135, 0.7071068]"
+    ],
+    [
+     "nodes[o_diag].controllers[orientation].keys[0].v",
+     "expected [0.70710677, 0.70710677, 0, -4.371139e-08], got [1, 1, 0, -4.371139e-08]"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[o_zero_axis].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_zero_angle].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_unnorm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_diag].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_neg].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_big].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_orient",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_reference",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[ref_a].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[ref_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.5"
+    ],
+    [
+     "nodes[ref_b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_reference",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_setfill",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[typo].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[typo].controllers[selfillumcolor]",
+     "not in the golden (id 100, 1 key(s), first [1, 0.5, 0.25])"
+    ],
+    [
+     "nodes[typo].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[typo].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[typo].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[right].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[right].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[right].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[right].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.8660254"
+    ],
+    [
+     "nodes[typo].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[right].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[right].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 1]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_setfill",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_skin",
+   "test": "all",
+   "status": "pending",
+   "reason": "compilemodel refuses a skin unless a creature using the model is on screen; needs an in-game rig"
+  },
+  {
+   "probe": "zspec_super",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand#2].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-0.75, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0.5, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.80039054"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_super",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tanfile",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[quad].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[quad].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tanfile",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tanmirror",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[strip].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[strip].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[strip].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[strip].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[strip].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tanmirror",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[strip].mesh.tangent",
+     "3 corner(s) differ; first: triangle 2 corner 0: expected [-1, 0, 0], got [1, 0, 0]"
+    ],
+    [
+     "nodes[strip].mesh.handedness",
+     "3 corner(s) differ; first: triangle 2 corner 0: expected -1, got 1"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_transp",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes.tree",
+     "node order differs: expected ['zspec_transp', 'd_dummy', 'l_light', 'keep', 'k_z', 'k_a', 'm_zero', 'm_one', 'm_two'], got ['zspec_transp', 'm_two', 'd_dummy', 'm_one', 'm_zero', 'l_light', 'keep', 'k_z', 'k_a']"
+    ],
+    [
+     "nodes[d_dummy].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[l_light].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[l_light].light.lightpriority",
+     "expected 5, got 0"
+    ],
+    [
+     "nodes[l_light].light.ndynamictype",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[l_light].light.affectdynamic",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[l_light].light.shadow",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[l_light].light.fadinglight",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[keep].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[k_z].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[k_z].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[k_z].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[k_z].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[k_a].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[k_a].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[k_a].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[k_a].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m_zero].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m_zero].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_zero].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_zero].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m_one].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m_one].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_one].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_one].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m_two].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m_two].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_two].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m_two].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d_dummy].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[l_light].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[keep].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[k_z].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[k_a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_zero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_one].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_two].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_transp",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_trimesh",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.5"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_trimesh",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  }
+ ]
+}

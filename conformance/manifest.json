@@ -110,7 +110,16 @@
     "MDL-CTRL-020",
     "MDL-CTRL-023"
    ],
-   "golden": true
+   "golden": true,
+   "allow": [
+    {
+     "path": "nodes[quad].controllers[alpha]",
+     "rule": "MDL-CTRL-023",
+     "tests": [
+      "decompile"
+     ]
+    }
+   ]
   },
   {
    "name": "zspec_cls_door",

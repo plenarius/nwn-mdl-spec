@@ -94,7 +94,8 @@ in 0 0 0, out 1 0.1 0); E34. The on-screen effect is not observed.*
 handles (0x11 for `alphabezierkey` with one key). The engine evaluates a
 geometry node's controllers at time 0, where both the linear and the bezier
 paths return the first value, so the handles have no effect. A compiler MUST
-write the controller; it MAY keep the handles. *Confirmed: zspec_bezier2
+write the controller (with the first key's value); it MAY keep the handles.
+A decompiler MAY write it as a plain value. *Confirmed: zspec_bezier2
 (geometry `alphabezierkey`); E36.*
 
 ## From ASCII

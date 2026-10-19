@@ -343,16 +343,23 @@ def compare_skin(r, path, e, a, own_nodes):
         r.must(path + '.weights', 'missing')
         return
     et, corners = drawn(e['mesh']), drawn(a['mesh'])
-    bad = []
+    out_of_tree = set(es.get('out_of_tree', []))
+    bad, soft = [], []
     for ti, (ef, af) in enumerate(zip(et, corners)):
         for k in range(3):
             want = sorted((n.lower(), w) for n, w in (ew[ef[k]] if ef[k] < len(ew) else []))
             got = sorted((n.lower(), w) for n, w in (aw[af[k]] if af[k] < len(aw) else []))
             if [n for n, _ in want] != [n for n, _ in got] or \
                     not vclose([w for _, w in want], [w for _, w in got], 1e-4):
-                bad.append('triangle %d corner %d: expected %s, got %s' % (ti, k, want, got))
+                msg = 'triangle %d corner %d: expected %s, got %s' % (ti, k, want, got)
+                # A bone list entry past the tree: by the code the engine
+                # skips that influence; not observed in game (spec/unknown.md).
+                (soft if ef[k] in out_of_tree else bad).append(msg)
     if bad:
         r.must(path + '.weights', '%d corner(s) differ; first: %s' % (len(bad), bad[0]))
+    if soft:
+        r.should(path + '.weights', '%d corner(s) differ on a bone list entry past the tree; first: %s'
+                 % (len(soft), soft[0]))
 
 
 def dfs_order(nodes):
@@ -403,7 +410,22 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             compare_section(r, p + '.reference', e['reference'], a.get('reference'),
                             {'refmodel': '', 'reattachable': 0}, profile, vol)
         if 'dangly' in e:
-            compare_section(r, p + '.dangly', e['dangly'], a.get('dangly'), {}, profile, vol, 1e-4)
+            ed = dict(e['dangly'])
+            ad = dict(a.get('dangly') or {})
+            if profile == 'decompile' and 'mesh' in e and 'mesh' in a:
+                # constraints are per vertex; an ASCII may number vertices
+                # its own way, so compare them per drawn corner
+                ec, ac = ed.pop('constraints', []), ad.pop('constraints', [])
+                bad = []
+                for ti, (x, y) in enumerate(zip(drawn(e['mesh']), drawn(a['mesh']))):
+                    for k in range(3):
+                        cx = ec[x[k]] if x[k] < len(ec) else None
+                        cy = ac[y[k]] if y[k] < len(ac) else None
+                        if not close(cx, cy, 1e-4):
+                            bad.append('triangle %d corner %d: expected %s, got %s' % (ti, k, cx, cy))
+                if bad:
+                    r.must(p + '.dangly.constraints', '%d corner(s) differ; first: %s' % (len(bad), bad[0]))
+            compare_section(r, p + '.dangly', ed, ad, {}, profile, vol, 1e-4)
         if 'animmesh' in e:
             ea = dict(e['animmesh'])
             aa = a.get('animmesh') or {}

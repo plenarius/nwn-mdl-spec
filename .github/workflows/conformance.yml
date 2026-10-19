@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: CC0-1.0
+# Self-checks on every push; the implementations' runs are reports, not gates
+# (both currently fail MUST checks, see conformance/reports/).
+# Regenerating the goldens needs the game and an X server, so it is not
+# done here: see CONTRIBUTING.md (a self-hosted runner with the game could
+# run conformance/tools/make_goldens.py and `mdlconf.py check-goldens`).
+name: conformance
+on: [push, pull_request]
+jobs:
+  selfcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install pyyaml
+      - run: python3 runner/selfcheck.py
+  cleanmodels:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: {go-version: '1.26'}
+      - run: go install github.com/plenarius/cleanmodels/cmd/cleanmodels@latest
+      - run: python3 runner/mdlconf.py run --impl cleanmodels --cmd runner/adapters/cleanmodels.sh --json cleanmodels.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: cleanmodels-report, path: cleanmodels.json}
+  moonglow:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: {repository: jadzziaa/moonglow-toolset, path: moonglow-toolset}
+      - uses: dtolnay/rust-toolchain@stable
+      - run: runner/adapters/moonglow/build.sh moonglow-toolset /tmp/mdlspec-mgconf
+      - run: python3 runner/mdlconf.py run --impl moonglow --cmd runner/adapters/moonglow.sh --json moonglow.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: moonglow-report, path: moonglow.json}

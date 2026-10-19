@@ -485,7 +485,11 @@ node's start to the first model data it owns: 816 bytes (a 192-byte skin
 header) in the engine's HD part `pmh0_chest001`; 724 (100) in
 `tni_udoor_19` (EE) and BioWare files; 944 (320) in `c_golemerald` and
 `c_kocrachn` (older EE). The in-memory skin node has a 64-entry bone list
-(+0x320). *Inferred (data); no skin golden.*
+(+0x320), which the loader's skin branch (0x4bd400) fills with 128 bytes
+from node +0x2b0 whatever the file's size: in a 724-byte file, entries 17
+onwards come from what follows (stock `tni_udoor_19`: 109 for bone 17, past
+its 46-node tree). *Sizes inferred (data); the copy confirmed (code); no
+skin golden.*
 
 **E58 Node counts.** Without a supermodel the header node count is the
 number of nodes written; an animation's is the number of nodes in its tree.
