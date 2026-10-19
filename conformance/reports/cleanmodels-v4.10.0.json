@@ -1,0 +1,3557 @@
+{
+ "impl": "cleanmodels-v4.10.0",
+ "build": "89.8193.37-17",
+ "results": [
+  {
+   "probe": "cmbez01",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 1.7320508"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation]",
+     "expected bezier keys, got linear [allowed: MDL-CTRL-022]"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation].keys[0].v",
+     "expected [0, 0, 1], got [0, 0, 0, 1] [allowed: MDL-CTRL-022]"
+    ]
+   ]
+  },
+  {
+   "probe": "cmbez01",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[spark].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spinner].controllers[position]",
+     "omitted; the golden has it with the default value"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation]",
+     "missing (id 20, 2 key(s)) [allowed: MDL-CTRL-022]"
+    ]
+   ]
+  },
+  {
+   "probe": "cmtan01",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ]
+   ]
+  },
+  {
+   "probe": "cmtan01",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[quad].controllers[position]",
+     "omitted; the golden has it with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabb",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.2311072"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.125, 0.5, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabb",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_aabbdef",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.2311072"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.125, 0.5, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabbdef",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_aabbdeg",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[walk].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[walk].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[walk].mesh.triangles",
+     "expected 3 drawn triangles, got 4 [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.face_count",
+     "expected 3, got 4 [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.position",
+     "5 corner(s) differ; first: triangle 1 corner 0: expected [1, 0, 0], got [0, 0, 0] [allowed: MDL-MESH-024]"
+    ],
+    [
+     "nodes[walk].mesh.vertex_order",
+     "same triangles, different vertex numbering or order"
+    ],
+    [
+     "nodes[walk].mesh.radius",
+     "expected 1.118034, got 1.3552618"
+    ],
+    [
+     "nodes[walk].mesh.average",
+     "expected [1, 0.5, 0], got [1.2857143, 0.42857143, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_aabbdeg",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_anim",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.8660254"
+    ],
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[blade].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[blade].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_anim",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_animfx",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0"
+    ],
+    [
+     "nodes[lamp].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animfx",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[fx].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animmesh",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[water].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[water].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animmesh",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_bezier2",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0.70710677"
+    ],
+    [
+     "nodes[mover].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[mover].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[alpha]",
+     "expected bezier keys, got linear [allowed: MDL-CTRL-023]"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[lamp].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[fx].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_bezier2",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[quad].controllers[alpha]",
+     "expected bezier keys, got linear [allowed: MDL-CTRL-023]"
+    ],
+    [
+     "nodes[fx].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[fx].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_door",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_door",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_effs",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_effs",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_gui",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_gui",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_item",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_item",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_tile",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_tile",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_cls_tiles",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_cls_tiles",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_crlf",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.8708287"
+    ],
+    [
+     "nodes[child_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_crlf",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_dangly",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[flag].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[flag].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_dangly",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_dummy",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.8708287"
+    ],
+    [
+     "nodes[child_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_dummy",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_emitter",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0.5"
+    ],
+    [
+     "nodes[fx_a].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[fx_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_emitter",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_hint_mesh",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_hint_mesh",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_hints",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 2.0615528"
+    ],
+    [
+     "nodes[hint_none].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_none].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hint_tangents].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_tangents].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hint_tangents].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 1]"
+    ],
+    [
+     "nodes[hint_bogus].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_bogus].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hint_bogus].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 2]"
+    ],
+    [
+     "nodes[hint_lower].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hint_lower].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hint_lower].mesh.bmin",
+     "expected [-1, -1, 0], got [-1, -1, 3]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_hints",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.5"
+    ],
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[extra].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[extra].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid2",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[Arm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[Arm].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid2",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid3",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid3",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_light",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 0, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.118034"
+    ],
+    [
+     "nodes[lamp].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[lamp_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_light",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_merge",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 4]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 2.1213202"
+    ],
+    [
+     "nodes[shared].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[shared].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[uvsplit].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[uvsplit].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[uvsplit].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 1]"
+    ],
+    [
+     "nodes[negzero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[negzero].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[negzero].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 2]"
+    ],
+    [
+     "nodes[negzero].mesh.radius",
+     "expected 0.9013878, got 0.745356"
+    ],
+    [
+     "nodes[negzero].mesh.average",
+     "expected [0.5, 0.25, 2], got [0.6666667, 0.33333334, 2]"
+    ],
+    [
+     "nodes[degen].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[degen].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[degen].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 3]"
+    ],
+    [
+     "nodes[degen].mesh.radius",
+     "expected 0.84852815, got 0.70710677"
+    ],
+    [
+     "nodes[degen].mesh.average",
+     "expected [0.6, 0.4, 3], got [0.5, 0.5, 3]"
+    ],
+    [
+     "nodes[degen].mesh.faces.normal",
+     "1 face(s) differ; first face 1: expected [1, 0, 0], got [0, 0, 1]"
+    ],
+    [
+     "nodes[degen].mesh.faces.distance",
+     "1 face(s) differ; first face 1: expected -1, got -3"
+    ],
+    [
+     "nodes[mirror].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[mirror].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[mirror].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 4]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_merge",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_mtrbmp",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_mtrbmp",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_nodeorder",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[a].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[a1].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[a1].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[a2].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[a2].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[b1].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[b1].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_nodeorder",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_nodetypes",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -5, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [3, 1, 2]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 3.5"
+    ],
+    [
+     "nodes[cam].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[odd].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[upper].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[mixed].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[mixed].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_nodetypes",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_normals",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [2, 1, 5.5]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 3.2882366"
+    ],
+    [
+     "nodes[smooth].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[smooth].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[backtoback].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[backtoback].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[backtoback].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 2]"
+    ],
+    [
+     "nodes[sgbits].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[sgbits].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[sgbits].mesh.bmin",
+     "expected [-1, 0, 0], got [-1, 0, 3]"
+    ],
+    [
+     "nodes[area].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[area].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[area].mesh.bmin",
+     "expected [-0.5, 0, 0], got [-0.5, 0, 4]"
+    ],
+    [
+     "nodes[sgzero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[sgzero].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[sgzero].mesh.bmin",
+     "expected [-0.5, 0, 0], got [-0.5, 0, 5]"
+    ],
+    [
+     "nodes[sgzero].mesh.radius",
+     "expected 1.6488632, got 1.7834113"
+    ],
+    [
+     "nodes[sgzero].mesh.average",
+     "expected [0.375, 0.25, 5.125], got [0.25, 0.33333334, 5.0833335]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_normals",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_numbers",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.node_count",
+     "expected 8, got 7 [lenient: malformed input]"
+    ],
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -0.25, -1]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [10, 16, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 9.747596"
+    ],
+    [
+     "nodes[n_exp].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[n_hex].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[n_junk].controllers[position]",
+     "expected 1 columns, got 3; the same values at runtime (MDL-CTRL-014)"
+    ],
+    [
+     "nodes[n_junk].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[n_comma].controllers[position]",
+     "expected 1 columns, got 3; the same values at runtime (MDL-CTRL-014)"
+    ],
+    [
+     "nodes[n_comma].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[n_light].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[n_light].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[n_mesh].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[n_mesh].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_numbers",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[n_junk].controllers[position]",
+     "expected 1 columns, got 3; the same values at runtime (MDL-CTRL-014)"
+    ],
+    [
+     "nodes[n_comma].controllers[position]",
+     "omitted; the golden has it with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_numfmt",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, -0.25, -0.5]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [10, 2, 3]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 5.415545"
+    ],
+    [
+     "nodes[f_exp].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[f_dots].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[f_zeros].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[f_tabs].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[f_comment].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[f_case].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[f_case].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_numfmt",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_orient",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[o_zero_axis].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_zero_angle].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_unnorm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_diag].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_neg].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[o_big].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_orient",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_reference",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.5"
+    ],
+    [
+     "nodes[ref_a].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[ref_b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[ref_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_reference",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_setfill",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.8660254"
+    ],
+    [
+     "nodes[typo].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[typo].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[right].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[right].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[right].mesh.bmin",
+     "expected [0, 0, 0], got [0, 0, 1]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_setfill",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_skin",
+   "test": "all",
+   "status": "pending",
+   "reason": "compilemodel refuses a skin unless a creature using the model is on screen; needs an in-game rig"
+  },
+  {
+   "probe": "zspec_super",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-0.75, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0.5, 0, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.80039054"
+    ],
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand#2].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[foot].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_super",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tanfile",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[quad].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[quad].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tanfile",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tanmirror",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[strip].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[strip].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tanmirror",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[strip].mesh.tangent",
+     "3 corner(s) differ; first: triangle 2 corner 0: expected [-1, 0, 0], got [1, 0, 0]"
+    ],
+    [
+     "nodes[strip].mesh.handedness",
+     "3 corner(s) differ; first: triangle 2 corner 0: expected -1, got 1"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_transp",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d_dummy].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d_dummy].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[l_light].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[l_light].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[keep].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[keep].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[k_z].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[k_z].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[k_a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[k_a].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m_zero].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_zero].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m_one].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_one].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m_two].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m_two].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_transp",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_trimesh",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 1]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.5"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_trimesh",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_kid4",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[extra].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[extra].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[deep_a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deep_a].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[deeper].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deeper].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[deep_b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deep_b].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[arm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[hand#2].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand#2].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[lone].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lone].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[lone_c].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lone_c].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid4",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort24",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d00].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d02].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d20].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d19].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d12].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m06].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m05].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort24",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort50",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d01].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d25].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d25].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d18].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d17].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d16].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d04].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m37].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m37].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m00].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m42].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m42].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m39].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m39].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m36].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m36].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort50",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort90",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d00].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d50].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d50].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d65].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d65].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d42].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d42].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d39].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d39].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d67].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d67].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d37].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d37].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d36].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d36].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d76].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d76].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d77].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d77].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d80].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d80].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d23].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d14].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d85].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d85].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d84].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d84].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d87].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d87].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d10].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[d11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d11].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m79].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m79].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m25].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m25].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m61].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m61].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m56].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m56].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m57].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m57].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m58].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m58].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m63].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m63].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m86].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m86].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m71].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m71].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m72].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m72].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m66].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m66].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m81].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m81].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m53].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m53].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m55].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m55].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m89].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m89].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m60].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m60].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m82].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m82].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m51].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m51].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m59].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m59].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m78].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m78].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m74].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m74].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m73].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m73].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m70].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m70].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m83].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m83].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m62].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m62].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m52].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m52].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m88].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m88].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m75].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m75].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m69].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m69].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m64].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m64].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m54].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m54].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m68].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m68].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort90",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_animtv",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[water].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[water].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ],
+    [
+     "nodes[water].mesh.radius",
+     "expected 1.4142135, got 1.6970563"
+    ],
+    [
+     "nodes[water].mesh.average",
+     "expected [0, 0, 0], got [0.2, 0.2, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animtv",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_deton",
+   "test": "compile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0"
+    ],
+    [
+     "nodes[spark].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[spark].controllers[orientation]",
+     "not in the golden (id 20), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_deton",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": [
+    [
+     "nodes[spark].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
+  }
+ ]
+}

@@ -1,6 +1,8 @@
 # Conformance reports: cleanmodels and Moonglow (2026-10-19)
 
-- **cleanmodels v4.9.0** (55a9df3), through `runner/adapters/cleanmodels.sh`.
+- **cleanmodels v4.10.0** (faf1af3, the published Linux build) and **v4.9.0**
+  (55a9df3), through `runner/adapters/cleanmodels.sh`. v4.10.0 was written
+  against these results; v4.9.0 is kept for comparison.
 - **Moonglow Toolset** at e0ed4c4 (`crates/mg-mdl`, unchanged since 1.33.0),
   through `runner/adapters/moonglow/` (`mg_mdl::compile::compile_named` with
   supermodels looked up next to the input, and `mg_mdl::decompile`).
@@ -15,15 +17,16 @@ repository; `mdlconf.py stock` regenerates them from any install.
 
 | | compile | decompile | stock decompile |
 |---|---|---|---|
+| cleanmodels v4.10.0 | 46 pass | 46 pass | 14 pass |
 | cleanmodels v4.9.0 | 7 pass, 39 fail | 42 pass, 4 fail | 12 pass, 2 fail |
 | Moonglow e0ed4c4 | 27 pass, 19 fail | 44 pass, 2 fail | 13 pass, 1 fail |
 
 (46 probes with goldens; `zspec_skin` pending. A probe fails on any MUST
 check; most failing probes fail on one or two causes, listed below.)
 
-cleanmodels' unreleased pull request #101 (cd4522c), written against these
-results, passes 46 compile, 45 decompile (all but zspec_numbers, below) and
-14 stock decompiles; it is not one of the reports here.
+The tables below describe cleanmodels v4.9.0 and Moonglow e0ed4c4; v4.10.0
+fails none of their MUST checks. What it still reports at SHOULD level is
+listed at the end.
 
 ## Where both differ from the engine
 
@@ -84,3 +87,18 @@ results, passes 46 compile, 45 decompile (all but zspec_numbers, below) and
 - On the malformed probe zspec_numbers (lenient), both read hexadecimal floats
   as invalid, keep the `PARENT` node, and differ from the engine on trailing
   junk.
+
+## cleanmodels v4.10.0: reported, not failed (SHOULD)
+
+- Position and orientation controllers with their default values on nodes
+  whose source has no such line (MDL-CTRL-033); kept on purpose.
+- The model's real bounds and radius in the model header where the engine
+  writes fixed values (MDL-BIN-012), and a walkmesh's mesh radius and centre
+  computed with its degenerate faces kept (MDL-MESH-024 allows keeping them).
+- One-column controllers from malformed lines (zspec_numbers) written at
+  full width, which gives the same runtime values (MDL-CTRL-014).
+- `orientationbezierkey` compiled as linear keys (MDL-CTRL-022 allows it).
+- Decompile: zero-valued emitter mid and percent controllers written where
+  the golden has none; cloned tangent vertices read through the face list
+  (MDL-BIN-049); the face records after a deleted degenerate face differ
+  (zspec_merge, MDL-MESH-021).

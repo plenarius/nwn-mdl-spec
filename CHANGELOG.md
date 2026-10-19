@@ -45,3 +45,4 @@ Corrections after the first draft:
   --generated DIR` checks a generated parser, which decodes every golden and
   all 25,597 base-game binaries identically (ksy/README.md).
 - Reports rerun on the 46 probes.
+- Report for cleanmodels v4.10.0 (46 compile, 46 decompile, 14 stock).
