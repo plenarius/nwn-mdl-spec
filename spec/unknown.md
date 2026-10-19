@@ -1,0 +1,110 @@
+# Observed, inferred and unknown
+
+Nothing on this page is normative. Each item says what is known, how, and
+what would settle it.
+
+## Controllers
+
+- **Scalar bezier evaluation.** For a 1-column bezier controller,
+  `GetFloatValue` (0x498480) calls `InterpolateBezier(v0, v0 + v1, out0,
+  out0 + in1, t)`: the curve ends at v0 + v1, not at the next key's value,
+  and the first key's in handle is unused. The vector form (P0 = v0, P1 = v0
+  + out0, P2 = v1 + in1, P3 = v1) is consistent; the scalar one looks like an
+  engine bug. Past the last key both bezier paths read beyond the
+  controller's data. *Read in code (E35); not seen on screen. An in-game
+  probe animating alpha or scale with bezier keys would settle what players
+  see.*
+- **`orientationbezierkey`.** The engine keeps 9 of a row's 12 values,
+  unconverted, as a 3-column vector, which the vector path writes into the
+  node's quaternion (MDL-CTRL-022). What that looks like on screen, and what
+  to tell a builder beyond "it does not work", is open.
+- **Light controller 144.** 1,408 lights in 665 base-game models, all written
+  by an older EE compiler, carry it with value 1.0 (E64). This build's
+  compiler writes it for no keyword. The loader maps it into the light
+  (runtime offset 0xa8); what reads that offset was not traced.
+- **nwnmdlcomp's emitter ids.** No base-game emitter uses ids 464-488 or the
+  game's 448-472 (E64), so nothing shipped relies on the game reading
+  nwnmdlcomp's numbering. Haks were not surveyed. No nwnmdlcomp binary with
+  three-stop values was made, so the ids come from nwnmdlcomp's source only.
+- **Three-stop emitter values.** The game's compiler stores `colorMid`,
+  `alphaMid`, `sizeMid`, `sizeMid_y` and `percentStart/Mid/End`; Moonglow's
+  client measurements (notes B.20a) found they change nothing on screen.
+  Not re-checked here.
+
+## ASCII
+
+- **Animation node controllers in a supermodel's animation**: whether an
+  animation node with no controllers is always written. The game kept such
+  nodes in every probe (zspec_anim's root, zspec_kid's `hips`), but an
+  earlier engine compile of a third-party creature (cleanmodels' findings,
+  answer 5) omitted its skin nodes from every animation. What decides it is
+  unknown.
+- **Overlong values.** A static controller line with more values than the
+  controller's width (`scale 2 3 4`) was not probed: the probe line was in a
+  node that dropped out of the tree. The engine reads up to some number of
+  floats and sets the column count from it (MDL-CTRL-030); the upper limit
+  for a single value is not known.
+- **`radius`, `bmin`, `bmax` at the geometry level** (`Model::InternalParseField`
+  0x447990) and **`bmin`, `bmax` on a mesh**: read by the engine, never probed.
+  Whether the computed bounds overwrite them is unknown.
+- **`texindices1-3`**: per-face UV indices for the extra UV sets. Read by the
+  trimesh parser; not probed.
+- **`vertexindices`, `vertexindicescount`, `leftoverfaces`**: read; not
+  probed.
+- **`animlength <name> <time>`**: read as a case-sensitive word in an
+  animation; not probed.
+- **Comment lines inside counted lists** are read as rows (from the list
+  parsers' skip rule, MDL-ASCII-003); not probed for vertex lists.
+- **Several `parent NULL` nodes**: each makes itself the root in turn
+  (`MdlNode::InternalParseField` sets the tree's root), so the last one is
+  presumably the root and the others drop out. Not probed.
+- **A `parent` naming a node that does not exist**: `FindMdlNode`'s result is
+  used without a check (0x448bb0); presumably a crash. Not probed.
+- **Node names longer than 32 characters, model and texture names longer
+  than their fields**: truncation and collisions not probed.
+
+## Meshes
+
+- **Child order with more than 16 children** (MDL-NODE-012): `std::sort` is
+  not stable past 16 elements, so equal elements (all non-meshes, or meshes
+  with equal hints) may be reordered in a libstdc++-specific way. Not
+  probed.
+- **The stale AABB tree** after a degenerate walkmesh face is deleted
+  (MDL-MESH-024): what pathfinding and collision do with leaves pointing past
+  the face list was not observed.
+- **Face adjacency**: walkmeshes recompute it at load; whether anything reads
+  the stored values of render meshes is unknown (MDL-MESH-022).
+- **Mesh bounds and the model's bounds/radius**: what the engine uses them
+  for (culling?) was not read.
+- **Emitter `xgrid`/`ygrid` absent**: uninitialised in the game's compile
+  (MDL-BIN-052); what the game's runtime load of the ASCII does with them was
+  not observed.
+- **Vertex colours**: whether an all-white colour stream and no stream are
+  the same for every shader (MDL-MESH-061).
+- **The normal sum** at mesh +504 was not compared.
+
+## Skins
+
+- **No skin golden.** `compilemodel` needs the creature on screen
+  (MDL-SKIN-010), so the whole of [skin.md](skin.md) rests on code reading
+  and on engine-compiled files outside this repository. A small test module
+  that puts a creature with each skin probe on screen, then runs
+  `compilemodel`, would give the goldens.
+- **Skin header sizes** (MDL-BIN-061): 100, 192 and 320 bytes all occur in
+  game files, with no field to tell them apart; the sizes come from the
+  first data offset after each skin node, not from code.
+- **Which uninitialised fields matter**: bone constant indices and leftover
+  weight slots are uninitialised (MDL-SKIN-022, MDL-SKIN-014). A leftover
+  slot with a garbage weight > 0 and a garbage bone would distort its vertex;
+  whether that happens in shipped files was not surveyed.
+- **The quaternion sign** of `qbone_ref_inv` in BioWare-compiled files (w = +1
+  for an identity in `c_marilith2`, w = −1 from the EE compiler): both
+  render the same; the old compiler's maths was not read.
+
+## Process
+
+- **Golden regeneration after a patch** needs a machine with the game and an
+  X server; the CI workflow here runs the self-checks only.
+- **Moonglow's compile has no material lookup** in its library API, so its
+  adapter cannot show material-hinted tangents; the toolset application may
+  supply materials another way (not checked).
