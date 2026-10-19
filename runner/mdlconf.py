@@ -373,7 +373,10 @@ def is_default(flags, cid, keys, tol):
     if dflt is None or len(keys) != 1 or 'in' in keys[0] or not close(keys[0].get('t', 0), 0, tol):
         return False
     want = dflt if isinstance(dflt, list) else [dflt]
-    return (qclose if cdef['name'] == 'orientation' else vclose)(want, keys[0].get('v'), tol)
+    got = list(keys[0].get('v') or [])
+    if cdef['name'] != 'orientation' and len(got) < len(want):
+        got += want[len(got):]  # the rest of the runtime field keeps its initial value (MDL-CTRL-014)
+    return (qclose if cdef['name'] == 'orientation' else vclose)(want, got, tol)
 
 
 def compare_skin(r, path, e, a, own_nodes):

@@ -74,7 +74,9 @@ consecutive floats from the runtime field the id maps to (MDL-CTRL-011),
 blended with what is there (1: one `movss` store; 3: a vector; 4: a
 quaternion slerp). The field's other floats keep their values. Any other
 count (0, 2, 5-15) makes the engine skip the controller: nothing is read or
-written. Before geometry controllers are applied, once at time 0 by
+written. Column byte 0xff, which the game's compiler writes for a controller
+line with no values (sscanf's -1, MDL-CTRL-012), is such a count, not a
+bezier byte. Before geometry controllers are applied, once at time 0 by
 `Gob::Reset` (0x499bd0), the runtime fields hold their constructors' values:
 position (0, 0, 0), orientation the identity, scale 1 (`Part::Part`,
 0x43c800); selfillumcolor (0, 0, 0) and alpha 1 (`PartTriMesh::PartTriMesh`,
