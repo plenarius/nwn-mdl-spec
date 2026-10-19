@@ -1,0 +1,44 @@
+# mdl-spec conformance probe zspec_kid4 (CC0-1.0)
+# Numbering against the supermodel zspec_super of nodes it lacks, declared out
+# of tree order: children of a matched node (extra, lone) and nodes under an
+# unmatched parent (deep_a, deep_b, deeper, lone_c), whose numbers show
+# whether -1 or count + 1 + declaration index applies.
+newmodel zspec_kid4
+setsupermodel zspec_kid4 zspec_super
+classification character
+beginmodelgeom zspec_kid4
+node dummy zspec_kid4
+  parent NULL
+endnode
+node dummy hips
+  parent zspec_kid4
+endnode
+node dummy extra
+  parent hips
+endnode
+node dummy hand
+  parent hips
+endnode
+node dummy deep_a
+  parent extra
+endnode
+node dummy deep_b
+  parent extra
+endnode
+node dummy arm
+  parent hips
+endnode
+node dummy deeper
+  parent deep_a
+endnode
+node dummy hand
+  parent arm
+endnode
+node dummy lone
+  parent zspec_kid4
+endnode
+node dummy lone_c
+  parent lone
+endnode
+endmodelgeom zspec_kid4
+donemodel zspec_kid4

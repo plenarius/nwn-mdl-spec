@@ -57,7 +57,7 @@ controllers:
   - {id: 208, name: lightningDelay, applies: emitter, columns: 1, keyword: lightningDelay, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
   - {id: 212, name: lightningRadius, applies: emitter, columns: 1, keyword: lightningRadius, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
   - {id: 216, name: lightningScale, applies: emitter, columns: 1, keyword: lightningScale, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
-  - {id: 228, name: detonate, applies: emitter, columns: 0, keyword: detonate, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_animfx", note: "keys are times only; column byte 0"}
+  - {id: 228, name: detonate, applies: emitter, columns: 0, keyword: detonate, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_animfx, zspec_deton", note: "keys are times only; column byte 0 for detonatekey rows, 0xff for a bare static detonate (MDL-CTRL-012)"}
   - {id: 448, name: alphaMid, applies: emitter, columns: 1, keyword: alphaMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}
   - {id: 452, name: colorMid, applies: emitter, columns: 3, keyword: colorMid, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter, zspec_bezier2"}
   - {id: 464, name: percentStart, applies: emitter, columns: 1, keyword: percentStart, static: true, key: true, bezier: true, status: confirmed, evidence: "zspec_emitter"}

@@ -65,10 +65,6 @@ what would settle it.
 
 ## Meshes
 
-- **Child order with more than 16 children** (MDL-NODE-012): `std::sort` is
-  not stable past 16 elements, so equal elements (all non-meshes, or meshes
-  with equal hints) may be reordered in a libstdc++-specific way. Not
-  probed.
 - **The stale AABB tree** after a degenerate walkmesh face is deleted
   (MDL-MESH-024): what pathfinding and collision do with leaves pointing past
   the face list was not observed.

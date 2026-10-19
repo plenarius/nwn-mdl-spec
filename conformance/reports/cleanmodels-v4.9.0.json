@@ -36,6 +36,10 @@
     [
      "animations[default].nodes[spinner].controllers[orientation]",
      "expected bezier keys, got linear [allowed: MDL-CTRL-022]"
+    ],
+    [
+     "animations[default].nodes[spinner].controllers[orientation].keys[0].v",
+     "expected [0, 0, 1], got [0, 0, 0, 1] [allowed: MDL-CTRL-022]"
     ]
    ]
   },
@@ -2603,6 +2607,3233 @@
    "status": "pass",
    "must": [],
    "should": []
+  },
+  {
+   "probe": "zspec_kid4",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[hips].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[extra].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[deep_a].number",
+     "expected 11, got 10"
+    ],
+    [
+     "nodes[deep_a].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[deeper].number",
+     "expected 14, got 11"
+    ],
+    [
+     "nodes[deeper].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[deep_b].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand].number",
+     "expected 2, got -1"
+    ],
+    [
+     "nodes[hand].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[arm].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[hand#2].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lone].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[lone_c].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0"
+    ],
+    [
+     "nodes[hips].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[extra].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deep_a].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deeper].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[deep_b].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[arm].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[hand#2].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lone].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[lone_c].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_kid4",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort24",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes.tree",
+     "node order differs: expected ['zspec_tsort24', 'd00', 'd02', 'd20', 'd19', 'd12', 'm22', 'm04', 'm06', 'm15', 'm14', 'm23', 'm13', 'm11', 'm10', 'm07', 'm05', 'm01', 'm09', 'm16', 'm08', 'm21', 'm18', 'm17', 'm03'], got ['zspec_tsort24', 'd00', 'm01', 'd02', 'm03', 'm04', 'm05', 'm06', 'm07', 'm08', 'm09', 'm10', 'm11', 'd12', 'm13', 'm14', 'm15', 'm16', 'm17', 'm18', 'd19', 'd20', 'm21', 'm22', 'm23']"
+    ],
+    [
+     "nodes[d00].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d02].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d20].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d19].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d12].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m22].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m04].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m04].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m04].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m04].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m06].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m06].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m06].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m06].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m15].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m14].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m14].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m14].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m14].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m23].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m23].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m23].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m23].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m13].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m11].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m11].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m11].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m11].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m10].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m10].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m10].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m10].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m07].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m05].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m05].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m05].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m05].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m01].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m01].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m01].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m01].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m09].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m16].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m16].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m16].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m16].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m08].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m21].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m18].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m18].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m18].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m18].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m17].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m17].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m17].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m17].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m03].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort24",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort50",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes.tree",
+     "node order differs: expected ['zspec_tsort50', 'd01', 'd44', 'd25', 'd18', 'd17', 'd16', 'd06', 'd04', 'd05', 'm07', 'm13', 'm37', 'm49', 'm46', 'm00', 'm43', 'm40', 'm10', 'm20', 'm47', 'm02', 'm14', 'm34', 'm15', 'm48', 'm42', 'm38', 'm27', 'm33', 'm03', 'm45', 'm35', 'm41', 'm08', 'm19', 'm22', 'm23', 'm11', 'm12', 'm39', 'm29', 'm26', 'm32', 'm24', 'm28', 'm36', 'm09', 'm21', 'm30', 'm31'], got ['zspec_tsort50', 'm00', 'd01', 'm02', 'm03', 'd04', 'd05', 'd06', 'm07', 'm08', 'm09', 'm10', 'm11', 'm12', 'm13', 'm14', 'm15', 'd16', 'd17', 'd18', 'm19', 'm20', 'm21', 'm22', 'm23', 'm24', 'd25', 'm26', 'm27', 'm28', 'm29', 'm30', 'm31', 'm32', 'm33', 'm34', 'm35', 'm36', 'm37', 'm38', 'm39', 'm40', 'm41', 'm42', 'm43', 'd44', 'm45', 'm46', 'm47', 'm48', 'm49']"
+    ],
+    [
+     "nodes[d01].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d44].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d25].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d18].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d17].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d16].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d06].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d04].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d05].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m07].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m13].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m37].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m37].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m37].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m37].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m49].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m49].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m49].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m49].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m46].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m46].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m46].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m46].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m00].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m00].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m00].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m00].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m43].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m43].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m43].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m43].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m40].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m40].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m40].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m40].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m10].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m10].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m10].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m10].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m20].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m20].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m20].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m20].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m47].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m47].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m47].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m47].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m02].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m02].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m02].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m02].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m14].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m14].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m14].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m14].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m34].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m34].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m34].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m34].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m15].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m48].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m48].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m48].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m48].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m42].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m42].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m42].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m42].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m38].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m38].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m38].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m38].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m27].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m27].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m27].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m27].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m33].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m33].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m33].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m33].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m03].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m45].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m45].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m45].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m45].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m35].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m35].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m35].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m35].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m41].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m41].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m41].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m41].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m08].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m19].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m19].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m19].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m19].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m22].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m23].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m23].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m23].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m23].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m11].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m11].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m11].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m11].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m12].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m12].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m12].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m12].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m39].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m39].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m39].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m39].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m29].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m29].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m29].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m29].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m26].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m26].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m26].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m26].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m32].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m32].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m32].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m32].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m24].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m24].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m24].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m24].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m28].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m28].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m28].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m28].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m36].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m36].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m36].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m36].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m09].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m21].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m30].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m30].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m30].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m30].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m31].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m31].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m31].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m31].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d25].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m37].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m42].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m39].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m36].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort50",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_tsort90",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes.tree",
+     "node order differs: expected ['zspec_tsort90', 'd00', 'd50', 'd65', 'd44', 'd42', 'd39', 'd67', 'd37', 'd36', 'd76', 'd77', 'd80', 'd23', 'd14', 'd05', 'd06', 'd85', 'd84', 'd87', 'd10', 'd11', 'm27', 'm40', 'm28', 'm79', 'm25', 'm12', 'm61', 'm19', 'm18', 'm56', 'm57', 'm58', 'm49', 'm63', 'm48', 'm45', 'm03', 'm43', 'm86', 'm13', 'm71', 'm15', 'm16', 'm22', 'm30', 'm33', 'm72', 'm41', 'm66', 'm31', 'm09', 'm21', 'm81', 'm53', 'm55', 'm89', 'm60', 'm82', 'm51', 'm34', 'm59', 'm78', 'm74', 'm73', 'm35', 'm70', 'm26', 'm24', 'm17', 'm83', 'm47', 'm62', 'm52', 'm88', 'm01', 'm29', 'm32', 'm75', 'm69', 'm46', 'm64', 'm54', 'm68', 'm20', 'm38', 'm08', 'm07', 'm04', 'm02'], got ['zspec_tsort90', 'd00', 'm01', 'm02', 'm03', 'm04', 'd05', 'd06', 'm07', 'm08', 'm09', 'd10', 'd11', 'm12', 'm13', 'd14', 'm15', 'm16', 'm17', 'm18', 'm19', 'm20', 'm21', 'm22', 'd23', 'm24', 'm25', 'm26', 'm27', 'm28', 'm29', 'm30', 'm31', 'm32', 'm33', 'm34', 'm35', 'd36', 'd37', 'm38', 'd39', 'm40', 'm41', 'd42', 'm43', 'd44', 'm45', 'm46', 'm47', 'm48', 'm49', 'd50', 'm51', 'm52', 'm53', 'm54', 'm55', 'm56', 'm57', 'm58', 'm59', 'm60', 'm61', 'm62', 'm63', 'm64', 'd65', 'm66', 'd67', 'm68', 'm69', 'm70', 'm71', 'm72', 'm73', 'm74', 'm75', 'd76', 'd77', 'm78', 'm79', 'd80', 'm81', 'm82', 'm83', 'd84', 'd85', 'm86', 'd87', 'm88', 'm89']"
+    ],
+    [
+     "nodes[d00].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d50].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d65].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d44].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d42].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d39].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d67].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d37].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d36].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d76].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d77].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d80].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d23].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d14].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d05].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d06].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d85].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d84].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d87].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d10].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[d11].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m27].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m27].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m27].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m27].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m40].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m40].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m40].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m40].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m28].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m28].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m28].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m28].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m79].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m79].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m79].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m79].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m25].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m25].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m25].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m25].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m12].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m12].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m12].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m12].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m61].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m61].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m61].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m61].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m19].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m19].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m19].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m19].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m18].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m18].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m18].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m18].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m56].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m56].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m56].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m56].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m57].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m57].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m57].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m57].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m58].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m58].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m58].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m58].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m49].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m49].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m49].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m49].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m63].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m63].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m63].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m63].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m48].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m48].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m48].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m48].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m45].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m45].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m45].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m45].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m03].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m03].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m03].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m43].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m43].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m43].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m43].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m86].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m86].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m86].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m86].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m13].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m13].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m13].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m71].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m71].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m71].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m71].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m15].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m15].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m15].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m16].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m16].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m16].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m16].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m22].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m22].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m22].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m30].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m30].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m30].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m30].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m33].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m33].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m33].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m33].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m72].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m72].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m72].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m72].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m41].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m41].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m41].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m41].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m66].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m66].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m66].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m66].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m31].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m31].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m31].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m31].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m09].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m09].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m09].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m21].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m21].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m21].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m81].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m81].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m81].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m81].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m53].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m53].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m53].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m53].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m55].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m55].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m55].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m55].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m89].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m89].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m89].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m89].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m60].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m60].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m60].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m60].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m82].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m82].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m82].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m82].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m51].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m51].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m51].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m51].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m34].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m34].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m34].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m34].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m59].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m59].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m59].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m59].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m78].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m78].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m78].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m78].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m74].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m74].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m74].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m74].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m73].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m73].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m73].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m73].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m35].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m35].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m35].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m35].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m70].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m70].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m70].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m70].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m26].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m26].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m26].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m26].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m24].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m24].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m24].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m24].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m17].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m17].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m17].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m17].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m83].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m83].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m83].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m83].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m47].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m47].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m47].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m47].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m62].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m62].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m62].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m62].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m52].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m52].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m52].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m52].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m88].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m88].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m88].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m88].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m01].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m01].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m01].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m01].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m29].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m29].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m29].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m29].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m32].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m32].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m32].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m32].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m75].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m75].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m75].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m75].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m69].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m69].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m69].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m69].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m46].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m46].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m46].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m46].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m64].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m64].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m64].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m64].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m54].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m54].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m54].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m54].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m68].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m68].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m68].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m68].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m20].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m20].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m20].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m20].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m38].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m38].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m38].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m38].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m08].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m08].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m08].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m07].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m07].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m07].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m04].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m04].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m04].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m04].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[m02].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[m02].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m02].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[m02].mesh.shininess",
+     "expected 1, got 0"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 0.70710677"
+    ],
+    [
+     "nodes[d00].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d50].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d65].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d44].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d42].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d39].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d67].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d37].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d36].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d76].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d77].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d80].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d23].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d14].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d05].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d06].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d85].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d84].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d87].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d10].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[d11].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m27].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m40].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m28].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m79].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m25].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m12].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m61].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m19].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m18].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m56].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m57].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m58].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m49].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m63].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m48].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m45].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m03].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m43].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m86].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m13].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m71].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m15].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m16].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m22].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m30].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m33].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m72].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m41].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m66].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m31].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m09].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m21].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m81].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m53].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m55].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m89].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m60].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m82].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m51].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m34].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m59].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m78].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m74].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m73].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m35].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m70].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m26].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m24].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m17].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m83].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m47].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m62].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m52].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m88].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m01].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m29].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m32].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m75].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m69].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m46].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m64].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m54].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m68].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m20].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m38].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m08].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m07].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m04].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[m02].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_tsort90",
+   "test": "decompile",
+   "status": "pass",
+   "must": [],
+   "should": []
+  },
+  {
+   "probe": "zspec_animtv",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[water].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ],
+    [
+     "nodes[water].mesh.diffuse",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[water].mesh.ambient",
+     "expected [1, 1, 1], got [0, 0, 0]"
+    ],
+    [
+     "nodes[water].mesh.shininess",
+     "expected 1, got 0"
+    ],
+    [
+     "nodes[water].mesh.shadow",
+     "expected 1, got 0"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animverts",
+     "expected [[-1, -1, 0], [1, -1, 0.01], [1, 1, 0.02], [1, 1, 0.02], [-1, 1, 0.03], [-1, -1, 0.1], [1, -1, 0.11], [1, 1, 0.12], [1, 1, 0.12], [-1, 1, 0.13], [-1, -1, 0.2], [1, -1, 0.21], [1, 1, 0.22], [1, 1, 0.22], [-1, 1, 0.23]], got [[-1, -1, 0], [-1, 1, 0.03], [1, 1, 0.12], [1, -1, 0.21], [0, 0, 0.1], [1, -1, 0.01], [-1, -1, 0.1], [-1, 1, 0.13], [1, 1, 0.22], [1, 0.2, 2], [1, 1, 0.02], [1, -1, 0.11], [-1, -1, 0.2], [-1, 1, 0.23], [0.3, 3, 0.4]]"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animtverts",
+     "expected [[0, 0], [0.1, 1], [0.4, 4], [0.2, 2], [0.3, 3], [1, 10], [1.1, 11], [1.4, 14], [1.2, 12], [1.3, 13], [2, 20], [2.1, 21], [2.4, 24], [2.2, 22], [2.3, 23]], got [[0, 0], [0.3, 3], [1.1, 11], [1.4, 14], [2.2, 22], [0.1, 1], [0.4, 4], [1.2, 12], [2, 20], [2.3, 23], [0.2, 2], [1, 10], [1.3, 13], [2.1, 21], [2.4, 24]]"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [-1, -1, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [1, 1, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 7, got 1.4142135"
+    ],
+    [
+     "nodes[water].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ],
+    [
+     "nodes[water].mesh.radius",
+     "expected 1.4142135, got 1.6970563"
+    ],
+    [
+     "nodes[water].mesh.average",
+     "expected [0, 0, 0], got [0.2, 0.2, 0]"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_animtv",
+   "test": "decompile",
+   "status": "fail",
+   "must": [
+    [
+     "animations[animloop01].nodes[water].animmesh.animverts",
+     "expected [[-1, -1, 0], [1, -1, 0.01], [1, 1, 0.02], [1, 1, 0.02], [-1, 1, 0.03], [-1, -1, 0.1], [1, -1, 0.11], [1, 1, 0.12], [1, 1, 0.12], [-1, 1, 0.13], [-1, -1, 0.2], [1, -1, 0.21], [1, 1, 0.22], [1, 1, 0.22], [-1, 1, 0.23]], got [[-1, -1, 0], [-1, -1, 0.1], [-1, -1, 0.2], [1, -1, 0.01], [1, -1, 0.11], [1, -1, 0.21], [1, 1, 0.02], [1, 1, 0.12], [1, 1, 0.22], [1, 1, 0.02], [1, 1, 0.12], [1, 1, 0.22], [-1, 1, 0.03], [-1, 1, 0.13], [-1, 1, 0.23]]"
+    ],
+    [
+     "animations[animloop01].nodes[water].animmesh.animtverts",
+     "expected [[0, 0], [0.1, 1], [0.4, 4], [0.2, 2], [0.3, 3], [1, 10], [1.1, 11], [1.4, 14], [1.2, 12], [1.3, 13], [2, 20], [2.1, 21], [2.4, 24], [2.2, 22], [2.3, 23]], got [[0, 0], [1, 10], [2, 20], [0.1, 1], [1.1, 11], [2.1, 21], [0.4, 4], [1.4, 14], [2.4, 24], [0.2, 2], [1.2, 12], [2.2, 22], [0.3, 3], [1.3, 13], [2.3, 23]]"
+    ]
+   ],
+   "should": []
+  },
+  {
+   "probe": "zspec_deton",
+   "test": "compile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[spark].controllers[detonate]",
+     "missing (id 228, 1 key(s))"
+    ],
+    [
+     "nodes[spark].controllers[orientation]",
+     "not in the golden (id 20, 1 key(s), first [0, 0, 0, 0.87758255])"
+    ]
+   ],
+   "should": [
+    [
+     "model.bmin",
+     "expected [-5, -5, -1], got [0, 0, 0]"
+    ],
+    [
+     "model.bmax",
+     "expected [5, 5, 10], got [0, 0, 0]"
+    ],
+    [
+     "model.radius",
+     "expected 40, got 0"
+    ],
+    [
+     "nodes[spark].controllers[position]",
+     "not in the golden (id 8), with the default value"
+    ]
+   ]
+  },
+  {
+   "probe": "zspec_deton",
+   "test": "decompile",
+   "status": "fail",
+   "must": [
+    [
+     "nodes[spark].controllers[detonate]",
+     "missing (id 228, 1 key(s))"
+    ]
+   ],
+   "should": [
+    [
+     "nodes[spark].controllers[alphaMid]",
+     "not in the golden (id 448, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[colorMid]",
+     "not in the golden (id 452, 1 key(s), first [0, 0, 0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid]",
+     "not in the golden (id 468, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[sizeMid_y]",
+     "not in the golden (id 472, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentStart]",
+     "not in the golden (id 464, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentMid]",
+     "not in the golden (id 465, 1 key(s), first [0])"
+    ],
+    [
+     "nodes[spark].controllers[percentEnd]",
+     "not in the golden (id 466, 1 key(s), first [0])"
+    ]
+   ]
   }
  ]
 }

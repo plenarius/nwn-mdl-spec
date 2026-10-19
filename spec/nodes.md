@@ -29,9 +29,18 @@ compiler MUST store the children in this order. *Confirmed: zspec_transp
 zspec_numbers; `MdlNode::ReorderChildren` 0x458120 with the comparison at
 0x453470.*
 
-The sort is `std::sort`, which keeps the declaration order of equal
-elements only up to 16 children; beyond that their order is whatever
-libstdc++'s introsort leaves ([unknown.md](unknown.md)).
+The sort is libstdc++'s `std::sort`: introsort (median-of-three pivot,
+partitioning down to runs of 16 or fewer, heap sort past 2·⌊log2 n⌋ levels),
+then insertion sort. It keeps the declaration order of equal elements (all
+non-meshes, or meshes with equal hints) only up to 16 children; past that, a
+compiler MUST reproduce libstdc++'s algorithm step for step with this
+comparison, since a stable sort gives a different order. Only the geometry
+tree is sorted: `ImportMaxTree` (0x447ef0) calls `ReorderChildren` on the
+model's root, not on animation trees. *Confirmed: zspec_tsort24,
+zspec_tsort50, zspec_tsort90 (a replica of libstdc++'s algorithm reproduces
+all three orders; a stable sort none); `__introsort_loop` (0x4586e0) and
+`__insertion_sort` (0x458490) called from `ReorderChildren`, the tail call at
+0x447f74.*
 
 **MDL-NODE-013** Part numbers are not affected by the sort or by nodes left
 out of the tree (MDL-ASCII-031): a number is used even by a node that is not
@@ -42,12 +51,18 @@ written. *Confirmed: zspec_transp (numbers in declaration order), zspec_numbers
 
 **MDL-NODE-020** With a supermodel, the engine numbers a node by walking its
 path from the root down the supermodel's tree, child by child, matching
-names case-insensitively: a node whose path exists in the supermodel takes
-that supermodel node's part number; any other node gets -1. The roots
-always match each other, whatever their names. A compiler MUST number
-nodes this way and so needs the supermodel. *Confirmed: zspec_kid (`hips` 1,
-`hand` 2, `foot` 5, `extra` -1), zspec_kid2 (`Arm` 3 matches `arm`; `hand`
-under it 4; `foot` directly under the root -1), zspec_kid3.*
+names case-insensitively; the roots always match each other, whatever their
+names. A node whose path exists in the supermodel takes that supermodel
+node's part number. A node whose path does not exist gets -1 when its parent
+matched, and otherwise the supermodel's header node count + 1 + its own
+declaration index (the number MDL-NODE-010 gives it, moved past the
+supermodel's). A compiler MUST number nodes this way and so needs the
+supermodel. *Confirmed: zspec_kid (`hips` 1, `hand` 2, `foot` 5, `extra`
+-1), zspec_kid2 (`Arm` 3 matches `arm`; `hand` under it 4; `foot` directly
+under the root -1), zspec_kid3, zspec_kid4 (`extra` and `lone` -1 under
+matched parents; under unmatched ones, declared out of tree order, `deep_a`
+11 = 6 + 1 + 4, `deep_b` 12, `deeper` 14, `lone_c` 17). The code doing it was
+not read.*
 
 **MDL-NODE-021** A name the supermodel uses twice is resolved by the walk:
 the node takes the number of the supermodel node at the same path.

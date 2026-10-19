@@ -1,0 +1,653 @@
+# mdl-spec conformance probe zspec_tsort50 (CC0-1.0)
+# Child order with 50 children (see zspec_tsort24).
+newmodel zspec_tsort50
+setsupermodel zspec_tsort50 NULL
+classification tile
+beginmodelgeom zspec_tsort50
+node dummy zspec_tsort50
+  parent NULL
+endnode
+node trimesh m00
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node dummy d01
+  parent zspec_tsort50
+endnode
+node trimesh m02
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m03
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 3
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node dummy d04
+  parent zspec_tsort50
+endnode
+node dummy d05
+  parent zspec_tsort50
+endnode
+node dummy d06
+  parent zspec_tsort50
+endnode
+node trimesh m07
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint -1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m08
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m09
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m10
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m11
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m12
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m13
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint -1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m14
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m15
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node dummy d16
+  parent zspec_tsort50
+endnode
+node dummy d17
+  parent zspec_tsort50
+endnode
+node dummy d18
+  parent zspec_tsort50
+endnode
+node trimesh m19
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m20
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m21
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m22
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m23
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m24
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node dummy d25
+  parent zspec_tsort50
+endnode
+node trimesh m26
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m27
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m28
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m29
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m30
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m31
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m32
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m33
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m34
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m35
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 3
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m36
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 7
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m37
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint -1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m38
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m39
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m40
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m41
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 5
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m42
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m43
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node dummy d44
+  parent zspec_tsort50
+endnode
+node trimesh m45
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 3
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m46
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m47
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 1
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m48
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 2
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+node trimesh m49
+  parent zspec_tsort50
+  bitmap zspec_t0
+  transparencyhint 0
+  verts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  tverts 3
+    0 0 0
+    1 0 0
+    0 1 0
+  faces 1
+    0 1 2 1 0 1 2 0
+endnode
+endmodelgeom zspec_tsort50
+donemodel zspec_tsort50

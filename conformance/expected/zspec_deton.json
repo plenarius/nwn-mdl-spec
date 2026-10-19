@@ -1,0 +1,96 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_deton",
+ "build": "89.8193.37-17",
+ "golden_sha256": "43aa85cf888070a64fbd596df313168da8a658d891485d74f6d4601714e9d71f",
+ "volatile": [
+  "nodes[1].emitter.xgrid",
+  "nodes[1].emitter.ygrid"
+ ],
+ "model": {
+  "name": "zspec_deton",
+  "classification": 1,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 2,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 40
+ },
+ "nodes": [
+  {
+   "name": "zspec_deton",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "spark",
+   "parent": "zspec_deton",
+   "type": "emitter",
+   "flags": 5,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 88,
+     "name": "birthrate",
+     "columns": 1,
+     "bezier": false,
+     "colbyte": 1,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        10
+       ]
+      }
+     ]
+    },
+    {
+     "id": 228,
+     "name": "detonate",
+     "columns": 0,
+     "bezier": false,
+     "colbyte": 255,
+     "keys": [
+      {
+       "t": 0,
+       "v": []
+      }
+     ]
+    }
+   ],
+   "emitter": {
+    "deadspace": 0,
+    "blastradius": 0,
+    "blastlength": 0,
+    "xgrid": 2406899872,
+    "ygrid": 25384,
+    "spawntype": 0,
+    "update": "Explosion",
+    "render": "Normal",
+    "blend": "Normal",
+    "texture": "fxpa_flare",
+    "chunkname": "",
+    "twosidedtex": 0,
+    "loop": 0,
+    "renderorder": 0,
+    "flags": 0
+   }
+  }
+ ],
+ "animations": []
+}

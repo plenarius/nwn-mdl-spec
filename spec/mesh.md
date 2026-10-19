@@ -187,5 +187,12 @@ Moonglow notes A.4).*
 
 **MDL-MESH-062** An animmesh animation's vertex and texture sets come from
 `animverts` and `animtverts`, listed set by set (set 0's vertices, then set
-1's, …), and are stored vertex-major (MDL-BIN-045). *Confirmed:
-zspec_animmesh.*
+1's, …) over the node's source `verts` and `tverts`: the vertex set count is
+the `animverts` count divided by the node's `verts` count, the texture set
+count the `animtverts` count divided by its `tverts` count. Each vertex the
+merge produces (MDL-MESH-011) takes its source vertex's entries and its
+source tvert's, and the merge compares them, so a vertex split by its UVs
+carries its sets twice. The sets are stored vertex-major over those merged
+vertices (MDL-BIN-045). *Confirmed: zspec_animmesh, zspec_animtv (4 verts and
+5 tverts, one vertex split: 5 merged vertices, 3 sets of each kind);
+`NodeVertexAnim::operator==` 0x45a550.*

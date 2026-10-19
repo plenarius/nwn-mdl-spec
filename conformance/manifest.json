@@ -116,8 +116,10 @@
      "path": "nodes[quad].controllers[alpha]",
      "rule": "MDL-CTRL-023",
      "tests": [
+      "compile",
       "decompile"
-     ]
+     ],
+     "match": "keys, got linear"
     }
    ]
   },
@@ -422,6 +424,59 @@
     "MDL-BIN-043",
     "MDL-BIN-080",
     "MDL-MESH-060"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_kid4",
+   "isolates": "numbering against a supermodel of nodes it lacks, under a matched and under an unmatched parent, declared out of tree order",
+   "rules": [
+    "MDL-NODE-020",
+    "MDL-NODE-030"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_super.mdl"
+   ]
+  },
+  {
+   "name": "zspec_tsort24",
+   "isolates": "the transparency sort with 24 children (std::sort past 16)",
+   "rules": [
+    "MDL-NODE-012"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_tsort50",
+   "isolates": "the transparency sort with 50 children",
+   "rules": [
+    "MDL-NODE-012"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_tsort90",
+   "isolates": "the transparency sort with 90 children",
+   "rules": [
+    "MDL-NODE-012"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_animtv",
+   "isolates": "animmesh sets per GPU vertex; tvert sets over the tvert count",
+   "rules": [
+    "MDL-MESH-062",
+    "MDL-BIN-045"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_deton",
+   "isolates": "a bare detonate line on a geometry emitter",
+   "rules": [
+    "MDL-CTRL-012"
    ],
    "golden": true
   }

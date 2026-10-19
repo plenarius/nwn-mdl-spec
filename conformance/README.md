@@ -25,6 +25,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_anim` | linear key lists (counted, endlist, empty line inside), events, transtime, animroot, a single value in an animation | MDL-CTRL-031, MDL-CTRL-035, MDL-ASCII-050, MDL-ASCII-060, MDL-NODE-040, MDL-NODE-042 | golden |
 | `zspec_animfx` | linear keys on a light and an emitter, detonate, lightningsubdivkey | MDL-CTRL-012, MDL-CTRL-013, MDL-CTRL-002 | golden |
 | `zspec_animmesh` | an animmesh animation: sample period, vertex and texture sets | MDL-BIN-045, MDL-MESH-062, MDL-ASCII-061 | golden |
+| `zspec_animtv` | an animmesh with 4 verts and 5 tverts, one vertex split by its UV: the sets over the merged vertices; the texture set count | MDL-MESH-062, MDL-BIN-045 | golden |
 | `zspec_bezier2` | position, shadowradius, verticaldisplacement, colorMid, sizeStart_y and percentEnd bezier keys; a bezier key list on a geometry node | MDL-CTRL-020, MDL-CTRL-023 | golden |
 | `zspec_cls_door` | classification door, ignorefog 1 | MDL-ASCII-021, MDL-ASCII-022 | golden |
 | `zspec_cls_effs` | classification Effects (plural) | MDL-ASCII-021 | golden |
@@ -32,6 +33,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_cls_item` | classification item | MDL-ASCII-021 | golden |
 | `zspec_cls_tile` | classification TILE (upper case) | MDL-ASCII-021 | golden |
 | `zspec_cls_tiles` | classification Tiles (plural) | MDL-ASCII-021 | golden |
+| `zspec_deton` | a bare static detonate line on a geometry emitter | MDL-CTRL-012 | golden |
 | `zspec_crlf` | zspec_dummy with CRLF line ends | MDL-ASCII-001 | golden |
 | `zspec_dangly` | danglymesh displacement, tightness, period, constraints | MDL-BIN-046 | golden |
 | `zspec_dummy` | model header fields; position, orientation, scale, inheritcolor | MDL-BIN-011, MDL-CTRL-003, MDL-CTRL-030 | golden |
@@ -41,6 +43,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_kid` | numbering against a supermodel; a name the supermodel uses twice; a node it lacks; the node count | MDL-NODE-020, MDL-NODE-021, MDL-NODE-030, MDL-NODE-040 | golden |
 | `zspec_kid2` | the supermodel name walk: case, a duplicate name under a different parent, a name under the wrong parent | MDL-NODE-020, MDL-NODE-021 | golden |
 | `zspec_kid3` | the node count with a supermodel (second data point) | MDL-NODE-030 | golden |
+| `zspec_kid4` | numbering against a supermodel of nodes it lacks, under a matched and an unmatched parent, declared out of tree order | MDL-NODE-020, MDL-NODE-030 | golden |
 | `zspec_light` | every light header field, flares, static light controllers; light spellings the engine does not read | MDL-BIN-040, MDL-ASCII-070, MDL-CTRL-011 | golden |
 | `zspec_merge` | vertex merging: groups and materials, UV splits, -0, degenerate faces, mirrorlist | MDL-MESH-010, MDL-MESH-011, MDL-MESH-020, MDL-MESH-021, MDL-MESH-050 | golden |
 | `zspec_mtrbmp` | a mesh whose bitmap names an .mtr with a normal-mapped hint | MDL-MESH-041 | golden |
@@ -57,6 +60,9 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_tanfile` | tangents given in the file with a normal-mapped hint | MDL-MESH-044 | golden |
 | `zspec_tanmirror` | tangent generation across a UV mirror seam: vertex clones | MDL-MESH-043, MDL-BIN-049 | golden |
 | `zspec_transp` | child order when a child mesh has transparencyhint > 0 | MDL-NODE-012, MDL-NODE-013 | golden |
+| `zspec_tsort24` | the transparency sort with 24 children (std::sort past 16) | MDL-NODE-012 | golden |
+| `zspec_tsort50` | the transparency sort with 50 children | MDL-NODE-012 | golden |
+| `zspec_tsort90` | the transparency sort with 90 children | MDL-NODE-012 | golden |
 | `zspec_trimesh` | trimesh material fields, two UV sets, vertex colours, static selfillumcolor and alpha | MDL-BIN-043, MDL-BIN-080, MDL-MESH-060 | golden |
 
 `cmbez01` and `cmtan01` were written for cleanmodels' and Moonglow's
@@ -116,7 +122,10 @@ still checked for compiles.
 
 Relaxations, each tied to a rule, are in the manifest: `lenient` (the probe
 is malformed input, every check is SHOULD) and `allow` (a path where the
-spec lets an implementation differ from the engine).
+spec lets an implementation differ from the engine; with `match`, only the
+checks there whose message contains that text, as for `zspec_bezier2`,
+where a compiler may drop the handles of a geometry node's bezier keys but
+must keep the controller and its first value).
 
 ## Making goldens
 

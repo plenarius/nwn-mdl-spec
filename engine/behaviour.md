@@ -382,11 +382,12 @@ zspec_transp, zspec_numbers.*
 
 **E45 Supermodel numbering.** A model with a supermodel numbers its nodes
 from the supermodel: by the path from the root, names compared
-case-insensitively, a matched node takes the supermodel node's number, an
-unmatched one −1; the roots match. The header node count is the
-supermodel's count + the model's own + 1. Animation nodes are numbered the
-same way. *Confirmed (goldens zspec_kid, zspec_kid2, zspec_kid3); the code
-doing it was not read.*
+case-insensitively, a matched node takes the supermodel node's number; an
+unmatched one gets −1 when its parent matched, and otherwise the
+supermodel's count + 1 + its declaration index; the roots match. The header
+node count is the supermodel's count + the model's own + 1. Animation nodes
+are numbered the same way. *Confirmed (goldens zspec_kid, zspec_kid2,
+zspec_kid3, zspec_kid4); the code doing it was not read.*
 
 **E46 Key lists.** `Parse<AurGenericKey>` (0x44e570) reads `"%d %c"` after the
 keyword. A count alone: that many rows, skipping lines whose first byte is
@@ -459,11 +460,14 @@ normal is (1, 0, 0) from E18). *Confirmed: zspec_tanmirror, zspec_merge
 **E54 Animmesh animations.** `MdlNodeAnimMesh::InternalPostProcess` divides
 the animation node's `animverts` count by its own vertex count (0x4578c9,
 `idivl`), so an animation node without `verts` crashes the engine (SIGFPE,
-reproduced with `nwmain-linux compilemodel`). The sets are stored
-vertex-major. The binary loader's animmesh branch (0x4bd400) copies `vertex
+reproduced with `nwmain-linux compilemodel`); the `animtverts` count is
+divided by its tvert count. The sets are stored vertex-major over the
+merged (GPU) vertices, each taking its source vertex's and source tvert's
+entries; `NodeVertexAnim::operator==` (0x45a550) compares them when
+merging. The binary loader's animmesh branch (0x4bd400) copies `vertex
 count (node +0x230) × sets` entries, so the animation node's own vertex
 count must be right. *Confirmed (in-engine crash with backtrace; asm;
-zspec_animmesh; loader code).*
+zspec_animmesh, zspec_animtv; loader code).*
 
 **E55 Runtime and uninitialised fields.** Compiling every probe twice and
 comparing the bytes: function pointers, geometry and parent pointers,
@@ -499,8 +503,11 @@ number of nodes written; an animation's is the number of nodes in its tree.
 (−5, −5, −1)-(5, 5, 10) and radius 7, or radius 40 when the model has an
 emitter, whatever the geometry. *Confirmed: every golden.*
 
-**E60 Detonate.** `detonatekey` rows with a time only give column byte 0.
-*Confirmed: zspec_animfx.*
+**E60 Detonate.** `detonatekey` rows with a time only give column byte 0; a
+bare `detonate` line on a geometry emitter gives one key at time 0 with
+column byte 0xff (sscanf's -1, stored as the float count by
+`AddGenericControllerSingle`, 0x4486f0). *Confirmed: zspec_animfx,
+zspec_deton.*
 
 **E61 Emitter header.** The layout of MDL-BIN-041 and the flag bits are
 confirmed by two emitters with complementary flags (0x555, 0x2aa); every

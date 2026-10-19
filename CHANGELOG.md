@@ -17,3 +17,21 @@ First draft:
   tests by name, and the first reports;
 - a Kaitai Struct description, checked by decoding every golden with the
   suite's own interpreter.
+
+Corrections after the first draft:
+- MDL-NODE-020 (and E45): a node the supermodel lacks gets -1 only when its
+  parent matched; under an unmatched parent it gets the supermodel's count
+  + 1 + its declaration index (new probe zspec_kid4).
+- MDL-CTRL-012 (and E60, tables/controllers.yaml): a bare static `detonate`
+  compiles with column byte 0xff (new probe zspec_deton).
+- Runner: an `allow` entry can be limited with `match`; zspec_bezier2 now
+  allows dropped bezier handles on a geometry node in compiles too, as
+  MDL-CTRL-023 says, while a missing controller or a wrong first value stays
+  a MUST failure.
+- MDL-NODE-012: past 16 children the order is libstdc++'s `std::sort`,
+  reproduced by a replica (zspec_tsort24, zspec_tsort50, zspec_tsort90); the
+  open question is closed.
+- MDL-MESH-062, MDL-BIN-045, E54: animmesh sets are laid out over the merged
+  vertices; the texture set count divides by the tvert count (zspec_animtv).
+- MDL-ASCII-040: where glibc's sscanf ends a number.
+- Reports rerun on the 46 probes.

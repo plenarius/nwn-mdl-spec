@@ -1,0 +1,20 @@
+# mdl-spec conformance probe zspec_deton (CC0-1.0)
+# A bare detonate line on a geometry emitter: its column byte.
+newmodel zspec_deton
+setsupermodel zspec_deton NULL
+classification effect
+beginmodelgeom zspec_deton
+node dummy zspec_deton
+  parent NULL
+endnode
+node emitter spark
+  parent zspec_deton
+  update Explosion
+  render Normal
+  blend Normal
+  texture fxpa_flare
+  birthrate 10
+  detonate
+endnode
+endmodelgeom zspec_deton
+donemodel zspec_deton

@@ -19,7 +19,7 @@ question was settled by the engine's compile of that probe.
 | emitter three-stop values 448, 452, 464-466, 468, 472 | same (game ids) | same | written as listed, static, keyed and bezier | zspec_emitter, zspec_bezier2 |
 | lightningsubdiv 220 | read when decompiling, not compiled since v4.9.0 | no id | no keyword in the emitter parser; nothing written for it, static or keyed | zspec_emitter, zspec_animfx, E37 |
 | opacity | not compiled | listed as a keyword | not read | zspec_emitter |
-| detonate column count | -1 ("no values") | 0 in the table; writes column byte 0xff | column byte 0, time-only keys | zspec_animfx |
+| detonate column count | -1 ("no values") | 0 in the table; writes column byte 0xff | time-only keys; column byte 0 for `detonatekey` rows, 0xff for a bare static `detonate` | zspec_animfx, zspec_deton |
 | nwnmdlcomp emitter ids 464/468/480-488 | read, compiler detected from the ids present | not read (game's reading kept) | the loader has no compiler switch: a 464 is percentStart, a 468 sizeMid | loader 0x4c01b0 (E36); **open**: no nwnmdlcomp binary was made (no nwnmdlcomp here) |
 | bezier column byte | 0x10 \| value columns; nwnmdlcomp's 0x19 read too | the same | 0x10 \| value columns | cmbez01, zspec_bezier2, E33 |
 
@@ -56,6 +56,7 @@ question was settled by the engine's compile of that probe.
 | node numbers (no supermodel) | depth-first order | file order | file order | zspec_nodeorder |
 | child order | file order | file order | file order, except that children are sorted (other nodes first, then meshes by transparencyhint) when a child mesh has transparencyhint > 0 | zspec_transp, ReorderChildren 0x458120 |
 | supermodel numbering: a name used twice in the supermodel (zspec_kid's `hand`) | -1 | 2 (the name walk) | 2: the name walk down the tree | zspec_kid, zspec_kid2 |
+| supermodel numbering: a node the supermodel lacks, under an unmatched parent | supermodel count + 1 + tree position | supermodel count + 1 + declaration index | supermodel count + 1 + declaration index | zspec_kid4 |
 | supermodel numbering: header node count | supermodel count + own count + 1 | the same | supermodel count + own count + 1 | zspec_kid, zspec_kid3 |
 | skin header size | 192 bytes after the mesh header (816 in all) | 724 or 944 seen; size not relied on | 816 in the engine's HD parts; 724 and 944 in older files | data (E57); **open**: no skin golden yet |
 | animmesh animation sets | stored set-major (as ASCII) | written with vertex count 0 in the animation node | vertex-major; the animation node's vertex count sizes the copy | zspec_animmesh, loader 0x4bd400 |

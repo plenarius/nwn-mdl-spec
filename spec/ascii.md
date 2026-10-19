@@ -112,9 +112,17 @@ digits with an optional point and exponent (`1e1`, `-2.5E-1`, `+3`, `.5`,
 Several values are read with `"%f %f %f"`: reading stops at the first word
 that does not start with a number, and also right after a number followed
 by other characters (`1.5abc 2 3` reads 1.5 only; `0,5 1 1` reads 0;
-`1.#INF` reads 1). The values not read keep what they had. *Confirmed:
-zspec_numfmt (well-formed), zspec_numbers (malformed); `Parse(char const*,
-float&)` 0x446770 and the vector parser 0x4466a0.*
+`1.#INF` reads 1). The values not read keep what they had. Where a number
+ends is the C library's: with glibc, which the Linux build calls, an
+exponent marker with no digits is consumed but not used (`1e` reads 1 and
+takes both characters, so `1e 2 3` reads all three; `100ergs` reads 100),
+`0x` alone is not a number but `0x.` reads 0, `nan(…)` takes only `nan`, and
+`infi` is not a number while `inf` and `infinity` are. Integers (`%d`, MDL-ASCII-041) take an optional sign and
+digits (`2.9` reads 2, `1e3` reads 1). *Confirmed: zspec_numfmt (well-formed),
+zspec_numbers (malformed); `Parse(char const*, float&)` 0x446770 and the
+vector parser 0x4466a0; the end of a number checked against glibc 2.39's
+`sscanf` on 177,000 strings. The Windows build's C library was not
+checked.*
 
 A writer MUST write plain decimal numbers. The malformed forms are
 documented so readers can match the engine; the suite checks them as

@@ -292,6 +292,13 @@ def compare_controllers(r, path, exp, act, profile, flags):
         if c['bezier'] != a.get('bezier'):
             r.must(p, 'expected %s keys, got %s' % ('bezier' if c['bezier'] else 'linear',
                                                      'bezier' if a.get('bezier') else 'linear'))
+            # The first key's value is still compared: it is all a geometry
+            # node shows (MDL-CTRL-023), and an allowance for the key kind
+            # alone ("match") must not hide a wrong value.
+            if c['keys'] and a['keys'] and 'v' in c['keys'][0]:
+                ev, av = c['keys'][0]['v'], a['keys'][0].get('v')
+                if not vclose(ev, av, tol):
+                    r.must('%s.keys[0].v' % p, 'expected %s, got %s' % (ev, av))
             continue
         if profile == 'compile':
             if c['columns'] != a.get('columns'):
@@ -596,13 +603,15 @@ def cmd_run(a):
                 # The manifest may relax checks: "lenient" (a list of tests)
                 # makes every check of that test a SHOULD (malformed input);
                 # "allow" entries make the checks under a path a SHOULD where
-                # the spec lets an implementation differ from the engine.
+                # the spec lets an implementation differ from the engine; with
+                # "match", only the checks whose message contains it.
                 items = []
                 for lvl, pth, msg in rep.items:
                     if lvl == 'must' and test in p.get('lenient', []):
                         lvl, msg = 'should', msg + ' [lenient: malformed input]'
                     for al in p.get('allow', []):
-                        if lvl == 'must' and pth.startswith(al['path']) and test in al.get('tests', ['compile', 'decompile']):
+                        if (lvl == 'must' and pth.startswith(al['path']) and test in al.get('tests', ['compile', 'decompile'])
+                                and al.get('match', '') in msg):
                             lvl, msg = 'should', '%s [allowed: %s]' % (msg, al['rule'])
                     items.append((lvl, pth, msg))
                 rep.items = items

@@ -1,0 +1,9887 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_tsort90",
+ "build": "89.8193.37-17",
+ "golden_sha256": "b2a6f9f311332bd73f191b354c7c6bc716d3eeeefb0205cb7eaae523b5ab8e40",
+ "volatile": [],
+ "model": {
+  "name": "zspec_tsort90",
+  "classification": 2,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 91,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_tsort90",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d00",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d50",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 51,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d65",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 66,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d44",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 45,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d42",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 43,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d39",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 40,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d67",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 68,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d37",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 38,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d36",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 37,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d76",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 77,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d77",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 78,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d80",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 81,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d23",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 24,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d14",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 15,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d05",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 6,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d06",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 7,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d85",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 86,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d84",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 85,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d87",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 88,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d10",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 11,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "d11",
+   "parent": "zspec_tsort90",
+   "type": "dummy",
+   "flags": 1,
+   "number": 12,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "m27",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 28,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m40",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 41,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m28",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 29,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m79",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 80,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m25",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 26,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m12",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 13,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m61",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 62,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m19",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 20,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m18",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 19,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m56",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 57,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m57",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 58,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 4294967295,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m58",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 59,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m49",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 50,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m63",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 64,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m48",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 49,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m45",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 46,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m03",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m43",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 44,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m86",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 87,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m13",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 14,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m71",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 72,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m15",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 16,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m16",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 17,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m22",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 23,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m30",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 31,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m33",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 34,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m72",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 73,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m41",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 42,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m66",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 67,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m31",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 32,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m09",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 10,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m21",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 22,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m81",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 82,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m53",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 54,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m55",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 56,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 1,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m89",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 90,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m60",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 61,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m82",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 83,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m51",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 52,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m34",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 35,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 2,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m59",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 60,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m78",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 79,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m74",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 75,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m73",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 74,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m35",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 36,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m70",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 71,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m26",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 27,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m24",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 25,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m17",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 18,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m83",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 84,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m47",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 48,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m62",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 63,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m52",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 53,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 3,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m88",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 89,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m01",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m29",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 30,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m32",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 33,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m75",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 76,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m69",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 70,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m46",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 47,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m64",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 65,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m54",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 55,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 5,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m68",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 69,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m20",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 21,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m38",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 39,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m08",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 9,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m07",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 8,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m04",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 5,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "m02",
+   "parent": "zspec_tsort90",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     0,
+     0,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 0.74535596,
+    "average": [
+     0.33333334,
+     0.33333334,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 7,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 3,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 1,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "animations": []
+}

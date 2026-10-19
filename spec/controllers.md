@@ -56,10 +56,15 @@ differ (MDL-CTRL-050), is read with the game's ids. Light id 144 occurs in
 always with value 1; this build's compiler writes it for no keyword, and
 what reads it is unknown ([unknown.md](unknown.md)).
 
-**MDL-CTRL-012** `detonate` keys are times only: the game's compiler writes
-column byte 0 and no values. Old BioWare files also carry column byte 1 and
-0xff for it (stock `vwp_flash_blured`). A reader MUST accept all three.
-*Confirmed: zspec_animfx; stock counts (E64).*
+**MDL-CTRL-012** `detonate` keys are times only, with no values. The game's
+compiler writes column byte 0 for `detonatekey` rows and 0xff for a bare
+static `detonate` line on an emitter: the byte is the number of floats
+`AddGenericControllerSingle` (0x4486f0) read, and sscanf returns -1 when there
+are none. Old BioWare files also carry column byte 1. A reader MUST accept
+any column byte for detonate (0xff is not a bezier flag here) and read its
+keys as times; a compiler SHOULD write 0 for keyed and 0xff for static
+detonate. *Confirmed: zspec_animfx (0), zspec_deton (0xff); stock
+`vwp_flash_blured` carries both; stock counts (E64).*
 
 **MDL-CTRL-013** `lightningsubdiv` and `opacity` are not controllers: the
 emitter parser has no such keywords, static or keyed, and the game's

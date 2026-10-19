@@ -240,7 +240,8 @@ mesh golden; values per MDL-MESH-021.*
 empty arrays (36 bytes), u4 vertex sets offset (model data), u4 texture
 sets offset (model data), u4 vertex set count, u4 texture set count. The
 sets hold `vertex count × set count` entries (vec3, and 2 floats for
-texture sets) stored **vertex-major**: entry `vertex × sets + set`. The
+texture sets) stored **vertex-major**: entry `vertex × sets + set`, where
+the vertices are the node's merged (GPU) vertices (MDL-MESH-062). The
 geometry node carries counts of 0; the sets are on the animation's node,
 whose own mesh header MUST carry the vertex count: the loader copies
 `vertex count × sets` entries using the animation node's vertex count
