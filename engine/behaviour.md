@@ -578,6 +578,6 @@ tile model whose ground trimesh has `tverts1` (0 to 1 over the tile) and
 `texture0` (its colour texture) and `texture7` (a 1 m checkerboard DDS); the
 custom vertex shader passes `vTcIn1` on, the fragment shader multiplies by
 `texture2D(texUnit7, …)` when `texture7Bound != 0`. The checkerboard showed
-on the ground, aligned to the tile, fading with the fog (Layonara
+on the ground, aligned to the tile, fading with the fog (NWN
 Landscaper's shadow-map shaders, 2026-10-20). So `tverts1` reaches
 `vTcIn1` and an MTR's `texture7` reaches `texUnit7`.*
