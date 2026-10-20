@@ -46,3 +46,6 @@ Corrections after the first draft:
   all 25,597 base-game binaries identically (ksy/README.md).
 - Reports rerun on the 46 probes.
 - Report for cleanmodels v4.10.0 (46 compile, 46 decompile, 14 stock).
+- Report for cleanmodels v4.11.0: the same results as v4.10.0. The
+  reconciliation table notes where cleanmodels changed since v4.9.0 (light
+  144, `setfillumcolor`, `ambient_only`).

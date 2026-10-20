@@ -5,7 +5,8 @@ The tables started from two implementations: cleanmodels v4.9.0
 (`crates/mg-mdl/src/ctrl.rs`, `keywords.rs`, `notes_models.md`). Every point
 where they disagreed with each other, or where either disagreed with what
 the engine was seen to do, is below with its resolution. "Probe" means the
-question was settled by the engine's compile of that probe.
+question was settled by the engine's compile of that probe. Where a later
+cleanmodels release changed its column, the cell says since which version.
 
 ## Controller IDs
 
@@ -14,7 +15,7 @@ question was settled by the engine's compile of that probe.
 | position 8, orientation 20, scale 36 | same | same | written as listed | zspec_dummy, zspec_anim |
 | mesh selfillumcolor 100, alpha 128 | same | same | written as listed | zspec_trimesh, zspec_anim |
 | light color 76, radius 88, shadowradius 96, verticaldisplacement 100, multiplier 140 | same | same | written as listed | zspec_light, zspec_animfx |
-| light 144 | unknown (dropped with a warning) | `ctrl144` | never written by this build's compiler for any keyword | zspec_light, zspec_animfx: kept as `observed` (seen in older EE-compiled shipped files, value 1.0; meaning unknown) |
+| light 144 | dropped when decompiling; with a warning up to v4.10.0, an info note since v4.11.0 | `ctrl144` | never written by this build's compiler for any keyword | zspec_light, zspec_animfx: kept as `observed` (seen in older EE-compiled shipped files, value 1.0; meaning unknown) |
 | emitter 80-216, 228 | same | same | written as listed | zspec_emitter, zspec_animfx |
 | emitter three-stop values 448, 452, 464-466, 468, 472 | same (game ids) | same | written as listed, static, keyed and bezier | zspec_emitter, zspec_bezier2 |
 | lightningsubdiv 220 | read when decompiling, not compiled since v4.9.0 | no id | no keyword in the emitter parser; nothing written for it, static or keyed | zspec_emitter, zspec_animfx, E37 |
@@ -27,8 +28,8 @@ question was settled by the engine's compile of that probe.
 
 | Item | cleanmodels | Moonglow | Engine | Settled by |
 |---|---|---|---|---|
-| `setfillumcolor` (misspelling) | read as selfillumcolor | read as selfillumcolor | **not read** | zspec_setfill |
-| `ambient_only`, `fading_light`, `negativelight`, `lensflares` | `ambient_only` read as ambientonly | listed as light keywords; `ambient_only` read | not read | zspec_light (lamp_b) |
+| `setfillumcolor` (misspelling) | read as selfillumcolor up to v4.9.0; not read since v4.10.0, with a warning naming selfillumcolor | read as selfillumcolor | **not read** | zspec_setfill |
+| `ambient_only`, `fading_light`, `negativelight`, `lensflares` | `ambient_only` read as ambientonly up to v4.9.0; not read since v4.10.0, with a warning | listed as light keywords; `ambient_only` read | not read | zspec_light (lamp_b) |
 | `n_dynamic_type`, `affect_dynamic` | — | listed | not in the light parser | 0x44baf0 (inferred, no probe) |
 | `texture3` … `texture14` | — | listed | only texture0-2 and bitmap; slot 3 holds `materialname` | 0x44ced0; cmtan01 |
 | `lightmapped` | read and written | listed | not read; the binary byte is uninitialised | 0x44ced0; zspec_trimesh and its second compile |
