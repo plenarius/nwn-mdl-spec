@@ -196,3 +196,13 @@ carries its sets twice. The sets are stored vertex-major over those merged
 vertices (MDL-BIN-045). *Confirmed: zspec_animmesh, zspec_animtv (4 verts and
 5 tverts, one vertex split: 5 merged vertices, 3 sets of each kind);
 `NodeVertexAnim::operator==` 0x45a550.*
+
+## What shaders read
+
+**MDL-MESH-063** A mesh's UV set 1 (`tverts1`) reaches a shader as the
+vertex attribute `vTcIn1`, and a material's `textureN` (N 0 to 14) as the
+uniform `texUnitN`, with `textureNBound` non-zero when one is bound. The
+stock shader includes declare only `vTcIn` and units 0 to 5: a custom shader
+(an MTR's `customshadervs` / `customshaderfs`) that reads UV set 1 or a unit
+above 5 MUST declare those inputs itself. *Confirmed: `ConnectShaderData`
+0x4ce8e0; the stock `inc_common` shader include; in game, E66.*
