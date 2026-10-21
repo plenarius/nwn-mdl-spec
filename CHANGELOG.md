@@ -18,6 +18,12 @@ First draft:
 - a Kaitai Struct description, checked by decoding every golden with the
   suite's own interpreter.
 
+Added:
+- MDL-MESH-063 (and E66): what shaders read: UV set 1 as `vTcIn1`, a
+  material's `textureN` as `texUnitN` / `textureNBound` for units 0 to 14;
+  custom shaders declare what the stock includes don't (in game: a custom
+  shader reading `tverts1` and `texture7`).
+
 Corrections after the first draft:
 - MDL-NODE-020 (and E45): a node the supermodel lacks gets -1 only when its
   parent matched; under an unmatched parent it gets the supermodel's count
