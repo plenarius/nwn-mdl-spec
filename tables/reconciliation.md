@@ -32,7 +32,7 @@ cleanmodels release changed its column, the cell says since which version.
 | `ambient_only`, `fading_light`, `negativelight`, `lensflares` | `ambient_only` read as ambientonly up to v4.9.0; not read since v4.10.0, with a warning | listed as light keywords; `ambient_only` read | not read | zspec_light (lamp_b) |
 | `n_dynamic_type`, `affect_dynamic` | — | listed | not in the light parser | 0x44baf0 (inferred, no probe) |
 | `texture3` … `texture14` | — | listed | only texture0-2 and bitmap; slot 3 holds `materialname` | 0x44ced0; cmtan01 |
-| `lightmapped` | read and written | listed | not read; the binary byte is uninitialised | 0x44ced0; zspec_trimesh and its second compile |
+| `lightmapped` | read and written up to v4.11.0; ignored since v4.12.0 (the byte written as 0) | listed | not read; the binary byte is uninitialised | 0x44ced0; zspec_trimesh and its second compile |
 | `filedependency` (spelling) | — | accepted | only `filedependancy`; both are ignored anyway | 0x446330 |
 | `classification Tiles` (plural) | 2 (any trailing S trimmed) | 0 | 0 (only `effects` has a plural) | zspec_cls_tiles, zspec_cls_effs |
 | `PARENT` (upper case) | read | read | not read: `parent` is case-sensitive; the node drops out of the tree | zspec_numbers |

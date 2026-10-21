@@ -1,11 +1,13 @@
 # Conformance reports: cleanmodels and Moonglow (2026-10-19)
 
-- **cleanmodels v4.11.0** (1d740cb), **v4.10.0** (faf1af3) and **v4.9.0**
-  (55a9df3), the published Linux builds, through
+- **cleanmodels v4.12.0** (e4fb9b6), **v4.11.0** (1d740cb), **v4.10.0**
+  (faf1af3) and **v4.9.0** (55a9df3), the published Linux builds, through
   `runner/adapters/cleanmodels.sh`. v4.10.0 was written against these
   results; v4.9.0 is kept for comparison. v4.11.0 (2026-10-20) changed what
-  cleanmodels reports, not what it writes, and gives the same results as
-  v4.10.0 on every probe, SHOULD notes included.
+  cleanmodels reports, not what it writes; v4.12.0 (2026-10-20) no longer
+  reads or writes the mesh `lightmapped` byte (MDL-BIN-051), which no check
+  compares. Both give the same results as v4.10.0 on every probe, SHOULD
+  notes included.
 - **Moonglow Toolset** at e0ed4c4 (`crates/mg-mdl`, unchanged since 1.33.0),
   through `runner/adapters/moonglow/` (`mg_mdl::compile::compile_named` with
   supermodels looked up next to the input, and `mg_mdl::decompile`).
@@ -20,6 +22,7 @@ repository; `mdlconf.py stock` regenerates them from any install.
 
 | | compile | decompile | stock decompile |
 |---|---|---|---|
+| cleanmodels v4.12.0 | 46 pass | 46 pass | 14 pass |
 | cleanmodels v4.11.0 | 46 pass | 46 pass | 14 pass |
 | cleanmodels v4.10.0 | 46 pass | 46 pass | 14 pass |
 | cleanmodels v4.9.0 | 7 pass, 39 fail | 42 pass, 4 fail | 12 pass, 2 fail |
@@ -29,7 +32,7 @@ repository; `mdlconf.py stock` regenerates them from any install.
 check; most failing probes fail on one or two causes, listed below.)
 
 The tables below describe cleanmodels v4.9.0 and Moonglow e0ed4c4; v4.10.0
-and v4.11.0 fail none of their MUST checks. What it still reports at SHOULD level is
+to v4.12.0 fail none of their MUST checks. What it still reports at SHOULD level is
 listed at the end.
 
 ## Where both differ from the engine
@@ -92,7 +95,7 @@ listed at the end.
   as invalid, keep the `PARENT` node, and differ from the engine on trailing
   junk.
 
-## cleanmodels v4.10.0 and v4.11.0: reported, not failed (SHOULD)
+## cleanmodels v4.10.0 to v4.12.0: reported, not failed (SHOULD)
 
 - Position and orientation controllers with their default values on nodes
   whose source has no such line (MDL-CTRL-033); kept on purpose.
