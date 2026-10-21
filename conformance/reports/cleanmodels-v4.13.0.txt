@@ -1,0 +1,96 @@
+# cleanmodels-v4.13.0
+cmbez01            compile   PASS (5 should)
+cmbez01            decompile PASS (9 should)
+cmtan01            compile   PASS (3 should)
+cmtan01            decompile PASS (1 should)
+zspec_aabb         compile   PASS (7 should)
+zspec_aabb         decompile PASS
+zspec_aabbdef      compile   PASS (7 should)
+zspec_aabbdef      decompile PASS
+zspec_aabbdeg      compile   PASS (11 should)
+zspec_aabbdeg      decompile PASS
+zspec_anim         compile   PASS (6 should)
+zspec_anim         decompile PASS
+zspec_animfx       compile   PASS (7 should)
+zspec_animfx       decompile PASS (7 should)
+zspec_animmesh     compile   PASS (5 should)
+zspec_animmesh     decompile PASS
+zspec_bezier2      compile   PASS (12 should)
+zspec_bezier2      decompile PASS (8 should)
+zspec_cls_door     compile   PASS (3 should)
+zspec_cls_door     decompile PASS
+zspec_cls_effs     compile   PASS (3 should)
+zspec_cls_effs     decompile PASS
+zspec_cls_gui      compile   PASS (3 should)
+zspec_cls_gui      decompile PASS
+zspec_cls_item     compile   PASS (3 should)
+zspec_cls_item     decompile PASS
+zspec_cls_tile     compile   PASS (3 should)
+zspec_cls_tile     decompile PASS
+zspec_cls_tiles    compile   PASS (3 should)
+zspec_cls_tiles    decompile PASS
+zspec_crlf         compile   PASS (4 should)
+zspec_crlf         decompile PASS
+zspec_dangly       compile   PASS (5 should)
+zspec_dangly       decompile PASS
+zspec_dummy        compile   PASS (4 should)
+zspec_dummy        decompile PASS
+zspec_emitter      compile   PASS (5 should)
+zspec_emitter      decompile PASS
+zspec_hint_mesh    compile   PASS (5 should)
+zspec_hint_mesh    decompile PASS
+zspec_hints        compile   PASS (14 should)
+zspec_hints        decompile PASS
+zspec_kid          compile   PASS (10 should)
+zspec_kid          decompile PASS
+zspec_kid2         compile   PASS (11 should)
+zspec_kid2         decompile PASS
+zspec_kid3         compile   PASS (5 should)
+zspec_kid3         decompile PASS
+zspec_light        compile   PASS (5 should)
+zspec_light        decompile PASS
+zspec_merge        compile   PASS (23 should)
+zspec_merge        decompile PASS
+zspec_mtrbmp       compile   PASS (5 should)
+zspec_mtrbmp       decompile PASS
+zspec_nodeorder    compile   PASS (13 should)
+zspec_nodeorder    decompile PASS
+zspec_nodetypes    compile   PASS (8 should)
+zspec_nodetypes    decompile PASS
+zspec_normals      compile   PASS (19 should)
+zspec_normals      decompile PASS
+zspec_numbers      compile   PASS (14 should)
+zspec_numbers      decompile PASS (2 should)
+zspec_numfmt       compile   PASS (10 should)
+zspec_numfmt       decompile PASS
+zspec_orient       compile   PASS (9 should)
+zspec_orient       decompile PASS
+zspec_reference    compile   PASS (6 should)
+zspec_reference    decompile PASS
+zspec_setfill      compile   PASS (8 should)
+zspec_setfill      decompile PASS
+zspec_skin         all       PENDING
+    compilemodel refuses a skin unless a creature using the model is on screen; needs an in-game rig
+zspec_super        compile   PASS (8 should)
+zspec_super        decompile PASS
+zspec_tanfile      compile   PASS (5 should)
+zspec_tanfile      decompile PASS
+zspec_tanmirror    compile   PASS (5 should)
+zspec_tanmirror    decompile PASS (2 should)
+zspec_transp       compile   PASS (19 should)
+zspec_transp       decompile PASS
+zspec_trimesh      compile   PASS (3 should)
+zspec_trimesh      decompile PASS
+zspec_kid4         compile   PASS (23 should)
+zspec_kid4         decompile PASS
+zspec_tsort24      compile   PASS (51 should)
+zspec_tsort24      decompile PASS
+zspec_tsort50      compile   PASS (103 should)
+zspec_tsort50      decompile PASS
+zspec_tsort90      compile   PASS (183 should)
+zspec_tsort90      decompile PASS
+zspec_animtv       compile   PASS (7 should)
+zspec_animtv       decompile PASS
+zspec_deton        compile   PASS (5 should)
+zspec_deton        decompile PASS (7 should)
+# totals: all pending 1, compile pass 46, decompile pass 46
