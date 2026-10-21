@@ -19,6 +19,9 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-BIN-053: merged meshes, an index list drawing other meshes' triangles
+  (render-0 donors with an empty list), in 1,015 base-game binaries; a
+  faces-only reader must put the donors back (Layonara nwn-module#476).
 - MDL-MESH-063 (and E66): what shaders read: UV set 1 as `vTcIn1`, a
   material's `textureN` as `texUnitN` / `textureNBound` for units 0 to 14;
   custom shaders declare what the stock includes don't (in game: a custom

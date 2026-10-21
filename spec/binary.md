@@ -276,6 +276,28 @@ refers to the clones. A reader that rebuilds triangles MUST use the index
 list when there is one. *Confirmed: zspec_tanmirror (index list
 `0 1 2 0 2 3 6 4 5 6 5 7`, faces still `1 4 5`, `1 5 2`); E31.*
 
+**MDL-BIN-053** An index list can draw more than its mesh's faces. In
+**merged** meshes, one mesh of a texture (the receiver) draws its own faces'
+triangles and copies of other meshes' of the same texture (the donors),
+whose vertices are appended to its own; each donor keeps its faces but has
+render 0 and an empty index list. The engine draws index lists
+(MDL-BIN-049), so such a model looks whole while its faces are not what it
+draws. A reader that writes ASCII, which holds faces only, MUST NOT lose the
+copies. Writing each donor whose triangles are all among a receiver's
+copies with render 1 is exact: it then draws the same triangles, as a mesh
+of its own. A donor that an animation moves was drawn still, as part of the
+receiver; written with render 1, it moves. *Confirmed (in game): Layonara's
+tin01 tiles (third-party, not here) drew whole walls as binaries and lost
+their lower walls through a faces-only round trip (nwn-module#476). Written
+with their donors at render 1 and compiled again, those tiles and the other
+1,356 below draw every triangle the originals draw but degenerate ones
+(compared statically, not in game). Data: 1,015 base-game binaries (tno01,
+tts02, ttf02 and tcn01 tiles, dag_ placeables) and 342 in Layonara's haks
+hold merged meshes, and every copy matches a render-0 donor's faces
+(texture coordinates exactly, side lengths within 1 mm). This build's
+compiler does not merge: its compile of such tiles' ASCII keeps one index
+list per mesh (the same report).*
+
 ## Uninitialised fields
 
 **MDL-BIN-050** Besides MDL-BIN-030, the game's output holds uninitialised
