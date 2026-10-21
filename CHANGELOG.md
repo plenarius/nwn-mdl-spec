@@ -19,6 +19,9 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-CTRL-033 covers the model root: the game's compiler writes a root's
+  position and orientation when the ASCII gives them (cleanmodels dropped
+  them).
 - MDL-BIN-053: merged meshes, an index list drawing other meshes' triangles
   (render-0 donors with an empty list), in 1,015 base-game binaries; a
   faces-only reader must put the donors back (Layonara nwn-module#476).

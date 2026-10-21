@@ -170,7 +170,13 @@ zspec_bezier2; `AddBezierController` 0x448a30.*
 the ASCII gives: a geometry node with no `orientation` line has no
 orientation controller, not an identity one. A compiler SHOULD do the same;
 writing a controller with the default value is equivalent in game (the
-node's transform starts at identity). *Confirmed: every golden; equivalence
+node's transform starts at identity). This holds for the model root too:
+a root with `position` or `orientation` lines gets those controllers (with
+explicit zeros, zero ones), and a root without them gets none, so a
+compiler MUST NOT drop a root's position or orientation the ASCII gives.
+*Confirmed: every golden; for the root, the game's compiles of
+cleanmodels' zcm_rootpos (`position 0 0 -1.75`, an orientation),
+zcm_rootzero and zcm_rootnone (tests/fixtures/engine there); equivalence
 inferred from `CreateInstanceTreeR` 0x43c6b0 (a part starts at identity,
 behaviour.md, "Skin binding: further notes").*
 
