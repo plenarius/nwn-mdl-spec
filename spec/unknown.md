@@ -65,6 +65,13 @@ what would settle it.
 
 ## Meshes
 
+- **Merged meshes (MDL-BIN-053).** Which compiler wrote them is not known:
+  the base game ships them and this build's compiler does not make them,
+  which points at BioWare's earlier compiler; no older compiler was run.
+  Whether the engine would draw a render-0 mesh that has an index list is
+  not shown by them either, since every donor's list is empty. An in-game
+  probe with render 0 and a full index list would settle it.
+
 - **The stale AABB tree** after a degenerate walkmesh face is deleted
   (MDL-MESH-024): what pathfinding and collision do with leaves pointing past
   the face list was not observed.
