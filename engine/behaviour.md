@@ -581,3 +581,31 @@ custom vertex shader passes `vTcIn1` on, the fragment shader multiplies by
 on the ground, aligned to the tile, fading with the fog (NWN
 Landscaper's shadow-map shaders, 2026-10-20). So `tverts1` reaches
 `vTcIn1` and an MTR's `texture7` reaches `texUnit7`.*
+
+## Render pass (E67, new)
+
+**E67 What makes a mesh blended.** `transparencyhint` only orders a node's
+child meshes (MDL-NODE-012); it does not choose the pass. A mesh is drawn in
+the blended pass when `PartTriMesh::GetIsOpaque` (0x43cee0) is false:
+- the part's alpha (+0xa0, set by the `alpha` controller and by fading, e.g.
+  a hidden DM) is below 1.0 (`ucomiss` against 1.0 at 0x43cee8);
+- or `Material::GetIsOpaque` (0x4c6190) is false;
+- or the object-level checks at +0x108 / +0x10c of the owning object fail.
+
+`Material::GetIsOpaque` is false when the material's blend mode (+0x94) is 2,
+set by `blending additive` in `Material::ParseField` (0x4c5850); or when its
+shared material has the `.mtr` `transparency` flag set
+(`cmpb $0x0,0x1f0(%rax)` at 0x4c61c1, with the shared material at +0xd0,
+stored from `Material::InitSharedMaterial` at 0x4c74be); otherwise an
+environment map makes it opaque, and else it follows the diffuse texture's
+alpha (virtual calls at 0x4c624d / 0x4c628a). `SharedMaterial::ParseField`
+(0x4c6760) reads `transparency` as a bool into +0x1f0 (0x4c6b30) and
+`twosided` into +0x1f1 (0x4c6b18), next to `sample_framebuffer` (+0x1f4) and
+`volumetric` (+0x1f8). So a mesh whose transparency comes from a custom
+shader or a separate mask texture, with a diffuse that has no alpha (a PLT),
+is drawn opaque, and its blended look returns only when the part is faded.
+*Confirmed (code). In game (2026-10-22): Layonara head `pmh0_head094`, hair
+meshes with transparencyhint 1 to 9, an MTR with a custom fragment shader
+that cuts and blends on a mask in `texture3`, PLT diffuse. Visible, the hair
+drew as solid strips; as a hidden DM it blended. The same MTR with
+`transparency 1` added blended when visible (nwn-haks#34).*

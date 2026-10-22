@@ -29,6 +29,11 @@ Added:
   material's `textureN` as `texUnitN` / `textureNBound` for units 0 to 14;
   custom shaders declare what the stock includes don't (in game: a custom
   shader reading `tverts1` and `texture7`).
+- MDL-MESH-064 (and E67): what makes a mesh blended. `transparencyhint` only
+  orders meshes; the pass comes from the material (`.mtr` `transparency`,
+  `blending additive`, or diffuse alpha) or a faded part. In game: hair with a
+  mask shader over a PLT drew as solid strips until its MTR set
+  `transparency 1` (Layonara nwn-haks#34).
 
 Corrections after the first draft:
 - MDL-NODE-020 (and E45): a node the supermodel lacks gets -1 only when its

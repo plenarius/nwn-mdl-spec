@@ -206,3 +206,16 @@ stock shader includes declare only `vTcIn` and units 0 to 5: a custom shader
 (an MTR's `customshadervs` / `customshaderfs`) that reads UV set 1 or a unit
 above 5 MUST declare those inputs itself. *Confirmed: `ConnectShaderData`
 0x4ce8e0; the stock `inc_common` shader include; in game, E66.*
+
+## Opaque or blended
+
+**MDL-MESH-064** `transparencyhint` orders meshes (MDL-NODE-012) but does not
+make a mesh blended. A visible mesh is drawn blended only when its material
+is not opaque: the material's `.mtr` sets `transparency 1`, its blending is
+`additive`, or its diffuse texture has alpha (an environment map makes it
+opaque). A mesh whose transparency comes only from a custom shader or a
+separate mask texture, over a diffuse without alpha (a PLT), MUST name an MTR
+with `transparency 1` to be blended. A checker SHOULD warn when a mesh has
+transparencyhint > 0 and a material that cannot be blended. *Confirmed:
+`PartTriMesh::GetIsOpaque` 0x43cee0, `Material::GetIsOpaque` 0x4c6190,
+`SharedMaterial::ParseField` 0x4c6760; in game, E67.*
