@@ -63,3 +63,5 @@ Corrections after the first draft:
   144, `setfillumcolor`, `ambient_only`).
 - Report for cleanmodels v4.12.0: the same results as v4.10.0; the
   reconciliation table notes that it ignores `lightmapped`.
+- Report for cleanmodels v4.13.0: the same results as v4.10.0 (no probe has
+  merged render lists or a root transform).
