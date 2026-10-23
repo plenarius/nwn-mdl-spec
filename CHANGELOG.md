@@ -19,6 +19,9 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-NODE-050: a worn robe's nodes directly under `torso_g` are drawn
+  without their orientation (confirmed in game; the code was not found, see
+  unknown.md, "Worn models").
 - MDL-CTRL-033 covers the model root: the game's compiler writes a root's
   position and orientation when the ASCII gives them (cleanmodels dropped
   them).

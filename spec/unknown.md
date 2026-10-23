@@ -112,6 +112,19 @@ what would settle it.
   for an identity in `c_marilith2`, w = −1 from the EE compiler): both
   render the same; the old compiler's maths was not read.
 
+## Worn models
+
+- **Why MDL-NODE-050 happens, and how far it reaches.** The code that
+  drops the orientation of a robe node under `torso_g` was not found. Open:
+  whether it comes from how the robe is attached to the wearer
+  (`CNWCAnimBaseParts::LoadModel` 0x9db550 loads it as an object of its own,
+  `AttachToObject`; MDL-SKIN-012), and whether it also applies to
+  children of the other bones above the waist (`neck_g`, the shoulders and
+  arms), to `rootdummy`'s, to cloaks and to body parts. Only `pelvis_g`
+  was seen to keep a child's orientation, on one sample. *A probe robe with
+  one marker mesh per bone, each turned 90 degrees, worn in game, would map
+  it; reading what poses a worn robe's nodes would explain it.*
+
 ## Process
 
 - **Golden regeneration after a patch** needs a machine with the game and an

@@ -103,3 +103,44 @@ numbers under the same names stop posing their creatures. A compiler MUST
 therefore keep the numbering of MDL-NODE-010 and MDL-NODE-020. *Confirmed
 in game by the Moonglow Viewer session of 2026-10-07 (Moonglow notes B.19);
 not re-tested for this suite.*
+
+## Worn models
+
+**MDL-NODE-050** When a part-based creature wears a robe (its
+`parts_robe.2da` model, such as `pmh0_robe202`), a node of the robe whose
+parent is `torso_g` is drawn without its orientation: as if it were the
+identity. Its position is kept, and so are the orientations of the nodes
+below it, which are applied from there. The game's compiler keeps the
+orientation in the binary (a `compilemodel` of such a robe has the same
+orientation controller as the ASCII), so the loss happens at run time. A
+tool that writes robes SHOULD put such a rotation into the node's own
+vertices and normals, and into its children's positions and orientations,
+leaving the node at the identity: that is drawn as modelled. A checker
+SHOULD warn about a non-identity orientation on a direct child of
+`torso_g` in a robe. *Confirmed in game (build 89.8193.37-17, 2026-10-22),
+on a human male wearing two of a server's robes, loaded as ASCII from
+`development/`, compared front, side and back:*
+
+- *A cape panel hung from a shoulder pad that is a child of `torso_g` and is
+  turned 180 degrees about x stood up above the shoulder instead of hanging
+  down. It still did with the pad renamed, with the turn written `1 0 0
+  3.14159` instead of `-1 0 0 -3.14159`, at 172 degrees, with the panel a
+  trimesh instead of a danglymesh, and with the panel on another texture.
+  With the pad turned 90 degrees about x and the panel's own transform
+  adjusted to keep the modelled placement, the panel stuck out backward,
+  where the pad's turn left out puts it. Hung from `torso_g` itself, with
+  its transform composed from the pad's and its own, the panel stuck out
+  backward: where its vertices lie with no rotation at all. With the pad's
+  turn put into the pad's vertices and the panel's transform (the pad at the
+  identity), it hung as modelled.*
+- *A figure draped over the shoulder, a danglymesh child of `torso_g` turned
+  2.73 radians, lay in front of the wearer; with its turn put into its
+  vertices and its five children's transforms, it was draped as modelled.*
+- *A belt that is a child of `pelvis_g`, turned 0.64 radians, looked the
+  same with and without its turn put into its vertices: the rule is not one
+  for every bone.*
+
+*BioWare's robes and cloaks never depend on it: in the base game, nodes
+under a body bone are turned by at most 0.06 radians, apart from dummies
+(`Impact`).*
+
