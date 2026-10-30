@@ -104,8 +104,8 @@ what would settle it.
   header) bone 17's list entry is 109, outside the 46-node tree, while the
   bone map gives position 6. By the code (64 entries copied, MDL-BIN-061;
   out-of-tree positions skipped, MDL-SKIN-030) the engine drops that bone,
-  leaving 27 corners of the two curtains with no influence (drawn at the
-  origin). Not observed in game. A decompiler that rebuilds the bone list
+  leaving 27 corners of the two curtains with no influence (drawn with
+  whatever matrix that slot last held, MDL-SKIN-030). Not observed in game. A decompiler that rebuilds the bone list
   from the bone map gets the bone the author meant; the suite checks such
   corners as SHOULD.
 - **The quaternion sign** of `qbone_ref_inv` in BioWare-compiled files (w = +1

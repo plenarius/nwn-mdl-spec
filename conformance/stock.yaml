@@ -6,7 +6,7 @@ schema: nwn-mdl-spec/stock/1
 build: 89.8193.37-17
 models:
   - {resref: tcn01_a15_01, producer: bioware, why: "1.69 water mesh (Plane452): the EE tangent slots hold a bump-map stream that is not tangents", rules: [MDL-BIN-048]}
-  - {resref: c_wings2, producer: bioware, why: "skin with 102 vertices that have no valid bone influence; their weights must come through unchanged", rules: [MDL-SKIN-031, MDL-SKIN-030]}
+  - {resref: c_wings2, producer: bioware, why: "skin with 102 vertices that have weights only on a skipped bone slot; their weights must come through unchanged", rules: [MDL-SKIN-031, MDL-SKIN-030]}
   - {resref: c_golemerald, producer: ee, why: "skin node with the 944-byte layout of an older EE compiler", rules: [MDL-BIN-061]}
   - {resref: tni_udoor_19, producer: ee, why: "EE-compiled skins with the 724-byte layout", rules: [MDL-BIN-061]}
   - {resref: c_halaster, producer: bioware, why: "a skin with 18 bones: bone 17 sits in the word after the 17-entry bone list", rules: [MDL-BIN-061]}

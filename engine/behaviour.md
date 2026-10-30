@@ -565,9 +565,17 @@ skipped. *Confirmed (code); zspec_numbers; two base-game controllers
 names a program's inputs. It binds the vertex attribute `vTcIn` (0x4ce92a)
 and `vTcIn1` (0x4ce996, attribute location 11: `mov $0xb,%esi` before the
 call through `rbx` at 0x4ce99d) among the others. For each texture unit N it
-formats the uniform names `texUnit%d` (0x4cf083) and `texture%dBound`
-(0x4cf0a6) and stores their locations at +0x1c84 + 4N and +0x1cc4 + 4N; the
-loop ends at N = 15 (`cmp $0xf,%r14d`, 0x4cf0e3), so units 0 to 14. The
+looks up one sampler and one bound flag per texture unit N and stores their
+locations at +0x1c84 + 4N and +0x1cc4 + 4N; the loop ends after N = 15
+(`cmp $0xf,%r14d`, 0x4cf0e3), so units 0 to 15. For N 0 to 10 the names are
+`texUnit%d` (0x4cf083) and `texture%dBound` (0x4cf0a6). For N 11 to 15 a
+jump table at 0x12f4e18 (reached by `lea -0xb(%r14)`, `cmp $4`, 0x4cf002)
+picks fixed names: 11 `texFBColor` (0x4cf178), 12 `texFBDepth` (0x4cf140),
+13 `texUnitEnvCube` (0x4cf100), 14 `texUnitEnv` (0x4cf020), 15
+`texUnitNoise` (0x4cf1b0), with their own bound names (14: `texEnvBound`). So
+no shader has `texUnit11` to `texUnit14`. (Corrected: the first draft read the
+loop bound as "units 0 to 14" and missed the table; Moonglow's shader notes
+had it right.) The
 stock shader includes declare only `vTcIn` and units 0 to 5 (`inc_common`,
 with `NORMAL_MAP` ... `SELF_ILLUMINATION_MAP` for 1 to 5), so a custom shader
 that reads UV set 1 or a higher unit declares `attribute vec2 vTcIn1;`,
