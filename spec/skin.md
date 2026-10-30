@@ -90,16 +90,24 @@ constructor 0x43c190, `InternalParseField` 0x44dbf0, E25, E27.*
 position t from the bone list; it skips the slot if t < 0 or t ≥ the number
 of parts gathered, and stops at the second t = 0. The vertex shader sums
 `weight × bone matrix × position` over the slots with weight > 0, starting
-from (0, 0, 0, 0), with no normalisation. A vertex with no valid influence
+from (0, 0, 0, 0), with no normalisation. A vertex whose weights are all 0
 is therefore drawn at clip-space (0, 0, 0, 0), collapsing the triangles
-around it; a bone slot the renderer skips keeps the matrix of the previous
-skin drawn that frame. *Confirmed: `ExecuteSkinGPU` 0x482800,
+around it. A vertex whose weight stands on a slot the renderer skips is not
+collapsed by that: the slot keeps the matrix it last held, that of the
+previous skin drawn in the frame, or zero if nothing set it, so where the
+vertex lands depends on draw order. *Confirmed: `ExecuteSkinGPU` 0x482800,
 `GLRender::SetBoneMatrix` 0x4cbbb0, `inc_transform.shd`, E25; in game (E22's
 rig: a part bound to its own tree rendered torn).*
 
 **MDL-SKIN-031** A decompiler MUST keep a vertex's weights as the binary
-gives them, and SHOULD warn about vertices with no valid influence (the
-stock `c_wings2` has 102). *Confirmed (data): stock `c_wings2`.*
+gives them, and SHOULD warn about vertices with no valid influence: all
+weights 0, or weights only on slots the renderer skips (the stock `c_wings2`
+has 102 of the second kind: `dragon_rwing`'s vertices weigh 0.985 and 0.014
+on bone-list slot 8, whose entry is -1, and its bone list holds
+uninitialised words). *Confirmed (data): stock `c_wings2`. In Moonglow's
+client (`reading_wings_without_bones`) that wing is not drawn, which fits a
+zero matrix in slot 8; what a mixed vertex or another draw order shows is not
+observed.*
 
 ## Decompiling body parts
 

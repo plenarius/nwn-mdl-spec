@@ -200,11 +200,14 @@ vertices (MDL-BIN-045). *Confirmed: zspec_animmesh, zspec_animtv (4 verts and
 ## What shaders read
 
 **MDL-MESH-063** A mesh's UV set 1 (`tverts1`) reaches a shader as the
-vertex attribute `vTcIn1`, and a material's `textureN` (N 0 to 14) as the
-uniform `texUnitN`, with `textureNBound` non-zero when one is bound. The
-stock shader includes declare only `vTcIn` and units 0 to 5: a custom shader
-(an MTR's `customshadervs` / `customshaderfs`) that reads UV set 1 or a unit
-above 5 MUST declare those inputs itself. *Confirmed: `ConnectShaderData`
+vertex attribute `vTcIn1`, and a material's `textureN` (N 0 to 10) as the
+uniform `texUnitN`, with `textureNBound` non-zero when one is bound. Units 11
+to 15 are not named that way: the engine gives them `texFBColor` (11),
+`texFBDepth` (12), `texUnitEnvCube` (13), `texUnitEnv` (14) and
+`texUnitNoise` (15), each with a bound flag of its own. The stock shader
+includes declare only `vTcIn` and units 0 to 5: a custom shader (an MTR's
+`customshadervs` / `customshaderfs`) that reads UV set 1 or a unit above 5
+MUST declare those inputs itself. *Confirmed: `ConnectShaderData`
 0x4ce8e0; the stock `inc_common` shader include; in game, E66.*
 
 ## Opaque or blended

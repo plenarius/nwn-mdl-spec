@@ -29,7 +29,7 @@ Added:
   (render-0 donors with an empty list), in 1,015 base-game binaries; a
   faces-only reader must put the donors back (Layonara nwn-module#476).
 - MDL-MESH-063 (and E66): what shaders read: UV set 1 as `vTcIn1`, a
-  material's `textureN` as `texUnitN` / `textureNBound` for units 0 to 14;
+  material's `textureN` as `texUnitN` / `textureNBound` for units 0 to 14 (corrected below: 0 to 10);
   custom shaders declare what the stock includes don't (in game: a custom
   shader reading `tverts1` and `texture7`).
 - MDL-MESH-064 (and E67): what makes a mesh blended. `transparencyhint` only
@@ -39,6 +39,13 @@ Added:
   `transparency 1` (Layonara nwn-haks#34).
 
 Corrections after the first draft:
+- MDL-MESH-063 (and E66): `texUnitN` / `textureNBound` exist for units 0 to
+  10 only; units 11 to 15 are `texFBColor`, `texFBDepth`, `texUnitEnvCube`,
+  `texUnitEnv` and `texUnitNoise` (a jump table in `ConnectShaderData`).
+  Found by comparison with Moonglow's shader notes.
+- MDL-SKIN-030, -031: a vertex weighing a skipped bone slot is not collapsed;
+  it takes the slot's last matrix (stock `c_wings2`'s weights are non-zero).
+  Only all-zero weights collapse.
 - MDL-NODE-020 (and E45): a node the supermodel lacks gets -1 only when its
   parent matched; under an unmatched parent it gets the supermodel's count
   + 1 + its declaration index (new probe zspec_kid4).
