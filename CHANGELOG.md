@@ -23,7 +23,8 @@ Added:
   adjacency (`PartTriMesh::Project`); a missing neighbour counts as facing
   away. MDL-MESH-022 no longer says the readers are unknown and is now a
   MUST; MDL-MESH-021 notes that shadows use the face planes.
-- MDL-MESH-025: a decompiler should share positions between faces, or a
+- MDL-MESH-025: a decompiler should share positions again where the stored
+  neighbours show the source shared them (not every equal position), or a
   recompile loses their adjacency and adds silhouette edges.
 - MDL-NODE-050: a worn robe's nodes directly under `torso_g` are drawn
   without their orientation (confirmed in game; the code was not found, see
