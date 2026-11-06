@@ -617,3 +617,35 @@ meshes with transparencyhint 1 to 9, an MTR with a custom fragment shader
 that cuts and blends on a mask in `texture3`, PLT diffuse. Visible, the hair
 drew as solid strips; as a hidden DM it blended. The same MTR with
 `transparency 1` added blended when visible (nwn-haks#34).*
+
+## Shadow volumes (E68, new)
+
+**E68 Shadows read the stored face adjacency.** A trimesh's shadow volume is
+built from its face records alone, in `PartTriMesh::Project(Vector const&,
+float, PartProjection*)` (0x4524f0). It is reached from
+`Scene::DoGobShadows` (0x45fba0) through `ProjectDynamicShadow` (0x45fb40)
+and `Gob::PartVolumeProject` (0x451e80), which walks the part tree and calls
+the part's virtual at vtable +0xc0: `PartTriMesh::Project` for trimeshes
+(`_ZTV11PartTriMesh` 0x186b060, slot 0x186b130), `Part::Project` (0x450030,
+nothing) otherwise. `PartTriMesh::GetProjectsShadows` (0x43cfa0) gates it.
+In `Project`, over the mesh's face list (+0xb0, count +0xb8, capped at
+0xfffe, stride 0x20):
+- each face gets a byte, the sign bit of `n · L + d` from the record's
+  normal and plane distance (+0x0 to +0xc), at 0x199b1c0 + i
+  (0x4525b0-0x4525eb): 1 means it faces away from the light;
+- the byte for index 0xffff is set to 1 (`movb $0x1, 0x19ab1bf`,
+  0x4525f8), so a missing neighbour counts as facing away;
+- for every face whose byte is 0, each edge k whose stored neighbour
+  (+0x14, +0x16, +0x18) has byte 1 is a silhouette edge, and its two vertex
+  indices (from +0x1a to +0x1e: v0 v1, v1 v2, v2 v0) are kept
+  (0x452608-0x45267c), at most 0x2aaa of them;
+- each silhouette edge becomes two triangles joining it to its projection,
+  written to the dynamic vertex stream, or, when the `PartProjection`
+  argument is not null, stored in a vertex data object kept with it (the
+  caller of that path was not traced).
+So an open edge (−1) of a face lit by the light is always a silhouette edge,
+and an edge shared by three or more faces, whose faces each store one
+neighbour (the lowest-numbered, E15), can drop out of the silhouette when a
+lit face and an unlit face do not name each other. *Confirmed (code, read in
+the disassembly; Ghidra decompiles in nwmain-analysis
+`decompiled/shadow/`). The look in game was not checked.*
