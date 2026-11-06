@@ -46,17 +46,32 @@ p0)`) are computed on the **source** face list before the deletion, by
 position: after a deletion the records from the deleted face onwards hold
 the values of the source face of the same index, not their own. A
 degenerate source face's normal is the zero vector normalised, (1, 0, 0).
-A compiler SHOULD reproduce this; it changes nothing the suite could see in
-game. *Confirmed: zspec_merge (`degen`: the second face keeps normal (1, 0,
+A compiler SHOULD reproduce this. Shadow volumes test these planes (E68),
+so a mesh that lost a face casts its shadow with the source faces' planes
+from that face on; not observed in game. *Confirmed: zspec_merge (`degen`: the second face keeps normal (1, 0,
 0), distance -1, from the deleted face); `BuildNeighborLists`, E19.*
 
 **MDL-MESH-022** The face adjacency (three s2 per face, the face sharing the
 edge from corner k to k+1, -1 for none) is computed on source vertex indices
 in either direction, the lowest face number winning, with the same
 source-numbering effect as MDL-MESH-021. The engine recomputes adjacency at
-load for walkmeshes (`ComputeTriangleAdjacency` 0x4269a0); what else reads
-the stored values is unknown. A compiler SHOULD write them as the engine
-does. *Confirmed: zspec_merge, zspec_tanmirror, zspec_aabb (values); E15.*
+load for walkmeshes (`ComputeTriangleAdjacency` 0x4269a0). Render meshes'
+stored values are read by the shadow volume (E68): a lit face's edge whose
+neighbour faces away from the light, or that has none (-1), is a silhouette
+edge. A compiler MUST write them as the engine does. *Confirmed: zspec_merge,
+zspec_tanmirror, zspec_aabb (values); E15; E68 (the reader).*
+
+**MDL-MESH-025** Because adjacency follows source vertex indices
+(MDL-MESH-022), a decompiler that writes one ASCII position per binary vertex
+turns every edge between faces whose corners were split (by UVs, normals or
+any other part of the merge key, MDL-MESH-010) into two open edges when the
+ASCII is compiled again, and the shadow volume (E68) then treats each as a
+silhouette edge. A decompiler SHOULD write each distinct position once and
+let faces share it, so a compile gives back the same neighbours. A binary's
+stored adjacency can check the result. *Inferred from MDL-MESH-022 and E68.
+Measured (2026-11-05, cleanmodels 4.13.0 decompile then compile, six tree
+placeables `plc_tmd20_36` to `_43` from the Vault): the shadow-casting meshes
+went from 0 face edges with no neighbour to 1,125-3,460.*
 
 **MDL-MESH-023** The index list (MDL-BIN-049) holds the surviving faces'
 three vertex indices each, in face order, until tangent generation rewrites

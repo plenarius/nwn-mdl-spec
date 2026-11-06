@@ -75,8 +75,12 @@ what would settle it.
 - **The stale AABB tree** after a degenerate walkmesh face is deleted
   (MDL-MESH-024): what pathfinding and collision do with leaves pointing past
   the face list was not observed.
-- **Face adjacency**: walkmeshes recompute it at load; whether anything reads
-  the stored values of render meshes is unknown (MDL-MESH-022).
+- **Face adjacency in shadows** (E68, MDL-MESH-022): the shadow volume reads
+  it (confirmed in code). Not checked in game: whether an edge stored as open
+  on both sides (MDL-MESH-025) casts two sides that cancel in the stencil
+  count, and how much an edge shared by three or more faces tears. Not
+  checked whether skin, danglymesh and animmesh parts use the same
+  `PartTriMesh::Project`.
 - **Mesh bounds and the model's bounds/radius**: what the engine uses them
   for (culling?) was not read.
 - **Emitter `xgrid`/`ygrid` absent**: uninitialised in the game's compile
