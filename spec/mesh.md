@@ -66,12 +66,20 @@ zspec_tanmirror, zspec_aabb (values); E15; E68 (the reader).*
 turns every edge between faces whose corners were split (by UVs, normals or
 any other part of the merge key, MDL-MESH-010) into two open edges when the
 ASCII is compiled again, and the shadow volume (E68) then treats each as a
-silhouette edge. A decompiler SHOULD write each distinct position once and
-let faces share it, so a compile gives back the same neighbours. A binary's
-stored adjacency can check the result. *Inferred from MDL-MESH-022 and E68.
-Measured (2026-11-05, cleanmodels 4.13.0 decompile then compile, six tree
-placeables `plc_tmd20_36` to `_43` from the Vault): the shadow-casting meshes
-went from 0 face edges with no neighbour to 1,125-3,460.*
+silhouette edge. A decompiler SHOULD give vertices one position again where
+the binary's stored neighbours show the source shared them: when face i names
+face j across an edge, that edge's ends were one source vertex in each. It
+SHOULD NOT join other vertices only because their positions are equal: the
+compile merges equal vertices of faces the source never linked (MDL-MESH-011),
+and joining their positions would link those faces. Only vertices equal in
+everything the ASCII writes per position (MDL-ASCII-053) can be joined, so a
+link across a hard edge (different normals) is lost. *Inferred from
+MDL-MESH-022 and E68. Measured (2026-11-05, cleanmodels decompile then
+compile, the 22 oracle game binaries that compile): one position per vertex
+kept 72% of the neighbour slots, lost 11,746 links and added 24; positions
+shared along stored links kept 88%, lost 5,148 and added the same 24 (faces
+the binary had merged by value). On six Vault tree placeables one position
+per vertex went from 0 face edges with no neighbour to 1,125-3,460.*
 
 **MDL-MESH-023** The index list (MDL-BIN-049) holds the surviving faces'
 three vertex indices each, in face order, until tangent generation rewrites
