@@ -42,6 +42,19 @@ compared case-insensitively by the engine (`FindMdlNode`, the supermodel
 walk). *Confirmed: goldens and goldens/run2 (texture, emitter and
 animation-root fields differ after the NUL).*
 
+**MDL-BIN-006** The emitter's chunk name (emitter header +184, 16 bytes) is a
+resref, and may fill the field: the game's compiler copies it with an
+unbounded `sscanf("%s")`, so a 16-character name is stored with no NUL (its
+NUL lands on the first byte of the next field, the two-sided texture flag).
+A reader MUST read at most 16 bytes; a compiler MUST keep all 16 characters
+of a 16-character name, or the emitter spawns a model that does not exist.
+*Confirmed (code): `Emitter::InternalParseField` reads `chunkName` with
+`Parse(char const*, char*)` (0x446740: `sscanf(s, "%s", dst)`) into emitter
++0x154, 16 bytes before the next field at +0x164. Data: Layonara's
+`plc_b01` (`mshfx_pc2_chunk1`) and ten `ia_vfx_*` effects
+(`ia_vfx_chunkexbl` and so on) store 16-character chunk names, and the
+models they name exist under those names. Not yet shown by a golden.*
+
 ## The model header
 
 **MDL-BIN-010** The **geometry header** (112 bytes) starts the model header
