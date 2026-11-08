@@ -1,0 +1,22 @@
+# nwn-mdl-spec conformance probe zspec_chunk16 (CC0-1.0)
+# An emitter whose chunkName is 16 characters, the longest resref, and
+# twosidedtex 1 after it: whether the game stores all 16 characters, and
+# where the NUL goes.
+newmodel zspec_chunk16
+setsupermodel zspec_chunk16 NULL
+classification effect
+beginmodelgeom zspec_chunk16
+node dummy zspec_chunk16
+  parent NULL
+endnode
+node emitter chunky
+  parent zspec_chunk16
+  update Explosion
+  render Normal
+  blend Normal
+  texture zspec_t0
+  chunkName zspec_chunk_abcd
+  twosidedtex 1
+endnode
+endmodelgeom zspec_chunk16
+donemodel zspec_chunk16

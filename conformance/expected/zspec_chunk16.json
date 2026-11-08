@@ -1,0 +1,67 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_chunk16",
+ "build": "89.8193.37-17",
+ "golden_sha256": "32c5ff3c6b121ab2bf62bd3c5eca929312d6f94e39a30952e3d8d52c9a71bacb",
+ "volatile": [
+  "nodes[1].emitter.xgrid",
+  "nodes[1].emitter.ygrid"
+ ],
+ "model": {
+  "name": "zspec_chunk16",
+  "classification": 1,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 2,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 40
+ },
+ "nodes": [
+  {
+   "name": "zspec_chunk16",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "chunky",
+   "parent": "zspec_chunk16",
+   "type": "emitter",
+   "flags": 5,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [],
+   "emitter": {
+    "deadspace": 0,
+    "blastradius": 0,
+    "blastlength": 0,
+    "xgrid": 1480855264,
+    "ygrid": 23469,
+    "spawntype": 0,
+    "update": "Explosion",
+    "render": "Normal",
+    "blend": "Normal",
+    "texture": "zspec_t0",
+    "chunkname": "zspec_chunk_abcd",
+    "twosidedtex": 1,
+    "loop": 0,
+    "renderorder": 0,
+    "flags": 0
+   }
+  }
+ ],
+ "animations": []
+}

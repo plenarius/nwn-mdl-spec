@@ -44,6 +44,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_kid2` | the supermodel name walk: case, a duplicate name under a different parent, a name under the wrong parent | MDL-NODE-020, MDL-NODE-021 | golden |
 | `zspec_kid3` | the node count with a supermodel (second data point) | MDL-NODE-030 | golden |
 | `zspec_kid4` | numbering against a supermodel of nodes it lacks, under a matched and an unmatched parent, declared out of tree order | MDL-NODE-020, MDL-NODE-030 | golden |
+| `zspec_chunk16` | an emitter chunkName of 16 characters, then twosidedtex 1 | MDL-BIN-006 | golden |
 | `zspec_animnum` | part numbers of animation nodes the geometry lacks: found by path, -1 under a matched parent, and under an unmatched one, declared out of tree order | MDL-NODE-040 | golden |
 | `zspec_light` | every light header field, flares, static light controllers; light spellings the engine does not read | MDL-BIN-040, MDL-ASCII-070, MDL-CTRL-011 | golden |
 | `zspec_merge` | vertex merging: groups and materials, UV splits, -0, degenerate faces, mirrorlist | MDL-MESH-010, MDL-MESH-011, MDL-MESH-020, MDL-MESH-021, MDL-MESH-050 | golden |
