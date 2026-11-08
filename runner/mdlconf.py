@@ -20,6 +20,16 @@
       Compare freshly made goldens (e.g. after a game patch) with the
       expected files and report what changed.
 
+  mdlconf.py roundtrip --impl NAME --cmd 'COMMAND' [--resource-dir DIR ...] PATH ...
+      Decompile every binary model under PATH (files or folders, searched
+      recursively), compile the ASCII back, and compare both with the
+      original under the same rules as the suite, the original standing in
+      for the golden. Then decompile and compile the result once more: the
+      second binary must be byte-identical to the first. The implementation
+      finds supermodels, skeletons and materials in the original's folder and
+      the --resource-dir folders, which it is given in MDLCONF_RESOURCE_DIRS.
+      Failures are grouped by cause. Exits 1 unless every model passes.
+
   mdlconf.py view FILE
       Print the JSON view of a binary or ASCII model.
 """
@@ -28,6 +38,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import shlex
 import shutil
 import subprocess
@@ -579,12 +590,12 @@ def cmd_expect(a):
         print('%-18s %d volatile field(s)' % (p['name'], len(volatile)))
 
 
-def run_impl(cmd, verb, src, dst, cwd):
+def run_impl(cmd, verb, src, dst, cwd, env=None):
     argv = shlex.split(cmd) + [verb, src, dst]
     if os.path.exists(argv[0]):  # a relative path: the command runs elsewhere
         argv[0] = os.path.abspath(argv[0])
     try:
-        r = subprocess.run(argv, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120)
+        r = subprocess.run(argv, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120, env=env)
         return r.returncode, r.stdout.decode('utf-8', 'replace')
     except subprocess.TimeoutExpired:
         return -1, 'timeout'
@@ -737,6 +748,126 @@ def cmd_stock(a):
     return report(a, results)
 
 
+def find_binaries(paths):
+    """The binary models under paths (files or folders, recursively), sorted,
+    and how many ASCII models were passed over."""
+    out, ascii_count = [], 0
+    for p in paths:
+        files = [p]
+        if os.path.isdir(p):
+            files = sorted(os.path.join(d, f) for d, _, fs in os.walk(p) for f in fs if f.lower().endswith('.mdl'))
+        for f in files:
+            with open(f, 'rb') as fh:
+                if fh.read(4) == b'\0\0\0\0':
+                    out.append(f)
+                else:
+                    ascii_count += 1
+    return sorted(set(out)), ascii_count
+
+
+def roundtrip_one(job):
+    """Round-trip one binary model: decompile, compile, and once more."""
+    cmd, path, resource_dirs = job
+    res = {'file': path, 'must': [], 'should': []}
+    name = os.path.basename(path)
+    env = dict(os.environ)
+    env['MDLCONF_RESOURCE_DIRS'] = os.pathsep.join([os.path.dirname(os.path.abspath(path))] + resource_dirs)
+    tmp = tempfile.mkdtemp(prefix='mdlconf-rt-')
+    try:
+        orig = open(path, 'rb').read()
+        try:
+            exp = normalise(mdlview.read_binary(orig))
+        except Exception as e:  # noqa: BLE001 - an unreadable original is reported, not fatal
+            res.update(status='error', reason='cannot read the original: %s' % e)
+            return res
+        steps = {}
+        for step, verb, src in (('ascii', 'decompile', path), ('binary', 'compile', 'ascii'),
+                                ('ascii2', 'decompile', 'binary'), ('binary2', 'compile', 'ascii2')):
+            os.makedirs(os.path.join(tmp, step))
+            dst = os.path.join(tmp, step, name)
+            rc, log = run_impl(cmd, verb, steps.get(src, src), dst, tmp, env)
+            if rc != 0 or not os.path.exists(dst):
+                res.update(status='error', reason='%s (%s step): exit %s: %s' % (verb, step, rc, log.strip()[-600:]))
+                return res
+            steps[step] = dst
+        data = {k: open(v, 'rb').read() for k, v in steps.items()}
+        try:
+            acts = [('decompile', mdlview.read_ascii(data['ascii'].decode('latin-1'))),
+                    ('compile', mdlview.read_binary(data['binary']))]
+        except Exception as e:  # noqa: BLE001
+            res.update(status='error', reason='cannot read the output: %s' % e)
+            return res
+        for test, act in acts:
+            for lvl, pth, msg in compare(exp, act, test).items:
+                res[lvl].append([test, pth, msg])
+        if res['must']:
+            res['status'] = 'fail'
+        elif data['binary2'] != data['binary']:
+            res['status'] = 'unstable'
+            res['reason'] = 'decompiling and compiling the compiled model again gives different bytes'
+        else:
+            res['status'] = 'pass'
+        return res
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def cause_of(test, pth, msg):
+    """A failure's cause, for grouping: the path with node names and indices
+    taken out, the message with its numbers and lists taken out."""
+    pth = re.sub(r'\[[^\]]*\]', '[*]', pth)
+    msg = re.sub(r'\[.*\]', '[...]', msg)
+    msg = re.sub(r'-?\d+(\.\d+)?(e-?\d+)?', 'N', msg)
+    msg = re.sub(r"'[^']*'", "'...'", msg)
+    return '%s %s: %s' % (test, pth, msg[:120])
+
+
+def cmd_roundtrip(a):
+    from concurrent.futures import ProcessPoolExecutor
+    files, ascii_count = find_binaries(a.paths)
+    if not files:
+        print('no binary models under %s (%d ASCII passed over)' % (', '.join(a.paths), ascii_count))
+        return 1
+    rdirs = [os.path.abspath(d) for d in (a.resource_dir or [])]
+    jobs = [(a.cmd, f, rdirs) for f in files]
+    with ProcessPoolExecutor(max_workers=a.workers or None) as ex:
+        results = list(ex.map(roundtrip_one, jobs, chunksize=8))
+
+    counts, causes = {}, {}
+    for r in results:
+        counts[r['status']] = counts.get(r['status'], 0) + 1
+        keys = {cause_of(*m) for m in r['must']} if r['status'] == 'fail' else set()
+        if r['status'] in ('error', 'unstable'):
+            keys = {'%s: %s' % (r['status'], re.sub(r'\d+', 'N', r['reason'].split(':')[0]))}
+        for k in keys:
+            c = causes.setdefault(k, {'cause': k, 'count': 0, 'example': r['file']})
+            c['count'] += 1
+    ordered = sorted(causes.values(), key=lambda c: (-c['count'], c['cause']))
+
+    print('# %s: round trip of %d binary models (%d ASCII passed over)' % (a.impl, len(files), ascii_count))
+    for r in results:
+        if r['status'] == 'pass' and not (a.verbose and r['should']):
+            continue
+        print('%s %s' % (r['status'].upper(), r['file']))
+        if r.get('reason'):
+            print('    ' + r['reason'].replace('\n', '\n    '))
+        for test, pth, msg in r['must'][:a.max]:
+            print('    MUST   %s %s: %s' % (test, pth, msg))
+        if a.verbose:
+            for test, pth, msg in r['should'][:a.max]:
+                print('    SHOULD %s %s: %s' % (test, pth, msg))
+    if ordered:
+        print('# causes (models affected, example):')
+        for c in ordered:
+            print('%6d  %s\n        e.g. %s' % (c['count'], c['cause'], c['example']))
+    print('# totals: ' + ', '.join('%s %d' % (s, n) for s, n in sorted(counts.items())))
+    if a.json:
+        with open(a.json, 'w') as f:
+            json.dump({'impl': a.impl, 'build': BUILD, 'ascii_passed_over': ascii_count,
+                       'totals': counts, 'causes': ordered, 'results': results}, f, indent=1)
+    return 0 if counts.get('pass', 0) == len(results) else 1
+
+
 def cmd_check_goldens(a):
     changed = 0
     for p in load_manifest():
@@ -780,6 +911,15 @@ def main():
     st.add_argument('--json')
     st.add_argument('--max', type=int, default=6)
     st.add_argument('-v', '--verbose', action='store_true')
+    rt = sub.add_parser('roundtrip')
+    rt.add_argument('--impl', required=True)
+    rt.add_argument('--cmd', required=True)
+    rt.add_argument('--resource-dir', action='append', help='more folders with supermodels, skeletons and materials (repeatable)')
+    rt.add_argument('--workers', type=int, default=0, help='parallel models (default: one per CPU)')
+    rt.add_argument('--json')
+    rt.add_argument('--max', type=int, default=6)
+    rt.add_argument('-v', '--verbose', action='store_true')
+    rt.add_argument('paths', nargs='+')
     v = sub.add_parser('view')
     v.add_argument('file')
     a = ap.parse_args()
@@ -787,6 +927,8 @@ def main():
         sys.exit(cmd_run(a))
     if a.cmd_name == 'stock':
         sys.exit(cmd_stock(a))
+    if a.cmd_name == 'roundtrip':
+        sys.exit(cmd_roundtrip(a))
     if a.cmd_name == 'expect':
         cmd_expect(a)
     elif a.cmd_name == 'check-goldens':
