@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-java@v6
         with: {distribution: temurin, java-version: '21'}
       - run: |
-          curl -sSL -o ksc.zip https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.11/kaitai-struct-compiler-0.11.zip
+          curl -fsSL --retry 3 --retry-all-errors -o ksc.zip https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.11/kaitai-struct-compiler-0.11.zip
           unzip -q ksc.zip -d /tmp
           /tmp/kaitai-struct-compiler-0.11/bin/kaitai-struct-compiler -t python --outdir /tmp/ksc-out ksy/nwn_mdl.ksy
           pip install kaitaistruct
