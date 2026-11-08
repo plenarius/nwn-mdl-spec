@@ -83,10 +83,24 @@ lookup per Moonglow notes C2.*
 
 ## Animation nodes
 
-**MDL-NODE-040** An animation's nodes take the part number of the model node
-of the same name (through the same walk as MDL-NODE-020 when the model has a
-supermodel), or -1. *Confirmed: zspec_anim, zspec_bezier2 (`lamp` keeps 3),
-zspec_kid (`extra` -1 in `kidanim`).*
+**MDL-NODE-040** An animation's nodes are numbered by walking each one's path
+from the animation's root down the model's own geometry tree, child by child,
+matching names case-insensitively; the roots always match. A node whose path
+exists in the geometry takes that geometry node's part number (with a
+supermodel, the number MDL-NODE-020 gave it, -1 included). A node whose path
+does not exist gets -1 when its parent matched, and otherwise its declaration
+index in the animation: its position in the animation's list of nodes, the
+root being 0, whether or not the model has a supermodel. The walk is by path:
+a name the geometry has under another parent does not match. A compiler MUST
+number animation nodes this way; giving a node the geometry lacks the root's
+number (0) would bind its keys to the root (MDL-NODE-043). *Confirmed:
+zspec_anim, zspec_bezier2 (`lamp` keeps 3), zspec_kid (`extra` -1 in
+`kidanim`), zspec_animnum (`x` and `y` -1 under matched parents; `x_kid` 3
+and `b` 4, their declaration indices, where their positions in the tree are 2
+and 3 and the geometry's own `b`, under `a`, is 2); and in 577 Layonara
+binaries whose animations have nodes their geometry lacks (87,000 animation
+nodes, 13,300 of them missing from the geometry, 2,100 in models with a
+supermodel), every one numbered as above.*
 
 **MDL-NODE-041** An animation node keeps the node type of its geometry node:
 its flags and full sub-headers are written (MDL-BIN-071), though only its

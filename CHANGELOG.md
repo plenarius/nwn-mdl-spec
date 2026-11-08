@@ -19,6 +19,10 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-NODE-040 covers animation nodes the geometry lacks (new probe
+  zspec_animnum): they are found by path, not name, and one the walk does
+  not find gets -1 under a matched parent and otherwise its declaration
+  index in the animation. cleanmodels gave them 0, the root's number.
 - E68: shadow volumes are built from the face records' planes and stored
   adjacency (`PartTriMesh::Project`); a missing neighbour counts as facing
   away. MDL-MESH-022 no longer says the readers are unknown and is now a

@@ -479,6 +479,14 @@
     "MDL-CTRL-012"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_animnum",
+   "isolates": "part numbers of animation nodes the geometry lacks: found by path, -1 under a matched parent, and under an unmatched one, declared out of tree order",
+   "rules": [
+    "MDL-NODE-040"
+   ],
+   "golden": true
   }
  ]
 }
