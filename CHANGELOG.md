@@ -25,6 +25,10 @@ Added:
 - MDL-BIN-053: a merged-mesh donor written back draws with the copy's
   normals, not its own, which can be (0, 0, 0) at back-to-back faces; a
   reader should give it the copy's.
+- MDL-BIN-007 (probes zspec_name31, zspec_name32, zspec_name40,
+  zspec_namelat): the game's compiler keeps 31 characters of a node name,
+  hangs on a child of a longer one, and keeps bytes above 0x7F; cleanmodels
+  decompile drops those bytes.
 - MDL-NODE-040 covers animation nodes the geometry lacks (new probe
   zspec_animnum): they are found by path, not name, and one the walk does
   not find gets -1 under a matched parent and otherwise its declaration

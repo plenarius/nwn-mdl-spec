@@ -495,6 +495,38 @@
     "MDL-BIN-006"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_name40",
+   "isolates": "a node name of 40 characters, past the 32-byte field",
+   "rules": [
+    "MDL-BIN-007"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_namelat",
+   "isolates": "a node name with a Latin-1 byte (0xF1, n with tilde)",
+   "rules": [
+    "MDL-BIN-007"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_name31",
+   "isolates": "a node name of 31 characters, the longest that leaves room for the NUL, with a child",
+   "rules": [
+    "MDL-BIN-007"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_name32",
+   "isolates": "a node name of exactly 32 characters, the field size",
+   "rules": [
+    "MDL-BIN-007"
+   ],
+   "golden": true
   }
  ]
 }

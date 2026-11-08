@@ -1,0 +1,14 @@
+# nwn-mdl-spec conformance probe zspec_name32 (CC0-1.0)
+# a node name of exactly 32 characters with no child: what the game's compiler stores for it.
+newmodel zspec_name32
+setsupermodel zspec_name32 NULL
+classification character
+beginmodelgeom zspec_name32
+node dummy zspec_name32
+  parent NULL
+endnode
+node dummy bbbbbbbbbbbbbbbbbbbbbbbbbbbbb_32
+  parent zspec_name32
+endnode
+endmodelgeom zspec_name32
+donemodel zspec_name32

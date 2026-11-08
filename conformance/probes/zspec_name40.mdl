@@ -1,0 +1,14 @@
+# nwn-mdl-spec conformance probe zspec_name40 (CC0-1.0)
+# a node name of 40 characters, past the 32-byte field: what the game's compiler stores for it.
+newmodel zspec_name40
+setsupermodel zspec_name40 NULL
+classification character
+beginmodelgeom zspec_name40
+node dummy zspec_name40
+  parent NULL
+endnode
+node dummy ccccccccccccccccccccccccccccccccccccc_40
+  parent zspec_name40
+endnode
+endmodelgeom zspec_name40
+donemodel zspec_name40
