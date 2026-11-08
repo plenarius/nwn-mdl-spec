@@ -487,6 +487,14 @@
     "MDL-NODE-040"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_chunk16",
+   "isolates": "an emitter chunkName of 16 characters, then twosidedtex 1",
+   "rules": [
+    "MDL-BIN-006"
+   ],
+   "golden": true
   }
  ]
 }
