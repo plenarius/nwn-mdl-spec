@@ -35,7 +35,7 @@ python3 runner/mdlconf.py run   --impl NAME --cmd COMMAND [--test compile|decomp
 python3 runner/mdlconf.py stock --impl NAME --cmd COMMAND [--root NWN_ROOT] [--json OUT] [-v]
 python3 runner/mdlconf.py expect [--second conformance/goldens/run2]
 python3 runner/mdlconf.py check-goldens DIR
-python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--json OUT] [-v] PATH ...
+python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--max-memory GB] [--json OUT] [-v] PATH ...
 python3 runner/mdlconf.py view FILE
 ```
 
@@ -62,6 +62,10 @@ python3 runner/mdlconf.py view FILE
   out, with how many models each affects and an example. Exit status 1
   unless all passed. The original is whatever compiled it: a difference can
   be the implementation's or a defect the original already had.
+  Models are taken in batches of 256. Each worker may use `--max-memory`
+  GB (default 4; the implementation it runs is not limited): a model that
+  needs more is an `error`, not a crash. If a worker dies anyway, only its
+  batch is lost, reported as errors. Progress goes to stderr.
 - `view FILE`: the JSON view of a binary or ASCII model.
 
 ## Files

@@ -590,12 +590,40 @@ def cmd_expect(a):
         print('%-18s %d volatile field(s)' % (p['name'], len(volatile)))
 
 
+# roundtrip caps the memory of its own worker processes (--max-memory) so one
+# model the reader cannot cope with fails alone instead of exhausting the
+# machine. The cap is the soft address-space limit, which a child can raise
+# again: the implementation under test runs without it.
+_MEMORY_CAPPED = False
+
+
+def _uncap_memory():
+    import resource
+    _, hard = resource.getrlimit(resource.RLIMIT_AS)
+    resource.setrlimit(resource.RLIMIT_AS, (hard, hard))
+
+
+def _cap_memory(gb):
+    global _MEMORY_CAPPED
+    try:
+        import resource
+    except ImportError:  # not POSIX: no cap
+        return
+    _, hard = resource.getrlimit(resource.RLIMIT_AS)
+    limit = int(gb * (1 << 30))
+    if hard != resource.RLIM_INFINITY:
+        limit = min(limit, hard)
+    resource.setrlimit(resource.RLIMIT_AS, (limit, hard))
+    _MEMORY_CAPPED = True
+
+
 def run_impl(cmd, verb, src, dst, cwd, env=None):
     argv = shlex.split(cmd) + [verb, src, dst]
     if os.path.exists(argv[0]):  # a relative path: the command runs elsewhere
         argv[0] = os.path.abspath(argv[0])
     try:
-        r = subprocess.run(argv, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120, env=env)
+        r = subprocess.run(argv, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=120, env=env,
+                           preexec_fn=_uncap_memory if _MEMORY_CAPPED else None)
         return r.returncode, r.stdout.decode('utf-8', 'replace')
     except subprocess.TimeoutExpired:
         return -1, 'timeout'
@@ -767,6 +795,14 @@ def find_binaries(paths):
 
 def roundtrip_one(job):
     """Round-trip one binary model: decompile, compile, and once more."""
+    try:
+        return _roundtrip_one(job)
+    except MemoryError:
+        return {'file': job[1], 'must': [], 'should': [], 'status': 'error',
+                'reason': 'the runner ran out of memory reading or comparing this model (--max-memory)'}
+
+
+def _roundtrip_one(job):
     cmd, path, resource_dirs = job
     res = {'file': path, 'must': [], 'should': []}
     name = os.path.basename(path)
@@ -822,16 +858,31 @@ def cause_of(test, pth, msg):
     return '%s %s: %s' % (test, pth, msg[:120])
 
 
+ROUNDTRIP_BATCH = 256
+
+
 def cmd_roundtrip(a):
     from concurrent.futures import ProcessPoolExecutor
+    from concurrent.futures.process import BrokenProcessPool
     files, ascii_count = find_binaries(a.paths)
     if not files:
         print('no binary models under %s (%d ASCII passed over)' % (', '.join(a.paths), ascii_count))
         return 1
     rdirs = [os.path.abspath(d) for d in (a.resource_dir or [])]
     jobs = [(a.cmd, f, rdirs) for f in files]
-    with ProcessPoolExecutor(max_workers=a.workers or None) as ex:
-        results = list(ex.map(roundtrip_one, jobs, chunksize=8))
+    # In batches, each with its own pool: a worker that dies (killed from
+    # outside, or crashing) costs its batch, reported as errors, not the run.
+    results = []
+    for i in range(0, len(jobs), ROUNDTRIP_BATCH):
+        batch = jobs[i:i + ROUNDTRIP_BATCH]
+        try:
+            with ProcessPoolExecutor(max_workers=a.workers or None, initializer=_cap_memory,
+                                     initargs=(a.max_memory,)) as ex:
+                results += list(ex.map(roundtrip_one, batch, chunksize=4))
+        except BrokenProcessPool:
+            results += [{'file': j[1], 'must': [], 'should': [], 'status': 'error',
+                         'reason': 'a worker process died in this batch of %d models' % len(batch)} for j in batch]
+        print('roundtrip: %d of %d models done' % (len(results), len(jobs)), file=sys.stderr, flush=True)
 
     counts, causes = {}, {}
     for r in results:
@@ -916,6 +967,7 @@ def main():
     rt.add_argument('--cmd', required=True)
     rt.add_argument('--resource-dir', action='append', help='more folders with supermodels, skeletons and materials (repeatable)')
     rt.add_argument('--workers', type=int, default=0, help='parallel models (default: one per CPU)')
+    rt.add_argument('--max-memory', type=float, default=4, help='memory each worker may use, in GB (default 4; the implementation run is not limited)')
     rt.add_argument('--json')
     rt.add_argument('--max', type=int, default=6)
     rt.add_argument('-v', '--verbose', action='store_true')
