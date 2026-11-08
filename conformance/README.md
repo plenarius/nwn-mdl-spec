@@ -64,6 +64,7 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_skin` | a whole-model skin weighted to two bones | MDL-SKIN-001, MDL-SKIN-013 | pending |
 | `zspec_super` | the supermodel for zspec_kid*: a name used twice | MDL-NODE-021 | golden |
 | `zspec_tanfile` | tangents given in the file with a normal-mapped hint | MDL-MESH-044 | golden |
+| `zspec_tanmerge` | tangents given in the file: vertices differing only in tangent or handedness | MDL-MESH-010 | golden |
 | `zspec_tanmirror` | tangent generation across a UV mirror seam: vertex clones | MDL-MESH-043, MDL-BIN-049 | golden |
 | `zspec_transp` | child order when a child mesh has transparencyhint > 0 | MDL-NODE-012, MDL-NODE-013 | golden |
 | `zspec_tsort24` | the transparency sort with 24 children (std::sort past 16) | MDL-NODE-012 | golden |

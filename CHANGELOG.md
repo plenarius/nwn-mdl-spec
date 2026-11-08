@@ -19,6 +19,9 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-MESH-010 confirmed for tangents (probe zspec_tanmerge): with tangents
+  given in the file, a vertex that differs only in its tangent or its
+  handedness is not merged; cleanmodels merged them, and one tangent won.
 - MDL-BIN-006: an emitter's chunk name is a resref that may fill its 16
   bytes with no NUL (the game's compiler copies it with an unbounded
   `%s`); cleanmodels cut 16-character names to 15.

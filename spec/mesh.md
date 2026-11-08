@@ -20,7 +20,10 @@ equal, floats compared with `==` (so -0 equals +0). The material and the
 smoothing group are **not** part of the key. *Confirmed: zspec_merge
 (`shared`: different groups and materials merge; `uvsplit`: different UVs do
 not; `negzero`: -0 and +0 merge; `mirror`: different mirrorlist values do
-not); `NodeVertex::operator==` 0x45a300, E2, E3, E16.*
+not); zspec_tanmerge (tangents given in the file: a vertex that differs only
+in its tangent, or only in its handedness, stays separate, with or without a
+render hint; 6 vertices where a key without them gives 4);
+`NodeVertex::operator==` 0x45a300, E2, E3, E16.*
 
 **MDL-MESH-011** Vertices are merged against the whole list: corners are
 taken face by face, corner by corner, and each joins the first earlier
