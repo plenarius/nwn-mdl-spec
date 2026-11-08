@@ -299,14 +299,21 @@ render 0 and an empty index list. The engine draws index lists
 (MDL-BIN-049), so such a model looks whole while its faces are not what it
 draws. A reader that writes ASCII, which holds faces only, MUST NOT lose the
 copies. Writing each donor whose triangles are all among a receiver's
-copies with render 1 is exact: it then draws the same triangles, as a mesh
-of its own. A donor that an animation moves was drawn still, as part of the
+copies with render 1 draws the same triangles, as a mesh of its own. Their
+normals are the copy's, not the donor's: where a donor's back-to-back faces
+share a vertex, its stored normal is (0, 0, 0) while the copy holds the
+normalised one (MDL-MESH-032), so a reader SHOULD give such a donor the
+copy's normals, turned from the receiver's frame into the donor's. A donor that an animation moves was drawn still, as part of the
 receiver; written with render 1, it moves. *Confirmed (in game): Layonara's
 tin01 tiles (third-party, not here) drew whole walls as binaries and lost
 their lower walls through a faces-only round trip (nwn-module#476). Written
 with their donors at render 1 and compiled again, those tiles and the other
 1,356 below draw every triangle the originals draw but degenerate ones
-(compared statically, not in game). Data: 1,015 base-game binaries (tno01,
+(compared statically, not in game). Normals (2026-11-08, Layonara's 1,366
+models with merged meshes, compared in world space): 33 differed where
+donors kept their own, 2,975 corners mostly (0, 0, 0) against the copy's
+unit normal; with the copy's normals, all but 4 draw the same, and those 4
+only lose slivers under 1 mm2. Data: 1,015 base-game binaries (tno01,
 tts02, ttf02 and tcn01 tiles, dag_ placeables) and 342 in Layonara's haks
 hold merged meshes, and every copy matches a render-0 donor's faces
 (texture coordinates exactly, side lengths within 1 mm). This build's
