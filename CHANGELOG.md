@@ -22,6 +22,9 @@ Added:
 - MDL-BIN-006: an emitter's chunk name is a resref that may fill its 16
   bytes with no NUL (the game's compiler copies it with an unbounded
   `%s`); cleanmodels cut 16-character names to 15.
+- MDL-BIN-053: a merged-mesh donor written back draws with the copy's
+  normals, not its own, which can be (0, 0, 0) at back-to-back faces; a
+  reader should give it the copy's.
 - MDL-NODE-040 covers animation nodes the geometry lacks (new probe
   zspec_animnum): they are found by path, not name, and one the walk does
   not find gets -1 under a matched parent and otherwise its declaration
