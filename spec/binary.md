@@ -57,6 +57,18 @@ of a 16-character name, or the emitter spawns a model that does not exist.
 models they name exist under those names. Golden: zspec_chunk16
 (`zspec_chunk_abcd` stored whole, two-sided texture 1 after it).*
 
+**MDL-BIN-007** The game's compiler keeps at most 31 characters of a node
+name: a longer one (32 or 40 characters) is stored as its first 31 and a
+NUL. A node whose `parent` is such a long name hangs the compiler (it never
+finishes; nothing is written), so ASCII meant for the game SHOULD keep node
+names to 31 characters. Bytes above 0x7F are stored as they are (`pestañas`
+keeps its 0xF1). A reader SHOULD keep them. Older tools wrote 32-character
+names that fill the field with no NUL; a reader MUST stop at 32 bytes.
+*Confirmed: zspec_name31 (31 kept), zspec_name32 and zspec_name40 (31
+kept), zspec_namelat (0xF1 kept); a probe with a child under a 32-character
+name timed out twice. Data: 23 Layonara heads hold 33 node names of 32
+characters with no NUL.*
+
 ## The model header
 
 **MDL-BIN-010** The **geometry header** (112 bytes) starts the model header

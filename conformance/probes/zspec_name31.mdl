@@ -1,0 +1,17 @@
+# nwn-mdl-spec conformance probe zspec_name31 (CC0-1.0)
+# a node name of 31 characters, the longest that leaves room for the NUL, with a child: what the game's compiler stores for it.
+newmodel zspec_name31
+setsupermodel zspec_name31 NULL
+classification character
+beginmodelgeom zspec_name31
+node dummy zspec_name31
+  parent NULL
+endnode
+node dummy aaaaaaaaaaaaaaaaaaaaaaaaaaaa_31
+  parent zspec_name31
+endnode
+node dummy kid
+  parent aaaaaaaaaaaaaaaaaaaaaaaaaaaa_31
+endnode
+endmodelgeom zspec_name31
+donemodel zspec_name31
