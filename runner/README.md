@@ -20,6 +20,11 @@ COMMAND decompile <in.mdl> <out.mdl>
 - `<out.mdl>` does not exist beforehand; its folder does.
 - Each call runs in a fresh temporary folder, which is also the working
   directory.
+- For `roundtrip` only: `MDLCONF_RESOURCE_DIRS` lists folders (separated as
+  in `PATH`) holding the model's supermodels, skeletons and materials, the
+  original's own folder first. An implementation that can search folders
+  should search these; one that can't will see node numbers and tangents
+  differ wherever they depend on them.
 
 A small wrapper script is usually enough: see [adapters/](adapters/).
 
@@ -30,6 +35,7 @@ python3 runner/mdlconf.py run   --impl NAME --cmd COMMAND [--test compile|decomp
 python3 runner/mdlconf.py stock --impl NAME --cmd COMMAND [--root NWN_ROOT] [--json OUT] [-v]
 python3 runner/mdlconf.py expect [--second conformance/goldens/run2]
 python3 runner/mdlconf.py check-goldens DIR
+python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--json OUT] [-v] PATH ...
 python3 runner/mdlconf.py view FILE
 ```
 
@@ -44,6 +50,18 @@ python3 runner/mdlconf.py view FILE
 - `check-goldens DIR`: compares goldens made anew (e.g. after a patch) with
   the expected files and lists what changed: the changelog material for a
   new engine build.
+- `roundtrip PATH ...`: for a collection of binary models (a hak's
+  folders, say), whether an implementation can keep them as ASCII and
+  compile them back. Each binary under PATH is decompiled and compiled
+  back, and both results are compared with the original under the suite's
+  rules, the original standing in for the golden. The compiled model is then
+  decompiled and compiled once more, and the second binary must equal the
+  first byte for byte (status `unstable` otherwise). ASCII models are passed
+  over. The output lists each model that did not pass, then the causes:
+  failures grouped by path and message with node names and numbers taken
+  out, with how many models each affects and an example. Exit status 1
+  unless all passed. The original is whatever compiled it: a difference can
+  be the implementation's or a defect the original already had.
 - `view FILE`: the JSON view of a binary or ASCII model.
 
 ## Files
