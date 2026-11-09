@@ -286,14 +286,28 @@ zspec_aabbdeg.*
 
 **MDL-BIN-048** The tangent and handedness slots (mesh +488, +496) hold
 another stream in 1.69 models: water meshes' bump-map animation (stock
-`tcn01_a15_01`, node `Plane452`, 3.08e-36 …). A reader SHOULD read slot 3
-as tangents when the render hint is 2 or 3, or when every vector in it is
-unit length (squared length within 0.02 of 1), and otherwise as
-something else. The game's compiler writes render hint 0 for meshes whose
-hint comes from a material, with real tangents (cmtan01, zspec_mtrbmp), so
-the hint alone cannot decide. *Confirmed: cmtan01, zspec_mtrbmp; stock data
-(582 of the base game's binary meshes carry the bump-map stream, per
-cleanmodels DECOMPILE.md).*
+`tcn01_a15_01`, node `Plane452`, 3.08e-36 …), with texture animation slots
+0, 1, 2 and 4 (+476, +480, +484, +492) set as well. A reader SHOULD read
+slot 3 as tangents when the render hint is 2 or 3; or when every vector in
+it is unit length (squared length within 0.02 of 1); or when slots 0, 1, 2
+and 4 are unset (−1), at least one vector is unit length and every finite,
+non-zero vector is. Otherwise it SHOULD read it as something else. The
+game's compiler writes render hint 0 for meshes whose hint comes from a
+material, with real tangents (cmtan01, zspec_mtrbmp), so the hint alone
+cannot decide. The last case keeps streams other tools wrote, which hold
+some NaN or zero vectors among real tangents; the slots tell them from 1.69
+streams that hold one vector of length 1 by chance among zeros (stock
+`tcn01_l03_01` `Plane211`: 6.1e-33, 3.1e-36, 1.00106). In a stream read as
+tangents, a NaN, infinite or zero vector, or one not of unit length under a
+normal-mapped hint, is a bad tangent: a reader MAY replace it with the
+tangent MDL-MESH-043 gives that vertex on the file's own vertex list and
+index list (MDL-BIN-049), and keep the other vectors as stored. *Confirmed:
+cmtan01, zspec_mtrbmp; stock data (582 of the base game's binary meshes
+carry the bump-map stream, per cleanmodels DECOMPILE.md; with the last case
+added, no stock mesh is read differently: `tcn01_l03_01` `Plane211` and
+`tts01_c02_01` `Plane95` are the two it would take without the slots).
+Data: 251 meshes in 169 Layonara models hold 96.6% unit vectors, with 8,204
+NaN and 886 zero ones among them.*
 
 **MDL-BIN-049** The engine draws the **index list** (mesh +404/+416), not the
 face list: the loader copies the index buffer from the raw data and the
