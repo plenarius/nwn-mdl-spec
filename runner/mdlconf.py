@@ -47,6 +47,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import approvals  # noqa: E402
 import mdlview  # noqa: E402
 
 ROOT = os.path.dirname(HERE)
@@ -106,8 +107,11 @@ def normalise(view):
 # ------------------------------------------------------------ comparison
 
 class Report:
-    def __init__(self):
+    def __init__(self, facts=False):
         self.items = []  # (level, path, message)
+        # With facts=True (roundtrip), what the approvals (runner/approvals.py)
+        # need to know about a failing mesh or a renamed node, by path.
+        self.facts = {} if facts else None
 
     def add(self, level, path, msg):
         self.items.append((level, path, msg))
@@ -253,6 +257,195 @@ def compare_mesh(r, path, exp, act, profile, volatile, aabb=False):
                 if diff:
                     r.should('%s.faces.%s' % (path, k), '%d face(s) differ; first face %d: expected %s, got %s'
                              % (len(diff), diff[0], ef[diff[0]].get(k), af[diff[0]].get(k)))
+
+
+CORNER_ATTRS = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
+
+
+def _has_nan(x):
+    if isinstance(x, list):
+        return any(_has_nan(y) for y in x)
+    x = fval(x)
+    return isinstance(x, float) and math.isnan(x)
+
+
+def _freeze(x):
+    if isinstance(x, list):
+        return tuple(_freeze(y) for y in x)
+    return fval(x)
+
+
+def bad_tangent(t):
+    """A NaN, infinite or zero tangent (MDL-BIN-048)."""
+    if not isinstance(t, list) or len(t) < 3:
+        return True
+    x, y, z = (fval(c) for c in t[:3])
+    try:
+        q = x * x + y * y + z * z
+    except TypeError:
+        return True
+    return not math.isfinite(q) or q == 0
+
+
+def tri_area2(pos, tri):
+    """Twice the area of a triangle (exactly 0 when two corners share a
+    position), None when a corner is out of range or not finite."""
+    try:
+        p = [[float(fval(c)) for c in pos[i]] for i in tri]
+    except (IndexError, TypeError):
+        return None
+    u = [p[1][k] - p[0][k] for k in range(3)]
+    w = [p[2][k] - p[0][k] for k in range(3)]
+    c = (u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0])
+    q = c[0] * c[0] + c[1] * c[1] + c[2] * c[2]
+    return math.sqrt(q) if math.isfinite(q) else None
+
+
+def mesh_streams(mesh):
+    """The vertex streams a mesh holds; an all-white colour stream counts as
+    none (MDL-MESH-061)."""
+    v = mesh.get('vertices', {})
+    s = {k for k, vals in v.items() if isinstance(vals, list) and vals}
+    if 'color' in s and all(c == [255, 255, 255, 255] for c in v['color']):
+        s.discard('color')
+    return s
+
+
+def mesh_facts(e, a, own_nodes):
+    """What a compiled mesh keeps of the original's, for the approvals: the
+    drawn triangles paired in order, an original triangle the compile did not
+    draw counted as dropped (with whether it has zero area), and per paired
+    corner which attributes differ (with the tolerances of compare_mesh),
+    including skin weights, dangly constraints and face materials. Also the
+    number of distinct vertices the original draws by the game's merge key
+    (MDL-MESH-010, floats compared exactly)."""
+    em, am = e['mesh'], a['mesh']
+    et, at = drawn(em), drawn(am)
+    ev, av = em.get('vertices', {}), am.get('vertices', {})
+    es, as_ = mesh_streams(em), mesh_streams(am)
+    both = [k for k in CORNER_ATTRS if k in es and k in as_]
+    epos = ev.get('position', [])
+    # skin weights by bone name, unless bound to a skeleton (compare_skin)
+    skin = None
+    ew = aw = None
+    if 'skin' in e or 'skin' in a:
+        sk = e.get('skin') or {}
+        if 'skin' not in e or 'skin' not in a:
+            skin = 'one side'
+        elif sk.get('bone_map_count', 0) > own_nodes:
+            skin = 'unresolved'
+        else:
+            ew, aw = sk.get('weights', []), a['skin'].get('weights', [])
+            skin = 'same'
+    ec = (e.get('dangly') or {}).get('constraints')
+    ac = (a.get('dangly') or {}).get('constraints')
+    constraints = None
+    if ec is not None or ac is not None:
+        constraints = 'same' if ec is not None and ac is not None else 'one side'
+
+    def weights(w, i):
+        return sorted((n.lower(), x) for n, x in (w[i] if i < len(w) else []))
+
+    def corner_diff(ei, ai):
+        out = []
+        for k in both:
+            ex, ax = ev[k], av[k]
+            if not (0 <= ei < len(ex)) or not (0 <= ai < len(ax)):
+                out.append(k)
+                continue
+            if k == 'handedness':
+                if (fval(ex[ei]) < 0) != (fval(ax[ai]) < 0):
+                    out.append(k)
+            elif not vclose(ex[ei], ax[ai], TOL[k]):
+                out.append(k)
+        if skin == 'same':
+            we, wa = weights(ew, ei), weights(aw, ai)
+            if [n for n, _ in we] != [n for n, _ in wa] or not vclose([x for _, x in we], [x for _, x in wa], 1e-4):
+                out.append('skin')
+        if constraints == 'same':
+            ce = ec[ei] if 0 <= ei < len(ec) else None
+            ca = ac[ai] if 0 <= ai < len(ac) else None
+            if not close(ce, ca, 1e-4):
+                out.append('constraint')
+        return out
+
+    def same_place(ti, tj):
+        for k in range(3):
+            for attr in ('position', 'uv0'):
+                if attr in both:
+                    x, y = ev[attr], av[attr]
+                    i, j = et[ti][k], at[tj][k]
+                    if not (0 <= i < len(x) and 0 <= j < len(y)) or not vclose(x[i], y[j], TOL[attr]):
+                        return False
+        return True
+
+    # Pair the drawn triangles in order. With fewer compiled triangles, an
+    # original one that is not where the next compiled one is was dropped.
+    pairs, dropped = [], []
+    if len(et) == len(at):
+        pairs = list(zip(range(len(et)), range(len(at))))
+        extra = 0
+    else:
+        i = j = 0
+        while i < len(et):
+            if j < len(at) and (len(et) - i <= len(at) - j or same_place(i, j)):
+                pairs.append((i, j))
+                j += 1
+            else:
+                dropped.append(i)
+            i += 1
+        extra = len(at) - j
+    differ, at_bad = {}, {}
+    etan = ev.get('tangent') if 'tangent' in both else None
+    for ti, tj in pairs:
+        for k in range(3):
+            ei, ai = et[ti][k], at[tj][k]
+            for attr in corner_diff(ei, ai):
+                differ[attr] = differ.get(attr, 0) + 1
+                if attr in ('tangent', 'handedness') and etan is not None and \
+                        (not (0 <= ei < len(etan)) or bad_tangent(etan[ei])):
+                    at_bad[attr] = at_bad.get(attr, 0) + 1
+    areas = [tri_area2(epos, et[ti]) for ti in dropped]
+    ef, af = em.get('faces', []), am.get('faces', [])
+    material = None
+    if len(ef) == len(et) and len(af) == len(at):
+        material = sum(1 for ti, tj in pairs if ef[ti].get('material') != af[tj].get('material'))
+    # distinct original vertices by the merge key (NaN never equals itself)
+    used = sorted({i for t in et for i in t})
+    keys = set()
+    streams = sorted(k for k in ev if isinstance(ev[k], list))
+    for i in used:
+        key = [ev[k][i] if i < len(ev[k]) else None for k in streams]
+        if ew is not None:
+            key.append(weights(ew, i))
+        if ec is not None:
+            key.append(ec[i] if i < len(ec) else None)
+        keys.add(('nan', i) if _has_nan(key) else _freeze(key))
+    f = {'vertices': [em.get('vertex_count'), am.get('vertex_count')],
+         'distinct': len(keys),
+         'triangles': [len(et), len(at)],
+         'faces': [len(ef), len(af)],
+         'paired': len(pairs),
+         'dropped': len(dropped),
+         'dropped_nonzero': sum(1 for x in areas if x != 0),
+         'extra': extra,
+         'differ': differ,
+         'differ_bad_tangent': at_bad,
+         'material_differ': material,
+         'streams_only_original': sorted(es - as_),
+         'streams_only_compiled': sorted(as_ - es),
+         'aabb': bool(e['flags'] & 0x200)}
+    if dropped:
+        f['dropped_max_area'] = max((x for x in areas if x is not None), default=None)
+    if em.get('texanim_slots_used'):
+        f['texanim_slots'] = em['texanim_slots_used']
+    if am.get('texanim_slots_used'):
+        f['texanim_slots_compiled'] = am['texanim_slots_used']
+    if skin is not None:
+        f['skin'] = skin if skin != 'same' or 'skin' not in differ else 'differ'
+    if constraints is not None:
+        f['constraints'] = constraints if constraints != 'same' or 'constraint' not in differ else 'differ'
+    return f
 
 
 MESH_DEFAULTS = {'diffuse': [1, 1, 1], 'ambient': [1, 1, 1], 'specular': [0, 0, 0], 'shininess': 1,
@@ -425,12 +618,36 @@ def dfs_order(nodes):
     return [(n['name'], n['parent']) for n in nodes]
 
 
+def cut_names(names):
+    """Each name as the game's compiler stores it (MDL-BIN-007: at most 31
+    characters), lower-case; with the set of those that two names share."""
+    cut = [n[:31].lower() for n in names]
+    seen, shared = set(), set()
+    for c in cut:
+        (shared if c in seen else seen).add(c)
+    return cut, shared
+
+
 def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
+    ecut, eshared = cut_names([n['name'] for n in exp_nodes])
+    long_names = {n['name'].lower() for n in exp_nodes if len(n['name']) == 32}
+
+    def name_cut(en, an):
+        """an is en cut to 31 characters, and no other node of the original
+        has that name once cut (MDL-BIN-007)."""
+        en, an = (en or '').lower(), (an or '').lower()
+        return len(en) == 32 and an == en[:31] and an not in eshared
+
     if [node_key(n) for n in exp_nodes] != [node_key(n) for n in act_nodes]:
         en = [n['name'] for n in exp_nodes]
         an = [n['name'] for n in act_nodes]
         level = 'must' if profile == 'compile' or set(map(str.lower, en)) != set(map(str.lower, an)) else 'should'
         r.add(level, base + '.tree', 'node order differs: expected %s, got %s' % (en, an))
+        if r.facts is not None and long_names and ecut == [node_key(n) for n in act_nodes]:
+            # the same tree once the 32-character names are cut to 31
+            r.facts[profile + ' ' + base + '.tree'] = {
+                'names_cut_only': True, 'cut': sorted(long_names),
+                'unique': not any(c[:31] in eshared for c in long_names)}
     # Match by name and occurrence: a name used twice (zspec_super) pairs
     # the first with the first and so on.
     def keyed(nodes):
@@ -441,15 +658,27 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             out.append(((k, seen[k]), n))
         return out
     amap = dict(keyed(act_nodes))
+    exp_keys = {node_key(n) for n in exp_nodes}
     for i, (ek, e) in enumerate(keyed(exp_nodes)):
         p = '%s[%s]' % (base, e['name']) if ek[1] == 1 else '%s[%s#%d]' % (base, e['name'], ek[1])
         a = amap.get(ek)
+        cut = (ek[0][:31], ek[1])
+        if a is None and len(ek[0]) == 32 and cut in amap and cut[0] not in exp_keys and cut[0] not in eshared:
+            # A 32-character name the compile cut to 31 (MDL-BIN-007), paired
+            # with that node when no other node of the original has the name.
+            a = amap[cut]
+            r.must(p + '.name', 'expected %r, got %r: cut to 31 characters' % (e['name'], a['name']))
+            if r.facts is not None:
+                r.facts[profile + ' ' + p + '.name'] = {'name_cut': [e['name'], a['name']], 'unique': True}
         if a is None:
             r.must(p, 'missing')
             continue
         ep, ap = (e.get('parent') or '').lower(), (a.get('parent') or '').lower()
         if ep != ap:
             r.must(p + '.parent', 'expected %s, got %s' % (e.get('parent'), a.get('parent')))
+            if r.facts is not None and name_cut(ep, ap):
+                r.facts[profile + ' ' + p + '.parent'] = {'name_cut': [e.get('parent'), a.get('parent')],
+                                                          'unique': True}
         if e['flags'] != a['flags']:
             level = 'should' if anim else 'must'
             r.add(level, p + '.type', 'expected %s (%#x), got %s (%#x)' % (e['type'], e['flags'], a['type'], a['flags']))
@@ -511,13 +740,17 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             if 'mesh' not in a:
                 r.must(p + '.mesh', 'missing')
             else:
+                before = len(r.items)
                 compare_mesh(r, p + '.mesh', e['mesh'], a['mesh'], profile, vol, bool(e['flags'] & 0x200))
+                if r.facts is not None and profile == 'compile' and any(
+                        lvl == 'must' for lvl, _, _ in r.items[before:]):
+                    r.facts['compile ' + p + '.mesh'] = mesh_facts(e, a, len(exp_nodes))
                 if 'skin' in e and profile == 'decompile':
                     compare_skin(r, p + '.skin', e, a, len(exp_nodes))
 
 
-def compare(exp, act, profile):
-    r = Report()
+def compare(exp, act, profile, facts=False):
+    r = Report(facts)
     volatile = set(exp.get('volatile', []))
     em, am = exp['model'], act['model']
     for k in ('name', 'classification', 'fog', 'animationscale', 'supermodel'):
@@ -833,12 +1066,20 @@ def _roundtrip_one(job):
         except Exception as e:  # noqa: BLE001
             res.update(status='error', reason='cannot read the output: %s' % e)
             return res
+        facts = {}
         for test, act in acts:
-            for lvl, pth, msg in compare(exp, act, test).items:
+            rep = compare(exp, act, test, facts=True)
+            for lvl, pth, msg in rep.items:
                 res[lvl].append([test, pth, msg])
+            facts.update(rep.facts)
+        if facts:
+            res['facts'] = facts
+        # Checked whatever the findings, so that approvals (approvals.py) can
+        # tell a model whose findings are all approved from an unstable one.
+        res['stable'] = data['binary2'] == data['binary']
         if res['must']:
             res['status'] = 'fail'
-        elif data['binary2'] != data['binary']:
+        elif not res['stable']:
             res['status'] = 'unstable'
             res['reason'] = 'decompiling and compiling the compiled model again gives different bytes'
         else:
@@ -864,6 +1105,7 @@ ROUNDTRIP_BATCH = 256
 def cmd_roundtrip(a):
     from concurrent.futures import ProcessPoolExecutor
     from concurrent.futures.process import BrokenProcessPool
+    approved = approvals.load(a.approved) if a.approved else None  # a bad file fails before the run
     files, ascii_count = find_binaries(a.paths)
     if not files:
         print('no binary models under %s (%d ASCII passed over)' % (', '.join(a.paths), ascii_count))
@@ -884,20 +1126,34 @@ def cmd_roundtrip(a):
                          'reason': 'a worker process died in this batch of %d models' % len(batch)} for j in batch]
         print('roundtrip: %d of %d models done' % (len(results), len(jobs)), file=sys.stderr, flush=True)
 
-    counts, causes = {}, {}
+    if approved is not None:
+        for r in results:
+            approvals.apply(r, approved)
+    return roundtrip_report(a, a.impl, results, len(files), ascii_count, approved)
+
+
+def group_causes(results, statuses, key):
+    causes = {}
     for r in results:
-        counts[r['status']] = counts.get(r['status'], 0) + 1
-        keys = {cause_of(*m) for m in r['must']} if r['status'] == 'fail' else set()
-        if r['status'] in ('error', 'unstable'):
+        keys = {cause_of(*m[:3]) for m in r.get(key, [])} if r['status'] in statuses else set()
+        if key == 'must' and r['status'] in ('error', 'unstable'):
             keys = {'%s: %s' % (r['status'], re.sub(r'\d+', 'N', r['reason'].split(':')[0]))}
         for k in keys:
             c = causes.setdefault(k, {'cause': k, 'count': 0, 'example': r['file']})
             c['count'] += 1
-    ordered = sorted(causes.values(), key=lambda c: (-c['count'], c['cause']))
+    return sorted(causes.values(), key=lambda c: (-c['count'], c['cause']))
 
-    print('# %s: round trip of %d binary models (%d ASCII passed over)' % (a.impl, len(files), ascii_count))
+
+def roundtrip_report(a, impl, results, nfiles, ascii_count, approved=None):
+    """Print the round trip's summary (and write --json); the exit status."""
+    counts = {}
     for r in results:
-        if r['status'] == 'pass' and not (a.verbose and r['should']):
+        counts[r['status']] = counts.get(r['status'], 0) + 1
+    ordered = group_causes(results, ('fail', 'error', 'unstable'), 'must')
+
+    print('# %s: round trip of %d binary models (%d ASCII passed over)' % (impl, nfiles, ascii_count))
+    for r in results:
+        if r['status'] in ('pass', 'pass-approved') and not (a.verbose and (r['should'] or r.get('approved'))):
             continue
         print('%s %s' % (r['status'].upper(), r['file']))
         if r.get('reason'):
@@ -905,18 +1161,55 @@ def cmd_roundtrip(a):
         for test, pth, msg in r['must'][:a.max]:
             print('    MUST   %s %s: %s' % (test, pth, msg))
         if a.verbose:
+            for test, pth, msg, aid in r.get('approved', [])[:a.max]:
+                print('    APPROVED (%s) %s %s: %s' % (aid, test, pth, msg))
             for test, pth, msg in r['should'][:a.max]:
                 print('    SHOULD %s %s: %s' % (test, pth, msg))
     if ordered:
         print('# causes (models affected, example):')
         for c in ordered:
             print('%6d  %s\n        e.g. %s' % (c['count'], c['cause'], c['example']))
+    doc_approvals = None
+    if approved is not None:
+        per = approvals.summary(results, approved)
+        acauses = {}
+        for aid in per:
+            acauses[aid] = group_causes([dict(r, approved=[x for x in r.get('approved', []) if x[3] == aid])
+                                         for r in results], ('pass-approved', 'fail', 'unstable'), 'approved')
+        print('# approved differences (%s): models, findings, causes' % approved['file'])
+        for e in approved['entries'].values():
+            c = per[e['id']]
+            print('%6d %7d  %s (%s)' % (c['models'], c['findings'], e['id'], ', '.join(e['rules'])))
+            for x in acauses[e['id']][:a.max]:
+                print('        %6d  %s' % (x['count'], x['cause']))
+        doc_approvals = {'file': approved['file'], 'name': approved['name'], 'sha256': approved['sha256'],
+                         'counts': per, 'causes': acauses}
     print('# totals: ' + ', '.join('%s %d' % (s, n) for s, n in sorted(counts.items())))
     if a.json:
+        doc = {'impl': impl, 'build': BUILD, 'ascii_passed_over': ascii_count,
+               'totals': counts, 'causes': ordered, 'results': results}
+        if doc_approvals is not None:
+            doc['approvals'] = doc_approvals
         with open(a.json, 'w') as f:
-            json.dump({'impl': a.impl, 'build': BUILD, 'ascii_passed_over': ascii_count,
-                       'totals': counts, 'causes': ordered, 'results': results}, f, indent=1)
-    return 0 if counts.get('pass', 0) == len(results) else 1
+            json.dump(doc, f, indent=1)
+    passed = counts.get('pass', 0) + counts.get('pass-approved', 0)
+    return 0 if passed == len(results) else 1
+
+
+def cmd_approve(a):
+    """Re-score a roundtrip --json result under an approvals file, without
+    running anything."""
+    doc = json.load(open(a.results))
+    approved = approvals.load(a.approved)
+    results = doc['results']
+    nofacts = sum(1 for r in results if r['status'] != 'error' and (r.get('must') or r.get('approved'))
+                  and 'facts' not in r)
+    for r in results:
+        approvals.apply(r, approved)
+    if nofacts:
+        print('# note: %d results with findings have no facts (made before the runner recorded them): '
+              'nothing in them can be approved' % nofacts, file=sys.stderr)
+    return roundtrip_report(a, doc.get('impl', '?'), results, len(results), doc.get('ascii_passed_over', 0), approved)
 
 
 def cmd_check_goldens(a):
@@ -971,7 +1264,15 @@ def main():
     rt.add_argument('--json')
     rt.add_argument('--max', type=int, default=6)
     rt.add_argument('-v', '--verbose', action='store_true')
+    rt.add_argument('--approved', help='an approvals file (runner/approvals/): findings it covers are reported apart, '
+                                       'and a model with only those passes as pass-approved')
     rt.add_argument('paths', nargs='+')
+    ap_ = sub.add_parser('approve')
+    ap_.add_argument('--results', required=True, help='a roundtrip --json file')
+    ap_.add_argument('--approved', required=True, help='an approvals file (runner/approvals/)')
+    ap_.add_argument('--json', help='write the re-scored results here')
+    ap_.add_argument('--max', type=int, default=6)
+    ap_.add_argument('-v', '--verbose', action='store_true')
     v = sub.add_parser('view')
     v.add_argument('file')
     a = ap.parse_args()
@@ -981,6 +1282,8 @@ def main():
         sys.exit(cmd_stock(a))
     if a.cmd_name == 'roundtrip':
         sys.exit(cmd_roundtrip(a))
+    if a.cmd_name == 'approve':
+        sys.exit(cmd_approve(a))
     if a.cmd_name == 'expect':
         cmd_expect(a)
     elif a.cmd_name == 'check-goldens':

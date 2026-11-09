@@ -1,0 +1,53 @@
+{
+ "format": "mdlconf-approvals/1",
+ "name": "layonara",
+ "description": "Differences James approved for the round trip of Layonara's haks (MDL pipeline Phase 2, 2026-11-09). Each entry names a check in runner/approvals.py; a MUST finding is approved only when that check's condition holds on the mesh or node it is about. Approved findings are reported apart, never dropped.",
+ "approvals": [
+  {
+   "id": "vertex-layout",
+   "check": "vertex-layout",
+   "rules": ["MDL-MESH-010", "MDL-MESH-011", "MDL-MESH-012"],
+   "description": "The stored vertex count differs only because the original holds duplicate vertices that the game's compiler merges.",
+   "condition": "On the mesh: every compiled triangle is paired, in order, with one of the original's; every paired corner keeps position, UV0-3, normal, tangent and handedness, colour, skin weights, dangly constraint and face material; the vertex streams are the same; and the compiled vertex count equals the number of distinct vertices the original draws by the merge key, floats compared exactly (for an AABB walkmesh, whose merge keeps some equal vertices apart, the corner match alone). Approves the mesh's vertex_count finding."
+  },
+  {
+   "id": "dropped-zero-area-faces",
+   "check": "dropped-zero-area-faces",
+   "rules": ["MDL-MESH-020"],
+   "description": "Faces whose corners merge into one vertex are deleted, as the game's compiler does; the original drew them with zero area.",
+   "condition": "On the mesh: every original triangle the compile does not draw has zero area (two corners at the same position), every other one is paired in order with a compiled triangle and matches it corner for corner as for vertex-layout, the triangle and face counts differ by exactly the dropped triangles. Approves the mesh's triangles and face_count findings, and the per-corner findings that only the runner's in-order comparison shows (a dropped face shifts the triangles after it)."
+  },
+  {
+   "id": "nan-tangent-fill",
+   "check": "nan-tangent-fill",
+   "rules": ["MDL-BIN-048", "MDL-MESH-043"],
+   "description": "The original's tangent stream holds NaN, infinite or zero vectors; the compile writes a generated tangent there.",
+   "condition": "On the mesh: as for vertex-layout, except that a paired corner's tangent or handedness may differ when the original's tangent at that corner is NaN, infinite or zero; every differing tangent or handedness corner is such a corner. Approves the mesh's tangent, handedness and vertex_count findings."
+  },
+  {
+   "id": "tangents-baked",
+   "check": "tangents-baked",
+   "rules": ["MDL-MESH-041", "MDL-MESH-042", "MDL-MESH-043"],
+   "description": "The original has no tangent stream and a normal-mapped material; the compile bakes tangents, as the game's compiler does, and clones vertices for them.",
+   "condition": "On the mesh: the original has no tangent stream and the compile has one (with handedness), no other stream differs, and every paired corner matches as for vertex-layout. Approves the mesh's vertex_count finding."
+  },
+  {
+   "id": "water-texanim-169",
+   "check": "water-texanim-169",
+   "rules": ["MDL-BIN-048"],
+   "description": "1.69 water meshes use the texture animation slots for a bump-map stream, which ASCII has no place for.",
+   "condition": "On the mesh: the original sets texture animation slots (0, 1, 2 or 4) and its slot-3 stream is read as a bump-map stream, not tangents; the compile has none of these; no other stream differs, and every paired corner matches as for vertex-layout. Approves the mesh's vertex_count finding."
+  },
+  {
+   "id": "name-cut-31",
+   "check": "name-cut-31",
+   "rules": ["MDL-BIN-007"],
+   "description": "A 32-character node name (older tools filled the field with no NUL) is stored as its first 31 characters, as the game's compiler does.",
+   "condition": "The original's name (or parent name) is 32 characters, the compiled one is its first 31, and no other node of the original has that name once cut. Approves the node's name or parent finding, and a node tree finding when the compiled tree is the original's with those names cut and nothing else."
+  }
+ ],
+ "not_approved": [
+  {"what": "face-neighbour (shadow) links, faces.adjacent", "why": "Always a SHOULD finding in the runner, so it never makes a model fail; nothing to approve."},
+  {"what": "merged render lists, node numbers and order (nodes[].number, nodes.tree, animation node numbers), aabb planes, controller keys, node-pairing artifacts, unstable models", "why": "Not approved (James, 2026-11-09)."}
+ ]
+}
