@@ -61,6 +61,11 @@ Added:
   `blending additive`, or diffuse alpha) or a faded part. In game: hair with a
   mask shader over a PLT drew as solid strips until its MTR set
   `transparency 1` (Layonara nwn-haks#34).
+- MDL-BIN-048: slot 3 is also read as tangents when texture animation slots
+  0-2 and 4 are unset, it holds a unit vector and every finite, non-zero
+  vector is unit length; NaN and zero vectors in it are bad tangents, which
+  a reader may fill from MDL-MESH-043. cleanmodels dropped 251 such streams
+  in Layonara's haks, and compile generated new tangents.
 
 Corrections after the first draft:
 - MDL-MESH-063 (and E66): `texUnitN` / `textureNBound` exist for units 0 to

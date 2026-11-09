@@ -277,19 +277,32 @@ def _mesh(b, base, nd, flags):
     hoff = b.rptr(b.u32(base + 496))
     if hoff is not None and nv and b.ok(hoff, 4 * nv):
         v['handedness'] = nums(b.fs(hoff, nv))
-    # The same slots hold a 1.69 water bump-map stream (MDL-BIN-048): read
-    # them as tangents only with a normal-mapped hint or when every vector
-    # is unit length, as the engine's compiler writes tangents.
+    other_slots = [s for s in (0, 1, 2, 4) if b.rptr(b.u32(base + 476 + 4 * s)) is not None]
+    # The same slots hold a 1.69 water bump-map stream (MDL-BIN-048). Read
+    # them as tangents with a normal-mapped hint; or when every vector is
+    # unit length, as the engine's compiler writes tangents; or, when slots
+    # 0, 1, 2 and 4 are unset, when at least one vector is unit length and
+    # every finite, non-zero one is (other tools' streams with a few NaN or
+    # zero vectors; 1.69 streams set those slots).
     if 'tangent' in v and m['renderhint'] not in (2, 3):
-        def unit(t):
+        def l2(t):
             x, y, z = (fval(c) for c in t)
-            l2 = x * x + y * y + z * z
-            return 0.98 < l2 < 1.02
-        if not all(unit(t) for t in v['tangent']):
+            return x * x + y * y + z * z
+
+        def unit(t):
+            return 0.98 < l2(t) < 1.02
+
+        def bad(t):
+            q = l2(t)
+            return not math.isfinite(q) or q == 0
+
+        tans = v['tangent']
+        keep = all(unit(t) for t in tans) or (
+            not other_slots and any(unit(t) for t in tans) and all(unit(t) or bad(t) for t in tans))
+        if not keep:
             v['bumpmap_slot3'] = v.pop('tangent')
             if 'handedness' in v:
                 v['bumpmap_slot5'] = v.pop('handedness')
-    other_slots = [s for s in (0, 1, 2, 4) if b.rptr(b.u32(base + 476 + 4 * s)) is not None]
     if other_slots:
         m['texanim_slots_used'] = other_slots
     m['vertices'] = v
