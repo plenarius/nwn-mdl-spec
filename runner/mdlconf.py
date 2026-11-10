@@ -1289,8 +1289,7 @@ def cmd_approve(a):
     doc = json.load(open(a.results))
     approved = approvals.load(a.approved)
     results = doc['results']
-    nofacts = sum(1 for r in results if r['status'] != 'error' and (r.get('must') or r.get('approved'))
-                  and 'facts' not in r)
+    nofacts = sum(1 for r in results if r['status'] != 'error' and r.get('must') and 'stable' not in r)
     for r in results:
         approvals.apply(r, approved)
     if nofacts:
