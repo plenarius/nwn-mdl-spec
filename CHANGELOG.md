@@ -19,6 +19,11 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-NODE-020 covers a supermodel node numbered -1 (new probes zspec_mid
+  and zspec_kid5): it still matches, takes -1, and the walk goes on to its
+  children, which take the supermodel's numbers. cleanmodels (v4.17.5)
+  stopped the walk there and gave them fresh numbers, so inherited
+  animations no longer bound to them.
 - MDL-MESH-010 confirmed for tangents (probe zspec_tanmerge): with tangents
   given in the file, a vertex that differs only in its tangent or its
   handedness is not merged; cleanmodels merged them, and one tangent won.

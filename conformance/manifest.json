@@ -535,6 +535,30 @@
     "MDL-MESH-010"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_mid",
+   "isolates": "a supermodel with its own supermodel: a node numbered -1 that has numbered children",
+   "rules": [
+    "MDL-NODE-020"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_super.mdl"
+   ]
+  },
+  {
+   "name": "zspec_kid5",
+   "isolates": "numbering below a supermodel node numbered -1: the walk goes on through it, or stops",
+   "rules": [
+    "MDL-NODE-020",
+    "MDL-NODE-030"
+   ],
+   "golden": true,
+   "with": [
+    "zspec_mid.mdl",
+    "zspec_super.mdl"
+   ]
   }
  ]
 }
