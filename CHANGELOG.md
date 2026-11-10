@@ -80,6 +80,14 @@ Corrections after the first draft:
   + 1 + its declaration index (new probe zspec_kid4).
 - MDL-CTRL-012 (and E60, tables/controllers.yaml): a bare static `detonate`
   compiles with column byte 0xff (new probe zspec_deton).
+- Runner: `roundtrip --approved FILE` and `approve` tell approved
+  differences from failures (runner/approvals.py, runner/approvals/). An
+  approval holds only where its condition is checked on the mesh or node
+  (per-corner facts the round trip now records); approved findings are
+  reported apart, and a model with only those is `pass-approved`. The round
+  trip now checks stability whatever the findings, and pairs a node whose
+  32-character name the compile cut to 31 (MDL-BIN-007) with the cut node
+  when no other node has that name, reporting `name` instead of `missing`.
 - Runner: an `allow` entry can be limited with `match`; zspec_bezier2 now
   allows dropped bezier handles on a geometry node in compiles too, as
   MDL-CTRL-023 says, while a missing controller or a wrong first value stays
