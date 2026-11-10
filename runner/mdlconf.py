@@ -42,6 +42,7 @@ import re
 import shlex
 import shutil
 import signal
+import struct
 import subprocess
 import sys
 import tempfile
@@ -50,6 +51,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import approvals  # noqa: E402
 import mdlview  # noqa: E402
+import nodefacts  # noqa: E402
 
 ROOT = os.path.dirname(HERE)
 CONF = os.path.join(ROOT, 'conformance')
@@ -183,7 +185,7 @@ TOL = {'position': 1e-5, 'uv0': 1e-5, 'uv1': 1e-5, 'uv2': 1e-5, 'uv3': 1e-5,
        'normal': 1e-4, 'tangent': 1e-3, 'handedness': 0.5, 'color': 0}
 
 
-def compare_mesh(r, path, exp, act, profile, volatile, aabb=False):
+def compare_mesh(r, path, exp, act, profile, volatile, aabb=False, face_indices=True):
     vol = lambda k: ('%s.%s' % (path, k)) in volatile  # noqa: E731
     fields = ['diffuse', 'ambient', 'specular', 'shininess', 'shadow', 'beaming', 'render',
               'transparencyhint', 'renderhint', 'tilefade', 'rotatetexture', 'textures']
@@ -247,6 +249,16 @@ def compare_mesh(r, path, exp, act, profile, volatile, aabb=False):
         if diff:
             r.must(path + '.faces.material', 'face %d: expected %s, got %s' % (diff[0], ef[diff[0]]['material'], af[diff[0]]['material']))
     if profile == 'compile':
+        if face_indices and len(ef) == len(af):
+            # The face records keep the original vertex where tangent
+            # generation cloned it; only the index list names the clone
+            # (MDL-MESH-043, MDL-BIN-049). Against a golden, the records'
+            # vertex indices must be the engine's. Not in a round trip, where
+            # the original's compiler numbered the vertices its own way.
+            diff = [i for i, (x, y) in enumerate(zip(ef, af)) if x.get('v') != y.get('v')]
+            if diff:
+                r.must(path + '.faces.v', '%d face(s) differ; first face %d: expected %s, got %s'
+                       % (len(diff), diff[0], ef[diff[0]].get('v'), af[diff[0]].get('v')))
         if exp.get('index_lists') and act.get('index_lists') and drawn(exp) != drawn(act):
             r.should(path + '.vertex_order', 'same triangles, different vertex numbering or order')
         for k in ('bmin', 'bmax', 'radius', 'average'):
@@ -310,6 +322,65 @@ def mesh_streams(mesh):
     if 'color' in s and all(c == [255, 255, 255, 255] for c in v['color']):
         s.discard('color')
     return s
+
+
+def left_out_tangents(rep):
+    """The mesh paths whose decompile findings say only that the ASCII has
+    no tangents (and so no handedness): every corner 'missing'."""
+    out = {}
+    for lvl, pth, msg in rep.items:
+        for attr in ('tangent', 'handedness'):
+            if pth.endswith('.mesh.' + attr) and lvl == 'should' and msg.endswith(': missing') \
+                    and re.match(r'(\d+) corner\(s\) differ; first: triangle \d+ corner \d+: missing$', msg):
+                out.setdefault(pth[:-len(attr) - 1], []).append((lvl, pth, msg))
+    return out
+
+
+def tangents_regenerated(exp_mesh, comp_mesh):
+    """Whether a compile of the ASCII gives exactly the original's tangents
+    and handedness: the same drawn triangles, and at each corner, in order,
+    the same tangent and handedness floats (MDL-MESH-043)."""
+    et, ct = drawn(exp_mesh), drawn(comp_mesh)
+    ev, cv = exp_mesh.get('vertices', {}), comp_mesh.get('vertices', {})
+    if len(et) != len(ct) or not et:
+        return False
+    for attr in ('tangent', 'handedness'):
+        if attr not in ev:
+            continue
+        if attr not in cv:
+            return False
+        for x, y in zip(et, ct):
+            for k in range(3):
+                if not (x[k] < len(ev[attr]) and y[k] < len(cv[attr])):
+                    return False
+                if _freeze(ev[attr][x[k]]) != _freeze(cv[attr][y[k]]):
+                    return False
+    return 'tangent' in ev
+
+
+def accept_left_out_tangents(rep, exp, compiled):
+    """Move the decompile findings of meshes whose ASCII left the tangents
+    out to a list of accepted ones, when compiling that ASCII (`compiled`, a
+    binary view) gives exactly the original's tangents: cleanmodels leaves
+    out tangents a compile makes again, so that the vertex order survives
+    (cleanmodels PR #137). Returns the accepted findings."""
+    meshes = left_out_tangents(rep)
+    if not meshes or compiled is None:
+        return []
+    exp_nodes = {n['name'].lower(): n for n in exp['nodes']}
+    cmp_nodes = {n['name'].lower(): n for n in compiled['nodes']}
+    ok = set()
+    for mp in meshes:
+        m = re.match(r'^nodes\[([^\]#]*)\]\.mesh$', mp)
+        if not m:
+            continue
+        e, c = exp_nodes.get(m.group(1).lower()), cmp_nodes.get(m.group(1).lower())
+        if e and c and 'mesh' in e and 'mesh' in c and tangents_regenerated(e['mesh'], c['mesh']):
+            ok.add(mp)
+    accepted = [x for mp in ok for x in meshes[mp]]
+    rep.items = [x for x in rep.items if x not in accepted]
+    return [[pth, msg + ' [accepted: compiling the ASCII gives exactly these tangents]']
+            for _, pth, msg in accepted]
 
 
 def mesh_facts(e, a, own_nodes):
@@ -736,13 +807,16 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
                         break
                     if profile == 'compile' and x.get('plane') != y.get('plane'):
                         r.must('%s.aabb[%d].plane' % (p, j), 'expected %s, got %s' % (x.get('plane'), y.get('plane')))
+                        if r.facts is not None:
+                            r.facts['compile ' + p + '.aabb'] = nodefacts.aabb_facts(ee, ae)
                         break
         if 'mesh' in e and not anim:
             if 'mesh' not in a:
                 r.must(p + '.mesh', 'missing')
             else:
                 before = len(r.items)
-                compare_mesh(r, p + '.mesh', e['mesh'], a['mesh'], profile, vol, bool(e['flags'] & 0x200))
+                compare_mesh(r, p + '.mesh', e['mesh'], a['mesh'], profile, vol, bool(e['flags'] & 0x200),
+                             face_indices=r.facts is None)
                 if r.facts is not None and profile == 'compile' and any(
                         lvl == 'must' for lvl, _, _ in r.items[before:]):
                     r.facts['compile ' + p + '.mesh'] = mesh_facts(e, a, len(exp_nodes))
@@ -865,6 +939,28 @@ def run_impl(cmd, verb, src, dst, cwd, env=None):
         return -1, str(e)
 
 
+def compile_check(cmd, probe, ascii_data, tmp):
+    """The implementation's compile of a decompile's ASCII, as a view (None
+    when it fails), with the probe's companion files beside it."""
+    d = os.path.join(tmp, 'check')
+    os.makedirs(d, exist_ok=True)
+    name = probe['name'] + '.mdl'
+    with open(os.path.join(d, name), 'wb') as f:
+        f.write(ascii_data)
+    for fn in probe.get('with', []):
+        if not fn.endswith('.mdl'):
+            shutil.copyfile(os.path.join(CONF, 'probes', fn), os.path.join(d, fn))
+        elif os.path.exists(os.path.join(CONF, 'goldens', fn)):
+            shutil.copyfile(os.path.join(CONF, 'goldens', fn), os.path.join(d, fn))
+    out = os.path.join(tmp, 'check-out', name)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    rc, _ = run_impl(cmd, 'compile', os.path.join(d, name), out, tmp)
+    try:
+        return mdlview.read_binary(open(out, 'rb').read()) if rc == 0 else None
+    except Exception:  # noqa: BLE001 - no compile, nothing accepted
+        return None
+
+
 def cmd_run(a):
     results = []
     probes = [p for p in load_manifest() if not a.only or p['name'] in a.only]
@@ -914,6 +1010,9 @@ def cmd_run(a):
                     results.append(res)
                     continue
                 rep = compare(exp, act, test)
+                accepted = []
+                if test == 'decompile' and left_out_tangents(rep):
+                    accepted = accept_left_out_tangents(rep, exp, compile_check(a.cmd, p, data, tmp))
                 # The manifest may relax checks: "lenient" (a list of tests)
                 # makes every check of that test a SHOULD (malformed input);
                 # "allow" entries make the checks under a path a SHOULD where
@@ -932,6 +1031,8 @@ def cmd_run(a):
                 res['status'] = 'fail' if rep.failed else 'pass'
                 res['must'] = [[pth, msg] for l, pth, msg in rep.items if l == 'must']
                 res['should'] = [[pth, msg] for l, pth, msg in rep.items if l == 'should']
+                if accepted:
+                    res['accepted'] = accepted
                 if log.strip():
                     res['log'] = log.strip()[-2000:]
                 results.append(res)
@@ -949,6 +1050,8 @@ def report(a, results):
         line = '%-18s %-9s %s' % (r['probe'], r['test'], r['status'].upper())
         if r['status'] == 'pass' and r.get('should'):
             line += ' (%d should)' % len(r['should'])
+        if r.get('accepted'):
+            line += ' (%d accepted)' % len(r['accepted'])
         print(line)
         if r['status'] in ('error', 'pending'):
             print('    ' + r['reason'].replace('\n', '\n    '))
@@ -957,6 +1060,8 @@ def report(a, results):
         if a.verbose:
             for pth, msg in r.get('should', [])[:a.max]:
                 print('    SHOULD %s: %s' % (pth, msg))
+            for pth, msg in r.get('accepted', [])[:a.max]:
+                print('    OK     %s: %s' % (pth, msg))
     print('# totals: ' + ', '.join('%s %s %d' % (t, s, n) for (t, s), n in sorted(counts.items())))
     if a.json:
         with open(a.json, 'w') as f:
@@ -1090,9 +1195,19 @@ def _roundtrip_one(job):
         facts = {}
         for test, act in acts:
             rep = compare(exp, act, test, facts=True)
+            if test == 'decompile' and left_out_tangents(rep):
+                # tangents the ASCII leaves out, which its compile makes again
+                for pth, msg in accept_left_out_tangents(rep, exp, acts[1][1]):
+                    res.setdefault('accepted', []).append([test, pth, msg])
             for lvl, pth, msg in rep.items:
                 res[lvl].append([test, pth, msg])
             facts.update(rep.facts)
+        if any(t == 'compile' and NODE_FINDING.search(p) for t, p, _ in res['must']):
+            try:
+                sup = find_supermodel(exp['model'].get('supermodel'), env['MDLCONF_RESOURCE_DIRS'].split(os.pathsep))
+                facts['compile model.nodes'] = nodefacts.model_facts(exp, acts[1][1], data['ascii'].decode('latin-1'), sup)
+            except Exception as e:  # noqa: BLE001 - no facts, nothing approved
+                facts['compile model.nodes'] = {'error': repr(e)}
         if facts:
             res['facts'] = facts
         # Checked whatever the findings, so that approvals (approvals.py) can
@@ -1101,6 +1216,12 @@ def _roundtrip_one(job):
         if not res['stable']:
             res['unstable_fields'] = unstable_fields(acts[1][1], data['binary2'])
             res['unstable_adjacency_only'] = adjacency_only(data['binary'], data['binary2'])
+            try:
+                why = explain_unstable(data['binary'], data['binary2'], exp)
+            except Exception:  # noqa: BLE001 - unexplained
+                why = None
+            if why:
+                res['unstable_explained'] = why
         if res['must']:
             res['status'] = 'fail'
         elif not res['stable']:
@@ -1128,6 +1249,218 @@ def adjacency_only(first, second):
     if xo != yo or x != y:
         return 0
     return sum(1 for o in xo if first[o + 20:o + 26] != second[o + 20:o + 26])
+
+
+NODE_FINDING = re.compile(r'(\.number|\.tree|node_count)$')
+_SUPERS = {}
+
+
+def find_supermodel(name, dirs, depth=0):
+    """The supermodel an implementation compiles against, as a
+    nodefacts.Super: the first <name>.mdl in the folders (the original's own
+    first), else the base game's (NWN_ROOT); an ASCII one numbered by the
+    rules against its own supermodel. None when there is none or it (or a
+    supermodel it names) is not found."""
+    name = (name or '').strip().lower()
+    if not name or name == 'null' or depth > 8:
+        return None
+    key = (name, tuple(dirs))
+    if key in _SUPERS:
+        return _SUPERS[key]
+    data = None
+    for d in dirs:
+        for fn in (name + '.mdl', name.upper() + '.mdl'):
+            p = os.path.join(d, fn)
+            if data is None and os.path.isfile(p):
+                data = open(p, 'rb').read()
+    if data is None:
+        try:
+            import resfiles
+            root = resfiles.default_root()
+            if root:
+                if 'archive' not in _SUPERS:
+                    _SUPERS['archive'] = resfiles.KeyArchive(root)
+                data = _SUPERS['archive'].get(name)
+        except Exception:  # noqa: BLE001 - not found
+            data = None
+    sup = None
+    if data and data[:4] == b'\0\0\0\0':
+        sup = nodefacts.Super.from_binary(mdlview.read_binary(data))
+    elif data:
+        text = data.decode('latin-1')
+        parent = nodefacts.ascii_supermodel(text)
+        psup = find_supermodel(parent, dirs, depth + 1) if parent else None
+        if not parent or psup is not None:
+            sup = nodefacts.Super.from_ascii(text, psup)
+    _SUPERS[key] = sup
+    return sup
+
+
+M_BOUNDS = range(12 + 136, 12 + 160, 4)  # the model's bounding box (bmin, bmax), file offsets
+
+
+def _ulps(a, b):
+    """The distance in units in the last place between two float32 (bytes)."""
+    def ordered(x):
+        u = struct.unpack('<I', x)[0]
+        return -(u & 0x7fffffff) if u & 0x80000000 else u
+    fa, fb = struct.unpack('<f', a)[0], struct.unpack('<f', b)[0]
+    if not (math.isfinite(fa) and math.isfinite(fb)):
+        return None
+    return abs(ordered(a) - ordered(b))
+
+
+def explain_bytes(first, second):
+    """{kind: count} when two compiles of the same length differ only in
+    (a) the adjacency fields of face records at the same offsets in both
+    (MDL-BIN-044), (b) float fields (as the reader reads them) that are 0.0
+    in one and -0.0 in the other, and (c) the model bounding box's floats by
+    at most 1 ulp each; None when anything else differs."""
+    if first == second or len(first) != len(second):
+        return None
+    x, xo = mdlview.face_adjacency_masked(first)
+    y, yo = mdlview.face_adjacency_masked(second)
+    if xo != yo:
+        return None
+    floats = mdlview.float_fields(first) & mdlview.float_fields(second)
+    words = set()
+    for i in range(len(x)):
+        if x[i] != y[i]:
+            w = next((i - k for k in range(4) if i - k in floats), None)
+            if w is None:
+                return None
+            words.add(w)
+    out = {}
+    adj = sum(1 for o in xo if first[o + 20:o + 26] != second[o + 20:o + 26])
+    if adj:
+        out['adjacency'] = adj
+    zero = {bytes(4), b'\0\0\0\x80'}
+    for w in words:
+        a, b = first[w:w + 4], second[w:w + 4]
+        if a in zero and b in zero:
+            out['signed_zero'] = out.get('signed_zero', 0) + 1
+        elif w in M_BOUNDS and _ulps(a, b) is not None and _ulps(a, b) <= 1:
+            out['bounds_ulp'] = out.get('bounds_ulp', 0) + 1
+        else:
+            return None
+    return out
+
+
+def _dead_vertices(mesh):
+    """The vertices no face record and no index list uses."""
+    used = set()
+    for f in mesh.get('faces', []):
+        used.update(f['v'])
+    for il in mesh.get('index_lists') or []:
+        used.update(il)
+    return [i for i in range(mesh.get('vertex_count', 0)) if i not in used]
+
+
+def _without_vertices(node, dead):
+    """A copy of a mesh node without the vertices `dead`, the others
+    renumbered in order: streams, face records, index lists, skin weights,
+    dangly constraints and animmesh sets."""
+    import copy
+    node = copy.deepcopy(node)
+    m = node['mesh']
+    nv = m.get('vertex_count', 0)
+    gone = set(dead)
+    keep = [i for i in range(nv) if i not in gone]
+    remap = {o: n for n, o in enumerate(keep)}
+    m['vertices'] = {k: ([vals[i] for i in keep] if isinstance(vals, list) and len(vals) == nv else vals)
+                     for k, vals in m.get('vertices', {}).items()}
+    m['vertex_count'] = len(keep)
+    for f in m.get('faces', []):
+        f['v'] = [remap.get(i, -1) for i in f['v']]
+    m['index_lists'] = [[remap.get(i, -1) for i in il] for il in m.get('index_lists') or []]
+    sk = node.get('skin')
+    if sk and len(sk.get('weights', [])) == nv:
+        sk['weights'] = [sk['weights'][i] for i in keep]
+        if 'out_of_tree' in sk:
+            sk['out_of_tree'] = [remap[i] for i in sk['out_of_tree'] if i in remap]
+    dg = node.get('dangly')
+    if dg and len(dg.get('constraints', [])) == nv:
+        dg['constraints'] = [dg['constraints'][i] for i in keep]
+    am = node.get('animmesh')
+    if am:
+        for k, sets in (('animverts', am.get('vertex_sets', 0)), ('animtverts', am.get('texture_sets', 0))):
+            if k in am and nv and len(am[k]) == sets * nv:
+                am[k] = [am[k][s * nv + i] for s in range(sets) for i in keep]
+    return node
+
+
+def _exact(view):
+    """A view flattened, floats by their exact text (so -0.0 is not 0.0)."""
+    return {k: (repr(v) if isinstance(v, float) else v) for k, v in flat(view)}
+
+
+def explain_dead_vertices(first, second, exp):
+    """{'dead_vertices': n[, 'adjacency': faces]} when the second compile is
+    the first without the vertices no face of the first uses, each of them at
+    the position of a corner of a zero-area triangle the original draws (the
+    compile dropped that face, MDL-MESH-020, and kept its vertices), with the
+    other vertices renumbered in order; the meshes' bounding box, average and
+    radius may differ there (computed from the vertices, MDL-MESH-050), and
+    their box must be that of their own vertices; face adjacency may differ
+    (counted). None when anything else differs."""
+    return dead_vertices_explained(mdlview.read_binary(first), mdlview.read_binary(second), exp)
+
+
+def dead_vertices_explained(v1, v2, exp):
+    """explain_dead_vertices on the two compiles' views (changed in place)."""
+    n1, n2 = v1['nodes'], v2['nodes']
+    if [n['name'] for n in n1] != [n['name'] for n in n2]:
+        return None
+    orig = {n['name'].lower(): n for n in exp['nodes']}
+    dead_total = adj = 0
+    for i, (a, b) in enumerate(zip(n1, n2)):
+        if 'mesh' not in a or 'mesh' not in b:
+            continue
+        dead = _dead_vertices(a['mesh'])
+        if _dead_vertices(b['mesh']):
+            return None
+        if not dead:
+            continue
+        o = orig.get(a['name'].lower())
+        if o is None or 'mesh' not in o:
+            return None
+        opos = o['mesh'].get('vertices', {}).get('position', [])
+        corners = set()
+        for tri in drawn(o['mesh']):
+            if tri_area2(opos, tri) == 0:
+                corners.update(_freeze(opos[k]) for k in tri)
+        pos1 = a['mesh']['vertices'].get('position', [])
+        if not all(_freeze(pos1[k]) in corners for k in dead):
+            return None
+        a = _without_vertices(a, dead)
+        for m, src in ((a['mesh'], pos1), (b['mesh'], b['mesh']['vertices'].get('position', []))):
+            if not src or [min(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmin') or []] or \
+                    [max(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmax') or []]:
+                return None
+            for k in ('bmin', 'bmax', 'average', 'radius'):
+                m.pop(k, None)
+        dead_total += len(dead)
+        n1[i], n2[i] = a, b
+    if not dead_total:
+        return None
+    for a, b in zip(n1, n2):
+        for x, y in zip(a.get('mesh', {}).get('faces', []), b.get('mesh', {}).get('faces', [])):
+            if x['adjacent'] != y['adjacent']:
+                adj += 1
+                x['adjacent'] = y['adjacent']
+    if _exact(v1) != _exact(v2):
+        return None
+    out = {'dead_vertices': dead_total}
+    if adj:
+        out['adjacency'] = adj
+    return out
+
+
+def explain_unstable(first, second, exp):
+    """Why the second compile differs from the first, as {kind: count}, when
+    every difference is of a known kind (explain_bytes, or
+    explain_dead_vertices); None otherwise."""
+    return explain_bytes(first, second) or explain_dead_vertices(first, second, exp)
 
 
 def unstable_fields(first, second_data):
@@ -1289,11 +1622,12 @@ def roundtrip_report(a, impl, results, nfiles, ascii_count, approved=None):
                 print('        %6d  %s' % (x['count'], x['cause']))
         doc_approvals = {'file': approved['file'], 'name': approved['name'], 'sha256': approved['sha256'],
                          'counts': per, 'causes': acauses}
-        doc_approvals['stable_except_adjacency'] = sum(1 for r in results if approvals.stable_except_adjacency(r))
+        doc_approvals['stability_approved'] = sum(1 for r in results if approvals.stability_approved(r))
     print('# totals: ' + ', '.join('%s %d' % (s, n) for s, n in sorted(counts.items())))
     if doc_approvals is not None:
-        print('# stable-except-adjacency %d (of the pass-approved: the second compile differs in face '
-              'adjacency alone)' % doc_approvals['stable_except_adjacency'])
+        print('# stability-approved %d (of the pass-approved: the second compile differs from the first only '
+              'in ways an entry approves; per entry above, under "stability binary2")'
+              % doc_approvals['stability_approved'])
     if a.json:
         doc = {'impl': impl, 'build': BUILD, 'ascii_passed_over': ascii_count,
                'totals': counts, 'causes': ordered, 'results': results}

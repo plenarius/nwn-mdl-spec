@@ -93,6 +93,24 @@ Corrections after the first draft:
   trip now checks stability whatever the findings, and pairs a node whose
   32-character name the compile cut to 31 (MDL-BIN-007) with the cut node
   when no other node has that name, reporting `name` instead of `missing`.
+- Runner: more approved differences (runner/approvals/layonara.json,
+  James 2026-11-10): node numbers no declaration order reproduces
+  (`renumbered`), header counts against the haks' supermodel
+  (`supermodel-count`) and of animation trees (`anim-header-count`),
+  children nwnmdlcomp left out of transparency order (`tree-sorted`), aabb
+  planes at a tie of MDL-MESH-052 (`aabb-plane-tie`), and three kinds of
+  second-compile difference: vertices only dropped zero-area faces used
+  (`dead-face-vertices`), the model box by 1 ulp (`bounds-ulp`) and 0.0
+  against -0.0 in a float (`signed-zero`). The facts come from
+  runner/nodefacts.py (a replica of libstdc++'s `std::sort`, the numbering
+  rules, and whether any declaration order reproduces the original) and
+  `mdlconf.explain_unstable`. The >16-children shuffle, numbers a
+  part-number declaration reproduces and the supermodel -1 walk stay
+  failures.
+- Runner: `run` checks a compile's face-record vertex indices against the
+  golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
+  clones there), and accepts a decompile that leaves tangents out when
+  compiling its ASCII gives them back exactly (cleanmodels PR #137).
 - Runner: an `allow` entry can be limited with `match`; zspec_bezier2 now
   allows dropped bezier handles on a geometry node in compiles too, as
   MDL-CTRL-023 says, while a missing controller or a wrong first value stays

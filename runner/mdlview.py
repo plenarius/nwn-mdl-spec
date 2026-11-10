@@ -129,6 +129,7 @@ class _Bin:
         self.d = data
         self.warnings = []
         self.face_records = set()  # model offsets of the 32-byte face records read
+        self.float_spans = []  # (offset, count) of every float32 field read
         if len(data) < 12:
             raise ValueError('file shorter than the 12-byte file header')
         zero, self.raw_off, self.raw_size = struct.unpack_from('<III', data, 0)
@@ -156,12 +157,17 @@ class _Bin:
         return struct.unpack_from('<i', self.d, off)[0] if self.ok(off, 4) else 0
 
     def f(self, off):
-        return struct.unpack_from('<f', self.d, off)[0] if self.ok(off, 4) else 0.0
+        if not self.ok(off, 4):
+            return 0.0
+        self.float_spans.append((off, 1))
+        return struct.unpack_from('<f', self.d, off)[0]
 
     def fs(self, off, n):
         if not self.ok(off, 4 * n):
             self.warnings.append('float array at %#x past the end' % off)
             return [0.0] * n
+        if n:
+            self.float_spans.append((off, n))
         return list(struct.unpack_from('<%df' % n, self.d, off))
 
     def s(self, off, n):
@@ -482,6 +488,18 @@ def face_adjacency_masked(data):
     for o in b.face_records:
         out[o + 20:o + 26] = bytes(6)
     return bytes(out), sorted(b.face_records)
+
+
+def float_fields(data):
+    """The file offsets of every 4-byte field the reader reads as a float
+    (vertex streams, face normals and distances, bounds, controller keys and
+    values, and the header floats)."""
+    b = _Bin(data)
+    _read_binary(b)
+    out = set()
+    for off, n in b.float_spans:
+        out.update(range(off, off + 4 * n, 4))
+    return out
 
 
 def _read_binary(b):

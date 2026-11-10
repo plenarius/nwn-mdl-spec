@@ -42,7 +42,14 @@ python3 runner/mdlconf.py view FILE
 
 - `run`: every probe with a golden, compiled and decompiled. Prints one line
   per test (PASS/FAIL/ERROR/PENDING) with the MUST failures under it (and
-  the SHOULD notes with `-v`); `--json` writes everything.
+  the SHOULD notes with `-v`); `--json` writes everything. A compile's face
+  records must hold the golden's vertex indices (`faces.v`): after tangent
+  generation clones a vertex, the face records keep the original and only
+  the index list names the clone (MDL-MESH-043, MDL-BIN-049). A decompile
+  may leave a normal-mapped mesh's tangents out when its compile makes them
+  again: the run compiles the ASCII with the same implementation, and when
+  every drawn corner gets exactly the golden's tangent and handedness, the
+  "missing" notes move to `accepted` (shown with `-v`).
 - `stock`: the stock models of `conformance/stock.yaml`, extracted from the
   install (`NWN_ROOT`, or the usual Steam folders), decompiled and compared.
 - `expect`: regenerates `conformance/expected/` from the goldens (after a
@@ -77,10 +84,26 @@ python3 runner/mdlconf.py view FILE
   (`stable`, checked whatever the findings; when it is not,
   `unstable_fields` counts the fields that differ, and
   `unstable_adjacency_only` is the number of faces whose adjacency differs
-  when nothing else in the bytes does, 0 otherwise) and `facts`: for each mesh with
+  when nothing else in the bytes does, 0 otherwise, and `unstable_explained`
+  the kinds of difference, `{kind: count}`, when every difference is of a
+  known kind: `adjacency`, `signed_zero` (a float field 0.0 in one, -0.0 in
+  the other), `bounds_ulp` (the model's bounding box by 1 ulp) or
+  `dead_vertices` (vertices only faces the compile dropped used,
+  `mdlconf.explain_unstable`) and `facts`: for each mesh with
   a MUST finding in the compile, how its drawn triangles pair with the
-  original's and which corner attributes differ (`mdlconf.mesh_facts`), and
-  for each node name cut to 31 characters whether the cut name is unique.
+  original's and which corner attributes differ (`mdlconf.mesh_facts`); for
+  each node name cut to 31 characters whether the cut name is unique; for an
+  aabb node whose planes differ, whether they are at ties
+  (`nodefacts.aabb_facts`); and, when the compile has a node number, tree or
+  count finding, `compile model.nodes` (`nodefacts.model_facts`): whether
+  the numbers follow MDL-NODE-010/020 from the ASCII's declaration order
+  against the supermodel the implementation finds (the original's folder,
+  then the `--resource-dir` folders, then the base game; an ASCII
+  supermodel numbered by the same rules), whether any declaration order
+  gives the original's numbers and tree, whether the animations follow
+  MDL-NODE-040 in both, the tree resorted by MDL-NODE-012, and the header
+  counts. A decompile whose ASCII leaves out tangents the compile makes
+  again exactly has those notes in `accepted`.
 - `--approved FILE`: differences a project has agreed to live with
   ([approvals/](approvals/), checked by [approvals.py](approvals.py)). A
   MUST finding is approved only when its entry's condition holds on the
@@ -88,9 +111,9 @@ python3 runner/mdlconf.py view FILE
   none. Approved findings are moved to `approved` with the entry's id and
   counted per entry, never dropped. A model whose MUST findings are all
   approved and whose second compile is stable is `pass-approved`, and so is
-  one whose second compile differs only in face adjacency when the file has
-  an `unstable-adjacency-only` entry (counted apart as
-  `stable-except-adjacency`). Without the flag nothing changes.
+  one whose second compile differs only in kinds of difference the file
+  approves (`unstable_explained`; a `stability binary2` finding per kind,
+  counted apart as `stability-approved`). Without the flag nothing changes.
 - `approve`: re-scores a `roundtrip --json` file under an approvals file
   without running anything. Results made before the runner recorded facts
   approve nothing.
@@ -106,8 +129,10 @@ python3 runner/mdlconf.py view FILE
 
 `check` names one of the conditions [approvals.py](approvals.py)
 implements (`vertex-layout`, `dropped-zero-area-faces`, `nan-tangent-fill`,
-`tangents-baked`, `water-texanim-169`, `name-cut-31`,
-`unstable-adjacency-only`); `condition` says in
+`tangents-baked`, `water-texanim-169`, `name-cut-31`, `renumbered`,
+`supermodel-count`, `anim-header-count`, `tree-sorted`, `aabb-plane-tie`,
+`unstable-adjacency-only`, `signed-zero`, `bounds-ulp`,
+`dead-face-vertices`); `condition` says in
 words what it checks. Leaving an entry out of the file leaves its findings
 failed, together with every other finding on the same mesh.
 [approvals/layonara.json](approvals/layonara.json) is Layonara's.
@@ -118,6 +143,7 @@ failed, together with every other finding on the same mesh.
 |---|---|
 | `mdlconf.py` | the runner and the comparison |
 | `approvals.py`, `approvals/` | approved differences for `roundtrip --approved` and `approve` |
+| `nodefacts.py` | node numbers and order as the game's compiler makes them (libstdc++'s `std::sort`, MDL-NODE-010/012/020/040) and aabb plane ties, for the approvals |
 | `mdlview.py` | the two readers: binary (spec/binary.md) and ASCII as the engine reads it (spec/ascii.md) |
 | `miniyaml.py` | a reader for the YAML subset the tables use |
 | `resfiles.py` | KEY/BIF and ERF readers for the stock tests |
