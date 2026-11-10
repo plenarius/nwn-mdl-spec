@@ -1098,6 +1098,8 @@ def _roundtrip_one(job):
         # Checked whatever the findings, so that approvals (approvals.py) can
         # tell a model whose findings are all approved from an unstable one.
         res['stable'] = data['binary2'] == data['binary']
+        if not res['stable']:
+            res['unstable_fields'] = unstable_fields(acts[1][1], data['binary2'])
         if res['must']:
             res['status'] = 'fail'
         elif not res['stable']:
@@ -1108,6 +1110,22 @@ def _roundtrip_one(job):
         return res
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def unstable_fields(first, second_data):
+    """What differs between the first compile (its view) and the second
+    (bytes): {path with indices taken out: count}, the ten most common."""
+    try:
+        x = dict(flat(first))
+        y = dict(flat(mdlview.read_binary(second_data)))
+    except Exception as e:  # noqa: BLE001
+        return {'cannot read the second compile: %s' % e: 1}
+    counts = {}
+    for k in set(x) | set(y):
+        if x.get(k) != y.get(k):
+            k = re.sub(r'\[\d+\]', '[]', k)
+            counts[k] = counts.get(k, 0) + 1
+    return dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:10])
 
 
 def cause_of(test, pth, msg):

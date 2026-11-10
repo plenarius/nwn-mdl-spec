@@ -74,7 +74,8 @@ python3 runner/mdlconf.py view FILE
   each result to FILE as a JSON line as it finishes; a run given the same
   file skips the models already in it, so a stopped run resumes.
   The JSON keeps, per result, whether the second compile was byte-identical
-  (`stable`, checked whatever the findings) and `facts`: for each mesh with
+  (`stable`, checked whatever the findings; when it is not,
+  `unstable_fields` counts the fields that differ) and `facts`: for each mesh with
   a MUST finding in the compile, how its drawn triangles pair with the
   original's and which corner attributes differ (`mdlconf.mesh_facts`), and
   for each node name cut to 31 characters whether the cut name is unique.
