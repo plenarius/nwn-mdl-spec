@@ -58,6 +58,7 @@ cleanmodels release changed its column, the cell says since which version.
 | child order | file order | file order | file order, except that children are sorted (other nodes first, then meshes by transparencyhint) when a child mesh has transparencyhint > 0 | zspec_transp, ReorderChildren 0x458120 |
 | supermodel numbering: a name used twice in the supermodel (zspec_kid's `hand`) | -1 | 2 (the name walk) | 2: the name walk down the tree | zspec_kid, zspec_kid2 |
 | supermodel numbering: a node the supermodel lacks, under an unmatched parent | supermodel count + 1 + tree position | supermodel count + 1 + declaration index | supermodel count + 1 + declaration index | zspec_kid4 |
+| supermodel numbering: below a supermodel node numbered -1 | count + 1 + declaration index (the walk stops; v4.17.5) | the walk goes on (e0ed4c4) | the walk goes on: the supermodel's numbers, -1 where it lacks the node | zspec_kid5 |
 | supermodel numbering: header node count | supermodel count + own count + 1 | the same | supermodel count + own count + 1 | zspec_kid, zspec_kid3 |
 | skin header size | 192 bytes after the mesh header (816 in all) | 724 or 944 seen; size not relied on | 816 in the engine's HD parts; 724 and 944 in older files | data (E57); **open**: no skin golden yet |
 | animmesh animation sets | stored set-major (as ASCII) | written with vertex count 0 in the animation node | vertex-major; the animation node's vertex count sizes the copy | zspec_animmesh, loader 0x4bd400 |

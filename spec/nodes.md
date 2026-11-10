@@ -56,13 +56,18 @@ names. A node whose path exists in the supermodel takes that supermodel
 node's part number. A node whose path does not exist gets -1 when its parent
 matched, and otherwise the supermodel's header node count + 1 + its own
 declaration index (the number MDL-NODE-010 gives it, moved past the
-supermodel's). A compiler MUST number nodes this way and so needs the
-supermodel. *Confirmed: zspec_kid (`hips` 1, `hand` 2, `foot` 5, `extra`
--1), zspec_kid2 (`Arm` 3 matches `arm`; `hand` under it 4; `foot` directly
-under the root -1), zspec_kid3, zspec_kid4 (`extra` and `lone` -1 under
-matched parents; under unmatched ones, declared out of tree order, `deep_a`
-11 = 6 + 1 + 4, `deep_b` 12, `deeper` 14, `lone_c` 17). The code doing it was
-not read.*
+supermodel's). A supermodel node numbered -1 (one its own supermodel lacks)
+still matches: the node takes -1 and the walk goes on to its children, which
+take the supermodel's numbers, or -1 where the supermodel lacks them. A
+compiler MUST number nodes this way and so needs the supermodel. *Confirmed:
+zspec_kid (`hips` 1, `hand` 2, `foot` 5, `extra` -1), zspec_kid2 (`Arm` 3
+matches `arm`; `hand` under it 4; `foot` directly under the root -1),
+zspec_kid3, zspec_kid4 (`extra` and `lone` -1 under matched parents; under
+unmatched ones, declared out of tree order, `deep_a` 11 = 6 + 1 + 4,
+`deep_b` 12, `deeper` 14, `lone_c` 17), zspec_kid5 against zspec_mid (whose
+`cape` is -1 and its children `cape_a` 10, `cape_b` 11): `cape` -1, `cape_b`
+11 and `cape_a` 10, declared in another order, `cape_x`, which zspec_mid
+lacks, -1. The code doing it was not read.*
 
 **MDL-NODE-021** A name the supermodel uses twice is resolved by the walk:
 the node takes the number of the supermodel node at the same path.

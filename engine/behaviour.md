@@ -384,10 +384,12 @@ zspec_transp, zspec_numbers.*
 from the supermodel: by the path from the root, names compared
 case-insensitively, a matched node takes the supermodel node's number; an
 unmatched one gets −1 when its parent matched, and otherwise the
-supermodel's count + 1 + its declaration index; the roots match. The header
-node count is the supermodel's count + the model's own + 1. Animation nodes
-are numbered the same way. *Confirmed (goldens zspec_kid, zspec_kid2,
-zspec_kid3, zspec_kid4); the code doing it was not read.*
+supermodel's count + 1 + its declaration index; the roots match. A
+supermodel node numbered −1 still matches: the node takes −1 and the walk
+goes on to its children. The header node count is the supermodel's count +
+the model's own + 1. Animation nodes are numbered the same way. *Confirmed
+(goldens zspec_kid, zspec_kid2, zspec_kid3, zspec_kid4, zspec_kid5 with
+zspec_mid); the code doing it was not read.*
 
 **E46 Key lists.** `Parse<AurGenericKey>` (0x44e570) reads `"%d %c"` after the
 keyword. A count alone: that many rows, skipping lines whose first byte is
