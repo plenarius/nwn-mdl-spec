@@ -418,6 +418,13 @@ def check_node_facts():
         got = {x[3] for x in res.get('approved', [])}
         if res['status'] != status or got != ids:
             bad.append('%s: %s %s, expected %s %s' % (what, res['status'], sorted(got), status, sorted(ids)))
+    dup = [('r', None, 0, d), ('arm', 'r', 1, d), ('arm', 'r', 2, d)]
+    exp_dup = mdlconf.normalise(_tree(dup, 'sup', 3))
+    exp_dup['volatile'] = []
+    res = _node_result(exp_dup, _tree([('r', None, 0, d), ('arm', 'r', 1, d), ('arm', 'r', -1, d)], 'sup', 7),
+                       _ascii([('r', None, d), ('arm', 'r', d), ('arm', 'r', d)], 'sup'), sup, full)
+    if {x[3] for x in res.get('approved', [])} != {'supermodel-count'} or res['status'] != 'fail':
+        bad.append('a count with duplicate names: %s %s' % (res['status'], res.get('approved')))
     res = _node_result(exp, _tree(comp, 'sup', 7), _ascii(decl, 'sup'), None, full)
     if res['status'] != 'fail' or res.get('approved'):
         bad.append('a supermodel not found: %s %s' % (res['status'], res.get('approved')))

@@ -425,16 +425,15 @@ def model_facts(exp, act, ascii_text, sup):
                 == sorted(n['name'].lower() for n in aa['nodes'])}
     if anims:
         f['animations'] = anims
+    if sname:
+        f['supermodel_count'] = sup.count if sup is not None else None
+    else:
+        sup = None
     if not f['unique']:
         return f
     f['same_nodes'] = sorted(o.parent.items(), key=str) == sorted(c.parent.items(), key=str)
-    if sname:
-        f['supermodel_count'] = None
-        if sup is None:
-            return f
-        f['supermodel_count'] = sup.count
-    else:
-        sup = None
+    if sname and sup is None:
+        return f
     ref = ref_numbers([(n, p) for n, p, _ in decl], sup)
     f['numbers_by_rule'] = all(c.num[n] == ref.get(n) for n in c.names)
     f['reachable'] = reachable(o, sup)
