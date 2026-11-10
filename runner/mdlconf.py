@@ -1027,8 +1027,8 @@ def find_binaries(paths):
     return sorted(set(out)), ascii_count
 
 
-class ModelTimeout(Exception):
-    pass
+class ModelTimeout(BaseException):
+    """Not an Exception, so that no handler for a bad file catches it."""
 
 
 def _on_alarm(signum, frame):
