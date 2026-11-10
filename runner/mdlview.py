@@ -128,6 +128,7 @@ class _Bin:
     def __init__(self, data):
         self.d = data
         self.warnings = []
+        self.face_records = set()  # model offsets of the 32-byte face records read
         if len(data) < 12:
             raise ValueError('file shorter than the 12-byte file header')
         zero, self.raw_off, self.raw_size = struct.unpack_from('<III', data, 0)
@@ -315,6 +316,7 @@ def _mesh(b, base, nd, flags):
         if not b.ok(o, 32):
             b.warnings.append('face list of node %s past the end' % nd['name'])
             break
+        b.face_records.add(o)
         faces.append({
             'v': [b.u16(o + 26), b.u16(o + 28), b.u16(o + 30)],
             'material': b.u32(o + 16),
@@ -467,7 +469,22 @@ def _node(b, off, parent, out, depth, seen, anim):
 
 
 def read_binary(data):
+    return _read_binary(_Bin(data))
+
+
+def face_adjacency_masked(data):
+    """The file with the adjacency fields of every face record the reader
+    finds (three int16 at +20 of each 32-byte record, MDL-BIN face list)
+    set to zero, and the sorted offsets of those records."""
     b = _Bin(data)
+    _read_binary(b)
+    out = bytearray(data)
+    for o in b.face_records:
+        out[o + 20:o + 26] = bytes(6)
+    return bytes(out), sorted(b.face_records)
+
+
+def _read_binary(b):
     M = b.M
     model = {
         'name': b.s(M + 8, 64),

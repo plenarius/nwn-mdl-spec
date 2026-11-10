@@ -44,6 +44,17 @@ Then each finding gets the check that explains it:
 - `name-cut-31`: a node's name or parent cut from 32 to 31 characters
   (MDL-BIN-007) when no other node of the original has the cut name, and a
   tree finding whose only difference is such names.
+
+And one per model, about the second compile rather than a finding:
+
+- `unstable-adjacency-only`: a model whose MUST findings are all approved
+  and whose second compile differs from the first only in face records'
+  adjacency fields (MDL-BIN-044, MDL-MESH-022): byte for byte the same once
+  those fields are set to zero in both, with the face records at the same
+  offsets (mdlconf.adjacency_only, recorded as `unstable_adjacency_only`,
+  the number of faces whose adjacency differs). It passes as
+  `pass-approved`, with an approved finding `stability binary2` naming the
+  entry; any other difference leaves it `unstable`.
 """
 import hashlib
 import json
@@ -52,7 +63,8 @@ import re
 FORMAT = 'mdlconf-approvals/1'
 
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
-          'water-texanim-169', 'name-cut-31')
+          'water-texanim-169', 'name-cut-31', 'unstable-adjacency-only')
+STABILITY = ('stability', 'binary2')  # the approved finding of unstable-adjacency-only
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
 
@@ -164,7 +176,8 @@ def apply(res, approvals):
     approvals, the plain status). Findings approved earlier are scored again."""
     if res.get('status') == 'error':
         return res
-    findings = list(res.get('must', [])) + [x[:3] for x in res.get('approved', [])]
+    findings = list(res.get('must', [])) + [x[:3] for x in res.get('approved', [])
+                                            if tuple(x[:2]) != STABILITY]
     stable = res.get('stable')
     if stable is None and res.get('status') in ('pass', 'unstable'):
         stable = res['status'] == 'pass'  # made before 'stable' was recorded
@@ -189,6 +202,13 @@ def apply(res, approvals):
                 verdict[i] = c if c in entries else None
     res['must'] = [x for x, c in zip(findings, verdict) if c is None]
     approved = [list(x) + [entries[c]['id']] for x, c in zip(findings, verdict) if c is not None]
+    res.pop('reason', None)
+    adj = res.get('unstable_adjacency_only') or 0
+    if not res['must'] and stable is False and adj > 0 and 'unstable-adjacency-only' in entries:
+        approved.append(list(STABILITY) + [
+            'the second compile differs from the first only in the adjacency of %d faces' % adj,
+            entries['unstable-adjacency-only']['id']])
+        stable = True
     if approved:
         res['approved'] = approved
     else:
@@ -204,6 +224,11 @@ def apply(res, approvals):
     else:
         res['status'] = 'pass-approved' if approved else 'pass'
     return res
+
+
+def stable_except_adjacency(res):
+    """Whether a scored result passes only through unstable-adjacency-only."""
+    return any(tuple(x[:2]) == STABILITY for x in res.get('approved', []))
 
 
 def summary(results, approvals):

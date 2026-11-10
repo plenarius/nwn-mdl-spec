@@ -75,7 +75,9 @@ python3 runner/mdlconf.py view FILE
   file skips the models already in it, so a stopped run resumes.
   The JSON keeps, per result, whether the second compile was byte-identical
   (`stable`, checked whatever the findings; when it is not,
-  `unstable_fields` counts the fields that differ) and `facts`: for each mesh with
+  `unstable_fields` counts the fields that differ, and
+  `unstable_adjacency_only` is the number of faces whose adjacency differs
+  when nothing else in the bytes does, 0 otherwise) and `facts`: for each mesh with
   a MUST finding in the compile, how its drawn triangles pair with the
   original's and which corner attributes differ (`mdlconf.mesh_facts`), and
   for each node name cut to 31 characters whether the cut name is unique.
@@ -85,8 +87,10 @@ python3 runner/mdlconf.py view FILE
   mesh or node it is about, and all of a mesh's findings are approved or
   none. Approved findings are moved to `approved` with the entry's id and
   counted per entry, never dropped. A model whose MUST findings are all
-  approved and whose second compile is stable is `pass-approved`. Without
-  the flag nothing changes.
+  approved and whose second compile is stable is `pass-approved`, and so is
+  one whose second compile differs only in face adjacency when the file has
+  an `unstable-adjacency-only` entry (counted apart as
+  `stable-except-adjacency`). Without the flag nothing changes.
 - `approve`: re-scores a `roundtrip --json` file under an approvals file
   without running anything. Results made before the runner recorded facts
   approve nothing.
@@ -102,7 +106,8 @@ python3 runner/mdlconf.py view FILE
 
 `check` names one of the conditions [approvals.py](approvals.py)
 implements (`vertex-layout`, `dropped-zero-area-faces`, `nan-tangent-fill`,
-`tangents-baked`, `water-texanim-169`, `name-cut-31`); `condition` says in
+`tangents-baked`, `water-texanim-169`, `name-cut-31`,
+`unstable-adjacency-only`); `condition` says in
 words what it checks. Leaving an entry out of the file leaves its findings
 failed, together with every other finding on the same mesh.
 [approvals/layonara.json](approvals/layonara.json) is Layonara's.

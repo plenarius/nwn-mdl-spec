@@ -16,6 +16,7 @@ import json
 import os
 import re
 import subprocess
+import struct
 import sys
 import tempfile
 
@@ -201,6 +202,57 @@ def check_approvals():
     res['facts'] = rep.facts
     if approvals.apply(res, full)['status'] != 'unstable':
         bad.append('an unstable model with approved findings is %s' % res['status'])
+    # an unstable compile whose second compile differs in face adjacency alone
+    for what, adj, entries, must, status in (
+            ('adjacency only', 3, full, False, 'pass-approved'),
+            ('adjacency only, no entry', 3, dict(full, entries={k: v for k, v in full['entries'].items()
+                                                              if k != 'unstable-adjacency-only'}),
+             False, 'unstable'),
+            ('more than adjacency', 0, full, False, 'unstable'),
+            ('adjacency only, a finding left', 3, full, True, 'fail')):
+        res = {'file': what, 'status': 'unstable', 'must': [], 'should': [], 'stable': False,
+               'unstable_adjacency_only': adj}
+        rep = mdlconf.compare(exp, _view([merged]), 'compile', facts=True)
+        res['must'] = [['compile', p, m] for lvl, p, m in rep.items if lvl == 'must']
+        res['facts'] = rep.facts
+        if must:
+            res['must'].append(['compile', 'nodes[m0].mesh.render', 'expected 1, got 0'])
+        approvals.apply(res, entries)
+        ids = {x[3] for x in res.get('approved', [])}
+        if res['status'] != status or approvals.stable_except_adjacency(res) != (status == 'pass-approved'):
+            bad.append('%s: %s %s, expected %s' % (what, res['status'], sorted(ids), status))
+        if status == 'pass-approved' and ids != {'vertex-layout', 'unstable-adjacency-only'}:
+            bad.append('%s: approved %s' % (what, sorted(ids)))
+        if approvals.apply(json.loads(json.dumps(res)), entries) != res:
+            bad.append('%s: scoring the result again changes it' % what)
+        if approvals.apply(json.loads(json.dumps(res)), None)['status'] != 'fail':  # vertex_count is left
+            bad.append('%s: without approvals the status is not fail' % what)
+    # mdlconf.adjacency_only on a compiled golden: adjacency bytes alone, or more
+    g = open(os.path.join(ROOT, 'conformance', 'goldens', 'run2', 'zspec_merge.mdl'), 'rb').read()
+    _, recs = mdlview.face_adjacency_masked(g)
+
+    def patched(*edits):
+        d = bytearray(g)
+        for off, val in edits:
+            d[off:off + 2] = struct.pack('<h', val)
+        return bytes(d)
+
+    adj0 = struct.unpack_from('<h', g, recs[0] + 20)[0]
+    adj1 = struct.unpack_from('<h', g, recs[1] + 22)[0]
+    vtx = struct.unpack_from('<h', g, recs[0] + 26)[0]
+    for what, other, want in (
+            ('the same file', g, 0),
+            ('one face adjacency', patched((recs[0] + 20, adj0 + 1)), 1),
+            ('two faces adjacency', patched((recs[0] + 20, adj0 + 1), (recs[1] + 22, adj1 - 1)), 2),
+            ('a vertex index', patched((recs[0] + 26, vtx + 1)), 0),
+            ('adjacency and a vertex index', patched((recs[0] + 20, adj0 + 1), (recs[0] + 26, vtx + 1)), 0),
+            ('the face normal', patched((recs[0] + 0, 1)), 0),
+            ('a longer file', g + b'\0' * 4, 0)):
+        got = mdlconf.adjacency_only(g, other)
+        if got != want:
+            bad.append('adjacency_only, %s: %s, expected %s' % (what, got, want))
+    if len(recs) != 10:
+        bad.append('zspec_merge: %d face records found, expected 10' % len(recs))
     # results without facts (made before they were recorded) approve nothing
     res = {'file': 'old', 'status': 'fail', 'must': [['compile', 'nodes[m0].mesh.vertex_count', 'expected 6, got 4']],
            'should': []}

@@ -44,10 +44,17 @@
    "rules": ["MDL-BIN-007"],
    "description": "A 32-character node name (older tools filled the field with no NUL) is stored as its first 31 characters, as the game's compiler does.",
    "condition": "The original's name (or parent name) is 32 characters, the compiled one is its first 31, and no other node of the original has that name once cut. Approves the node's name or parent finding, and a node tree finding when the compiled tree is the original's with those names cut and nothing else."
+  },
+  {
+   "id": "unstable-adjacency-only",
+   "check": "unstable-adjacency-only",
+   "rules": ["MDL-BIN-044", "MDL-MESH-022"],
+   "description": "Lost face-neighbour links (category 6), in the second compile: decompiling and compiling the compiled model again changes only which faces the face records name as neighbours. They are read only by the shadow volume (E68), where they change its cost, not the look (James, 2026-11-10).",
+   "condition": "On the model: every MUST finding is approved, and the second compile is byte for byte the first once the three adjacency fields (s2 at +20, +22, +24) of every face record the reader finds are set to zero in both, with the face records at the same offsets in both. Any other difference, vertex order included, leaves the model unstable. Approves the model's instability, reported as the finding `stability binary2` and counted as stable-except-adjacency."
   }
  ],
  "not_approved": [
-  {"what": "face-neighbour (shadow) links, faces.adjacent", "why": "Always a SHOULD finding in the runner, so it never makes a model fail; nothing to approve."},
-  {"what": "merged render lists, node numbers and order (nodes[].number, nodes.tree, animation node numbers), aabb planes, controller keys, node-pairing artifacts, unstable models", "why": "Not approved (James, 2026-11-09)."}
+  {"what": "face-neighbour (shadow) links, faces.adjacent, in the first compile", "why": "Always a SHOULD finding in the runner, so it never makes a model fail; nothing to approve. In the second compile, see unstable-adjacency-only."},
+  {"what": "merged render lists, node numbers and order (nodes[].number, nodes.tree, animation node numbers), aabb planes, controller keys, node-pairing artifacts, unstable models whose second compile differs in anything but face adjacency", "why": "Not approved (James, 2026-11-09; adjacency-only instability approved 2026-11-10)."}
  ]
 }
