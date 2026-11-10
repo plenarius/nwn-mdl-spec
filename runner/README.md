@@ -35,7 +35,7 @@ python3 runner/mdlconf.py run   --impl NAME --cmd COMMAND [--test compile|decomp
 python3 runner/mdlconf.py stock --impl NAME --cmd COMMAND [--root NWN_ROOT] [--json OUT] [-v]
 python3 runner/mdlconf.py expect [--second conformance/goldens/run2]
 python3 runner/mdlconf.py check-goldens DIR
-python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--max-memory GB] [--approved FILE] [--json OUT] [-v] PATH ...
+python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--max-memory GB] [--model-timeout S] [--partial FILE] [--approved FILE] [--json OUT] [-v] PATH ...
 python3 runner/mdlconf.py approve --results ROUNDTRIP.json --approved FILE [--json OUT] [-v]
 python3 runner/mdlconf.py view FILE
 ```
@@ -67,6 +67,12 @@ python3 runner/mdlconf.py view FILE
   GB (default 4; the implementation it runs is not limited): a model that
   needs more is an `error`, not a crash. If a worker dies anyway, only its
   batch is lost, reported as errors. Progress goes to stderr.
+  `--model-timeout S` makes a model that takes longer than S seconds (all
+  four calls and the comparison) an `error`; a batch in which no model
+  finishes for that long plus 300 s (780 s without the option) is stopped
+  and its unfinished models reported as errors. `--partial FILE` appends
+  each result to FILE as a JSON line as it finishes; a run given the same
+  file skips the models already in it, so a stopped run resumes.
   The JSON keeps, per result, whether the second compile was byte-identical
   (`stable`, checked whatever the findings) and `facts`: for each mesh with
   a MUST finding in the compile, how its drawn triangles pair with the

@@ -41,6 +41,7 @@ import os
 import re
 import shlex
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -1026,17 +1027,37 @@ def find_binaries(paths):
     return sorted(set(out)), ascii_count
 
 
+class ModelTimeout(Exception):
+    pass
+
+
+def _on_alarm(signum, frame):
+    raise ModelTimeout()
+
+
 def roundtrip_one(job):
-    """Round-trip one binary model: decompile, compile, and once more."""
+    """Round-trip one binary model: decompile, compile, and once more. With a
+    time limit (job[3], seconds), a model that takes longer is an error."""
+    limit = job[3] if len(job) > 3 else 0
+    alarm = limit and hasattr(signal, 'SIGALRM')
+    if alarm:
+        signal.signal(signal.SIGALRM, _on_alarm)
+        signal.alarm(int(limit))
     try:
         return _roundtrip_one(job)
     except MemoryError:
         return {'file': job[1], 'must': [], 'should': [], 'status': 'error',
                 'reason': 'the runner ran out of memory reading or comparing this model (--max-memory)'}
+    except ModelTimeout:
+        return {'file': job[1], 'must': [], 'should': [], 'status': 'error',
+                'reason': 'timeout: the model took longer than %d s (--model-timeout)' % limit}
+    finally:
+        if alarm:
+            signal.alarm(0)
 
 
 def _roundtrip_one(job):
-    cmd, path, resource_dirs = job
+    cmd, path, resource_dirs = job[:3]
     res = {'file': path, 'must': [], 'should': []}
     name = os.path.basename(path)
     env = dict(os.environ)
@@ -1103,7 +1124,7 @@ ROUNDTRIP_BATCH = 256
 
 
 def cmd_roundtrip(a):
-    from concurrent.futures import ProcessPoolExecutor
+    from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
     from concurrent.futures.process import BrokenProcessPool
     approved = approvals.load(a.approved) if a.approved else None  # a bad file fails before the run
     files, ascii_count = find_binaries(a.paths)
@@ -1111,20 +1132,68 @@ def cmd_roundtrip(a):
         print('no binary models under %s (%d ASCII passed over)' % (', '.join(a.paths), ascii_count))
         return 1
     rdirs = [os.path.abspath(d) for d in (a.resource_dir or [])]
-    jobs = [(a.cmd, f, rdirs) for f in files]
+    # --partial: each result is appended as a JSON line as it finishes, and
+    # models already there are not run again, so a stopped run resumes.
+    done = {}
+    if a.partial and os.path.exists(a.partial):
+        with open(a.partial) as f:
+            for line in f:
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue  # a line cut short when the run was stopped
+                done[r['file']] = r
+    partial = open(a.partial, 'a') if a.partial else None
+    jobs = [(a.cmd, f, rdirs, a.model_timeout) for f in files if f not in done]
+    if done:
+        print('roundtrip: %d of %d models already in %s' % (len(files) - len(jobs), len(files), a.partial),
+              file=sys.stderr, flush=True)
+    stall = (a.model_timeout or 4 * 120) + 300
+
+    def keep(r):
+        done[r['file']] = r
+        if partial:
+            partial.write(json.dumps(r) + '\n')
+            partial.flush()
+
     # In batches, each with its own pool: a worker that dies (killed from
     # outside, or crashing) costs its batch, reported as errors, not the run.
-    results = []
+    # A pool where no model finishes for longer than a model may take (each
+    # call of the implementation is limited to 120 s) is stopped the same way.
     for i in range(0, len(jobs), ROUNDTRIP_BATCH):
         batch = jobs[i:i + ROUNDTRIP_BATCH]
-        try:
-            with ProcessPoolExecutor(max_workers=a.workers or None, initializer=_cap_memory,
-                                     initargs=(a.max_memory,)) as ex:
-                results += list(ex.map(roundtrip_one, batch, chunksize=4))
-        except BrokenProcessPool:
-            results += [{'file': j[1], 'must': [], 'should': [], 'status': 'error',
-                         'reason': 'a worker process died in this batch of %d models' % len(batch)} for j in batch]
-        print('roundtrip: %d of %d models done' % (len(results), len(jobs)), file=sys.stderr, flush=True)
+        ex = ProcessPoolExecutor(max_workers=a.workers or None, initializer=_cap_memory, initargs=(a.max_memory,))
+        futs = {ex.submit(roundtrip_one, j): j for j in batch}
+        why = None
+        pending = set(futs)
+        while pending:
+            finished, pending = wait(pending, timeout=stall, return_when=FIRST_COMPLETED)
+            if not finished:
+                why = 'no model finished for %d s in this batch of %d models (stalled worker)' % (stall, len(batch))
+                break
+            for fut in finished:
+                try:
+                    keep(fut.result())
+                except BrokenProcessPool:
+                    why = 'a worker process died in this batch of %d models' % len(batch)
+                except Exception as e:  # noqa: BLE001
+                    keep({'file': futs[fut][1], 'must': [], 'should': [], 'status': 'error',
+                          'reason': 'the runner failed on this model: %r' % e})
+            if why:
+                break
+        if why:
+            for p in list(getattr(ex, '_processes', {}).values()):
+                p.kill()
+            for fut in pending:
+                fut.cancel()
+            for fut in futs:
+                if futs[fut][1] not in done:
+                    keep({'file': futs[fut][1], 'must': [], 'should': [], 'status': 'error', 'reason': why})
+        ex.shutdown(wait=not why)
+        print('roundtrip: %d of %d models done' % (len(done), len(files)), file=sys.stderr, flush=True)
+    if partial:
+        partial.close()
+    results = [done[f] for f in files]
 
     if approved is not None:
         for r in results:
@@ -1262,6 +1331,11 @@ def main():
     rt.add_argument('--workers', type=int, default=0, help='parallel models (default: one per CPU)')
     rt.add_argument('--max-memory', type=float, default=4, help='memory each worker may use, in GB (default 4; the implementation run is not limited)')
     rt.add_argument('--json')
+    rt.add_argument('--partial', help='append each result here as a JSON line as it finishes; models already in it '
+                                      'are not run again (resume a stopped run)')
+    rt.add_argument('--model-timeout', type=int, default=0,
+                    help='seconds one model may take, all four calls and the comparison; past it the model is an '
+                         'error (default: no limit beyond 120 s per call)')
     rt.add_argument('--max', type=int, default=6)
     rt.add_argument('-v', '--verbose', action='store_true')
     rt.add_argument('--approved', help='an approvals file (runner/approvals/): findings it covers are reported apart, '
