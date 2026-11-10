@@ -1100,6 +1100,7 @@ def _roundtrip_one(job):
         res['stable'] = data['binary2'] == data['binary']
         if not res['stable']:
             res['unstable_fields'] = unstable_fields(acts[1][1], data['binary2'])
+            res['unstable_adjacency_only'] = adjacency_only(data['binary'], data['binary2'])
         if res['must']:
             res['status'] = 'fail'
         elif not res['stable']:
@@ -1110,6 +1111,23 @@ def _roundtrip_one(job):
         return res
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def adjacency_only(first, second):
+    """How many face records differ between two compiles that are byte
+    for byte the same apart from the faces' adjacency fields (MDL-BIN-044,
+    MDL-MESH-022), in face records found at the same offsets in both; 0 when
+    anything else differs (or the files are the same, or cannot be read)."""
+    if first == second or len(first) != len(second):
+        return 0
+    try:
+        x, xo = mdlview.face_adjacency_masked(first)
+        y, yo = mdlview.face_adjacency_masked(second)
+    except Exception:  # noqa: BLE001 - unreadable: not shown to differ only there
+        return 0
+    if xo != yo or x != y:
+        return 0
+    return sum(1 for o in xo if first[o + 20:o + 26] != second[o + 20:o + 26])
 
 
 def unstable_fields(first, second_data):
@@ -1271,7 +1289,11 @@ def roundtrip_report(a, impl, results, nfiles, ascii_count, approved=None):
                 print('        %6d  %s' % (x['count'], x['cause']))
         doc_approvals = {'file': approved['file'], 'name': approved['name'], 'sha256': approved['sha256'],
                          'counts': per, 'causes': acauses}
+        doc_approvals['stable_except_adjacency'] = sum(1 for r in results if approvals.stable_except_adjacency(r))
     print('# totals: ' + ', '.join('%s %d' % (s, n) for s, n in sorted(counts.items())))
+    if doc_approvals is not None:
+        print('# stable-except-adjacency %d (of the pass-approved: the second compile differs in face '
+              'adjacency alone)' % doc_approvals['stable_except_adjacency'])
     if a.json:
         doc = {'impl': impl, 'build': BUILD, 'ascii_passed_over': ascii_count,
                'totals': counts, 'causes': ordered, 'results': results}
