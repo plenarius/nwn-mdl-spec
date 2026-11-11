@@ -403,6 +403,73 @@ def anim_mismatches(view, geo):
 
 # ------------------------------------------------------------ the facts
 
+def node_paths(nodes):
+    """Each node's path from the root: a tuple of (name, k), names
+    lower-cased and cut to 31 characters as the game's compiler stores them
+    (MDL-BIN-007), k the node's occurrence among its parent's children of
+    that name. A node's parent is the latest node of its parent name before
+    it (in stored depth-first order, or in declaration order, a parent comes
+    before its children). A node whose parent is not found is placed under
+    ('?', 1)."""
+    latest, count, out = {}, {}, []
+    for i, n in enumerate(nodes):
+        nm = n['name'].lower()[:31]
+        par = n.get('parent')
+        par = par.lower()[:31] if par and par.upper() != 'NULL' else None
+        if par is None:
+            base = ()
+        else:
+            pi = latest.get(par)
+            base = out[pi] if pi is not None else (('?', 1),)
+        k = count[(base, nm)] = count.get((base, nm), 0) + 1
+        out.append(base + ((nm, k),))
+        latest[nm] = i
+    return out
+
+
+def _signature(n):
+    """What tells apart siblings of one name: node type, the first keys of
+    position and orientation, and a mesh's vertex count and first vertex."""
+    def first(name):
+        for c in n.get('controllers', []):
+            if c.get('name') == name and c.get('keys'):
+                return tuple(round(float(x), 4) if isinstance(x, (int, float)) else x
+                             for x in (c['keys'][0].get('v') or []))
+        return None
+    m = n.get('mesh') or {}
+    pos = (m.get('vertices') or {}).get('position') or []
+    v0 = tuple(round(float(x), 4) if isinstance(x, (int, float)) else x for x in pos[0]) if pos else None
+    return (n.get('flags'), first('position'), first('orientation'), m.get('vertex_count'), v0)
+
+
+def pair_nodes(exp_nodes, act_nodes):
+    """For each node of `exp_nodes`, the index of its node in `act_nodes`
+    (None when there is none): paired by path (node_paths); siblings that
+    share a name pair first with one alike in node_signature (the
+    transparency sort can swap them), then in order."""
+    ep, ap = node_paths(exp_nodes), node_paths(act_nodes)
+    egroups, agroups = {}, {}
+    for i, pt in enumerate(ep):
+        egroups.setdefault((pt[:-1], pt[-1][0]), []).append(i)
+    for j, pt in enumerate(ap):
+        agroups.setdefault((pt[:-1], pt[-1][0]), []).append(j)
+    out = [None] * len(exp_nodes)
+    for key, es in egroups.items():
+        as_ = list(agroups.get(key, []))
+        if len(es) > 1 or len(as_) > 1:
+            for i in es:
+                sig = _signature(exp_nodes[i])
+                for j in as_:
+                    if _signature(act_nodes[j]) == sig:
+                        out[i] = j
+                        as_.remove(j)
+                        break
+        for i in es:
+            if out[i] is None and as_:
+                out[i] = as_.pop(0)
+    return out
+
+
 def unique_labels(trees):
     """Labels that tell apart nodes sharing a name, the same in every tree:
     `trees` is a list of [(name, parent)] lists (names lower-case, cut to 31
@@ -450,6 +517,19 @@ def model_facts(exp, act, ascii_text, sup):
     trees = [pairs(exp['nodes']), pairs(act['nodes']), [(n, p or None) for n, p, _ in decl]]
     labels = unique_labels(trees)
     dups = len({n for t in trees for n, _ in t if [m for m, _ in t].count(n) > 1})
+    if labels is not None and dups:
+        # a shared name: the compile's nodes take their original's label
+        # (pair_nodes), and, without a supermodel, the ASCII's declarations
+        # the label of the compiled node their index numbers (MDL-NODE-010)
+        pairing = pair_nodes(exp['nodes'], act['nodes'])
+        alab = list(labels[1])
+        for i, j in enumerate(pairing):
+            if j is not None:
+                alab[j] = labels[0][i]
+        labels[1] = alab
+        bynum = {n.get('number'): lab for n, lab in zip(act['nodes'], alab)}
+        if not sname and sorted(bynum) == list(range(len(decl))) and len(bynum) == len(act['nodes']):
+            labels[2] = [bynum[i] for i in range(len(decl))]
     if labels is not None and dups and sname:
         labels = None  # supermodel paths go by name
     f = {'unique': labels is not None,

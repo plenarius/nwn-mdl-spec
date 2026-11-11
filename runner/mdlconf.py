@@ -1208,28 +1208,7 @@ def cut_names(names):
     return cut, shared
 
 
-def node_paths(nodes):
-    """Each node's path from the root, for pairing nodes: a tuple of (name,
-    k), names lower-cased and cut to 31 characters as the game's compiler
-    stores them (MDL-BIN-007), k the node's occurrence among its parent's
-    children of that name. A node's parent is the latest node of its parent
-    name before it (in stored depth-first order, or in declaration order,
-    a parent comes before its children). A node whose parent is not found
-    is placed under ('?', 1)."""
-    latest, count, out = {}, {}, []
-    for i, n in enumerate(nodes):
-        nm = n['name'].lower()[:31]
-        par = n.get('parent')
-        par = par.lower()[:31] if par and par.upper() != 'NULL' else None
-        if par is None:
-            base = ()
-        else:
-            pi = latest.get(par)
-            base = out[pi] if pi is not None else (('?', 1),)
-        k = count[(base, nm)] = count.get((base, nm), 0) + 1
-        out.append(base + ((nm, k),))
-        latest[nm] = i
-    return out
+node_paths = nodefacts.node_paths
 
 
 def node_labels(exp_nodes, act_nodes):
@@ -1243,8 +1222,10 @@ def node_labels(exp_nodes, act_nodes):
         k = n['name'].lower()
         seen[k] = seen.get(k, 0) + 1
         elab.append(k if seen[k] == 1 else '%s#%d' % (k, seen[k]))
-    bypath = dict(zip(node_paths(exp_nodes), elab))
-    alab = [bypath.get(pt, n['name'].lower() + '?') for pt, n in zip(node_paths(act_nodes), act_nodes)]
+    alab = [n['name'].lower() + '?' for n in act_nodes]
+    for i, j in enumerate(nodefacts.pair_nodes(exp_nodes, act_nodes)):
+        if j is not None:
+            alab[j] = elab[i]
     return elab, alab
 
 
@@ -1268,16 +1249,17 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             r.facts[profile + ' ' + base + '.tree'] = {
                 'names_cut_only': True, 'cut': sorted(long_names),
                 'unique': not any(c[:31] in eshared for c in long_names)}
-    # Pair by path from the root (node_paths): a name used twice (zspec_super)
-    # pairs by its place in the tree, and a 32-character name with the one
-    # the compile cut to 31 (MDL-BIN-007). Paths are named by the original's
-    # names and their occurrence in the whole list (`#2`).
-    amap = {pt: a for pt, a in zip(node_paths(act_nodes), act_nodes)}
+    # Pair by path from the root (nodefacts.pair_nodes): a name used twice
+    # (zspec_super) pairs by its place in the tree, siblings of one name by
+    # what they hold, and a 32-character name with the one the compile cut to
+    # 31 (MDL-BIN-007). Findings name a node by the original's name and its
+    # occurrence in the whole list (`#2`).
+    pairing = nodefacts.pair_nodes(exp_nodes, act_nodes)
     seen = {}
-    for i, (e, ept) in enumerate(zip(exp_nodes, node_paths(exp_nodes))):
+    for i, e in enumerate(exp_nodes):
         k = seen[node_key(e)] = seen.get(node_key(e), 0) + 1
         p = '%s[%s]' % (base, e['name']) if k == 1 else '%s[%s#%d]' % (base, e['name'], k)
-        a = amap.get(ept)
+        a = act_nodes[pairing[i]] if pairing[i] is not None else None
         if a is not None and e['name'].lower() != a['name'].lower():
             # A 32-character name the compile cut to 31 (MDL-BIN-007); the
             # facts say whether no other node of the original has the name.

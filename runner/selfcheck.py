@@ -854,6 +854,12 @@ def check_round3():
     rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
     if [p for lvl, p, _ in rep.items if lvl == 'must' and not p.endswith('.tree')]:
         bad.append('nodes sharing a name: paired wrongly: %s' % [p for _, p, _ in rep.items])
+    # siblings of one name that the sort swapped: paired by what they hold
+    e = model([node('r', None), node('x', 'r', [pos([1, 0, 0])]), node('x', 'r', [pos([2, 0, 0])])])
+    a = model([node('r', None), node('x', 'r', [pos([2, 0, 0])]), node('x', 'r', [pos([1, 0, 0])])])
+    rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
+    if [p for lvl, p, _ in rep.items if lvl == 'must' and not p.endswith('.tree')]:
+        bad.append('swapped siblings of one name: paired wrongly: %s' % [p for _, p, _ in rep.items])
     # two animations of one name, paired in order
     def anim(t):
         return {'name': '2hreadyr', 'length': 1, 'transtime': t, 'animroot': 'r', 'events': [], 'node_count': 1,
