@@ -44,11 +44,24 @@ def f32(x):
         return math.copysign(math.inf, x)
 
 
+_NUM = {}  # num() by value: models repeat their floats (0.0 and -0.0 both give 0)
+
+
 def num(x):
     """A float32 as the shortest decimal that reads back to the same float32
     (so the JSON stays readable); NaN and infinities as strings."""
     if isinstance(x, int):
         return x
+    r = _NUM.get(x)
+    if r is not None:
+        return r
+    r = _num(x)
+    if len(_NUM) < 1 << 20 and not math.isnan(x):
+        _NUM[x] = r
+    return r
+
+
+def _num(x):
     if math.isnan(x):
         return 'nan'
     if math.isinf(x):
