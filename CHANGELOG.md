@@ -197,6 +197,32 @@ Corrections after the first draft:
   1,122 pass-approved, 27 unstable, 28 fail; the 985 other models these
   items touch (cleanmodels 3003980): 852 pass-approved, 53 pass, 45
   unstable, 35 fail.
+- Runner, round 4 (James 2026-11-11, the last 49 models of Phase 2 run 7).
+  Checker fixes in the node-number facts: a label of a name used twice
+  (`name#parent#k`) is no longer cut to 31 characters, which made two nodes
+  of a 31-character name one (pfh0_head077, pmh0_head050, pmh0_head094); a
+  model with a supermodel keeps its labels and walks the supermodel's paths
+  by name (c_kenku_b, packox: packox's original numbers follow an older
+  c_a_ox, so in game its tail plays the neck's track; the compile numbers
+  against the shipped one); an animation node of a name its geometry uses
+  twice under one parent is checked against the first stored one, as both
+  the originals and the compiles bind it (MDL-NODE-040's walk by name; 12
+  tiles); and a name used twice that is a parent (a child dummy named like
+  the root, eld02_p18_01 and tvd01_p18_01) is labelled, a child's parent
+  being the latest node of that name before it, in a model with no
+  supermodel and no animations only (fact `duplicate_parents`), so that
+  `renumbered` covers it. Widened: `name-cut-31` counts a cut name as shared
+  only when two different names become it (pfh0_head073, pmh0_head216);
+  `dead-face-vertices` accepts a mesh whose every face the original draws
+  with zero area, which the second compile leaves with no vertices and the
+  compiler's empty box, the model's box unchanged (ttd01_g01_02,
+  pmh0_head088). On run 7's 49
+  fail and unstable models (nwn-haks 8689391302, the parent of run 7's
+  1276aa8d82, which changes none of them): with cleanmodels 917bc87, 22
+  fail, 6 unstable, 21 pass-approved (was 41 fail, 8 unstable); with the
+  cleanmodels prototype of the same analysis, 2 fail (the two doors), 47
+  pass-approved. 200 models that passed in run 7 (those these items touch
+  and a random sample) are unchanged.
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when

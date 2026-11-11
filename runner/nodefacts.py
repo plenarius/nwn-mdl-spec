@@ -17,6 +17,19 @@ ROOT = ('<root>',)
 TIE = 1e-4  # centre deltas this close count as a tie (MDL-MESH-052)
 
 
+def _cut(s):
+    """A name cut to 31 characters (MDL-BIN-007); a label of unique_labels
+    (name#parent#k) is kept whole, or two labels of a 31-character name
+    would become one."""
+    return s if '#' in s else s[:31]
+
+
+def _bare(path):
+    """A path of labels as names (a unique_labels label is name#parent#k):
+    supermodel paths, and the MDL-NODE-040 walk, go by name."""
+    return tuple(x.split('#', 1)[0] for x in path)
+
+
 def signed32(h):
     h = int(h or 0)
     return h - (1 << 32) if h >= 1 << 31 else h
@@ -195,12 +208,12 @@ class Geo:
     (model_facts gives such nodes labels first, unique_labels)."""
 
     def __init__(self, nodes):
-        self.names = [n['name'].lower()[:31] for n in nodes]
+        self.names = [_cut(n['name'].lower()) for n in nodes]
         self.unique = len(set(self.names)) == len(self.names)
         self.parent, self.kids, self.num, self.key = {}, {}, {}, {}
         for n in nodes:
-            nm = n['name'].lower()[:31]
-            p = n['parent'].lower()[:31] if n.get('parent') else None
+            nm = _cut(n['name'].lower())
+            p = _cut(n['parent'].lower()) if n.get('parent') else None
             mesh = bool(n.get('flags', 0) & F_MESH)
             self.parent.setdefault(nm, p)
             self.num.setdefault(nm, n.get('number'))
@@ -326,9 +339,9 @@ def ref_numbers(decl, sup):
             num[n] = sup.bypath.get(ROOT, -1)
         elif p is not False and p in matched:
             path = matched[p] + (n,)
-            if path in sup.bypath:
+            if _bare(path) in sup.bypath:
                 matched[n] = path
-                num[n] = sup.bypath[path]
+                num[n] = sup.bypath[_bare(path)]
             else:
                 num[n] = -1
         else:
@@ -354,8 +367,8 @@ def reachable(geo, sup):
     fixed, idx = {}, {}
     for n in geo.names:
         path = geo.path.get(n)
-        if sup is not None and path is not None and (path in sup.bypath or path[:-1] in sup.bypath):
-            fixed[n] = sup.bypath.get(path, -1)
+        if sup is not None and path is not None and (_bare(path) in sup.bypath or _bare(path[:-1]) in sup.bypath):
+            fixed[n] = sup.bypath.get(_bare(path), -1)
         else:
             idx[n] = (geo.num[n] if isinstance(geo.num[n], int) else -1) - offset
     if any(geo.num[n] != v for n, v in fixed.items()):
@@ -377,22 +390,29 @@ def reachable(geo, sup):
 def anim_mismatches(view, geo):
     """How many animation nodes are not numbered as MDL-NODE-040 gives
     against this view's own geometry (a node the geometry lacks under a
-    parent it lacks takes its position in the animation's stored list)."""
+    parent it lacks takes its position in the animation's stored list). The
+    walk matches names: where geometry siblings share a name, every
+    animation node of that path takes the first stored one's number, as the
+    game's compiler gives it (labels are compared by their names, _bare)."""
     bad = 0
+    first = {}
+    for n in geo.names:
+        if n in geo.path:
+            first.setdefault(_bare(geo.path[n]), n)
     for a in view.get('animations', []):
         latest = {}
         for i, n in enumerate(a['nodes']):
-            nm = n['name'].lower()[:31]
+            nm = _cut(n['name'].lower())
             if i == 0:
                 path = ROOT
             else:
-                pp = latest.get((n.get('parent') or '').lower()[:31])
+                pp = latest.get(_cut((n.get('parent') or '').lower()))
                 path = pp + (nm,) if pp is not None else None
             if path is not None:
                 latest[nm] = path
-            if path is not None and path in geo.bypath:
-                want = geo.num[geo.bypath[path]]
-            elif path is not None and path[:-1] in geo.bypath:
+            if path is not None and _bare(path) in first:
+                want = geo.num[first[_bare(path)]]
+            elif path is not None and _bare(path[:-1]) in first:
                 want = -1
             else:
                 want = i
@@ -496,34 +516,56 @@ def pair_nodes(exp_nodes, act_nodes):
     return out
 
 
-def unique_labels(trees):
+def unique_labels(trees, parents=False):
     """Labels that tell apart nodes sharing a name, the same in every tree:
     `trees` is a list of [(name, parent)] lists (names lower-case, cut to 31
     characters). A name used once in each tree keeps it; a name used more
     often is labelled name#parent#k, k its occurrence among its parent's
-    children of that name in the list's order. None when a shared name is a
-    parent in any tree (which of them a child names is then a guess)."""
+    children of that name in the list's order, the parent by its own label.
+    None when a shared name is a parent in any tree (which of them a child
+    names is then a guess), unless `parents`: then a node's parent is the
+    latest node of that name before it in the list (parent_labels; in
+    stored depth-first order, or in an ASCII's declarations, a parent comes
+    before its children), and None only when a shared name a node names as
+    its parent is not before it."""
     dup = set()
     for t in trees:
         names = [n for n, _ in t]
         dup |= {n for n in names if names.count(n) > 1}
-    if any(p in dup for t in trees for _, p in t):
+    if not parents and any(p in dup for t in trees for _, p in t):
         return None
     out = []
     for t in trees:
-        count, labels = {}, []
+        count, labels, latest = {}, [], {}
         for n, p in t:
+            if p in dup and p not in latest:
+                return None
+            pl = latest.get(p, p)
             if n in dup:
-                k = count[(n, p)] = count.get((n, p), 0) + 1
-                labels.append('%s#%s#%d' % (n, p, k))
+                k = count[(n, pl)] = count.get((n, pl), 0) + 1
+                labels.append('%s#%s#%d' % (n, '' if pl is None else pl, k))
             else:
                 labels.append(n)
+            latest[n] = labels[-1]
         out.append(labels)
     return out
 
 
-def _relabelled(nodes, labels):
-    return [dict(n, name=lab) for n, lab in zip(nodes, labels)]
+def parent_labels(tree, labels):
+    """Each node's parent by its label (unique_labels): the label of the
+    latest node of the parent's name before it in `tree`, [(name, parent)];
+    the parent's name when there is none (None for no parent)."""
+    latest, out = {}, []
+    for (n, p), lab in zip(tree, labels):
+        out.append(latest.get(p, p) if p is not None else None)
+        latest[n] = lab
+    return out
+
+
+def _relabelled(nodes, labels, parents=None):
+    if parents is None:
+        return [dict(n, name=lab) for n, lab in zip(nodes, labels)]
+    return [dict(n, name=lab, parent=par) for n, lab, par in zip(nodes, labels, parents)]
 
 
 def model_facts(exp, act, ascii_text, sup):
@@ -532,17 +574,23 @@ def model_facts(exp, act, ascii_text, sup):
     was compiled from, `sup` the supermodel the compile used (a Super; None
     when there is none or it was not found). Names are cut to 31 characters
     (MDL-BIN-007). Nodes that share a name are told apart by unique_labels
-    (`duplicates`: how many names are shared); when a shared name is a
-    parent, or the model has a supermodel, `unique` is False and nothing
-    else is computed."""
+    (`duplicates`: how many names are shared), with a supermodel too (its
+    paths are walked by name). A shared name that is a parent is labelled
+    only in a model with no supermodel and no animations, where a part
+    number binds nothing (`duplicate_parents`: True; a node's parent is the
+    latest node of that name before it); otherwise `unique` is False and
+    nothing else is computed."""
     def pairs(nodes):
         return [(n['name'].lower()[:31], n['parent'].lower()[:31] if n.get('parent') else None) for n in nodes]
     decl = ascii_declarations(ascii_text)
     sname = (exp['model'].get('supermodel') or '').lower()
     sname = '' if sname == 'null' else sname
     trees = [pairs(exp['nodes']), pairs(act['nodes']), [(n, p or None) for n, p, _ in decl]]
-    labels = unique_labels(trees)
+    animated = bool(exp.get('animations') or act.get('animations'))
+    labels = unique_labels(trees, parents=not sname and not animated)
     dups = len({n for t in trees for n, _ in t if [m for m, _ in t].count(n) > 1})
+    dup_parents = labels is not None and dups and any(
+        [m for m, _ in t].count(p) > 1 for t in trees for _, p in t if p)
     if labels is not None and dups:
         # a shared name: the compile's nodes take their original's label
         # (pair_nodes), and, without a supermodel, the ASCII's declarations
@@ -556,14 +604,14 @@ def model_facts(exp, act, ascii_text, sup):
         bynum = {n.get('number'): lab for n, lab in zip(act['nodes'], alab)}
         if not sname and sorted(bynum) == list(range(len(decl))) and len(bynum) == len(act['nodes']):
             labels[2] = [bynum[i] for i in range(len(decl))]
-    if labels is not None and dups and sname:
-        labels = None  # supermodel paths go by name
     f = {'unique': labels is not None,
          'supermodel': sname,
          'node_count': [exp['model'].get('node_count'), act['model'].get('node_count'),
                         len(exp['nodes']), len(act['nodes'])]}
     if dups:
         f['duplicates'] = dups
+    if dup_parents:
+        f['duplicate_parents'] = True
     anims = {}
     am = {x['name'].lower(): x for x in act.get('animations', [])}
     for ea in exp.get('animations', []):
@@ -581,8 +629,10 @@ def model_facts(exp, act, ascii_text, sup):
         sup = None
     if labels is None:
         return f
-    o, c = Geo(_relabelled(exp['nodes'], labels[0])), Geo(_relabelled(act['nodes'], labels[1]))
-    decl = [(lab, p if p is not False else False, k) for lab, (_, p, k) in zip(labels[2], decl)]
+    o = Geo(_relabelled(exp['nodes'], labels[0], parent_labels(trees[0], labels[0])))
+    c = Geo(_relabelled(act['nodes'], labels[1], parent_labels(trees[1], labels[1])))
+    decl = [(lab, pl if p is not False else False, k)
+            for lab, pl, (_, p, k) in zip(labels[2], parent_labels(trees[2], labels[2]), decl)]
 
     def anim_view(view):
         # animation nodes labelled as their geometry nodes are

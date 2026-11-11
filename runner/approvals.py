@@ -42,8 +42,9 @@ Then each finding gets the check that explains it:
 - `water-texanim-169`: the vertex_count of a mesh whose original holds a
   1.69 water bump-map stream in the texture animation slots (MDL-BIN-048);
 - `name-cut-31`: a node's name or parent cut from 32 to 31 characters
-  (MDL-BIN-007) when no other node of the original has the cut name, and a
-  tree finding whose only difference is such names.
+  (MDL-BIN-007) when no node of the original with another name has the cut
+  name (a name it already used twice is no new collision, cut_names), and
+  a tree finding whose only difference is such names.
 
 Per node, from the facts the comparison records:
 
@@ -60,8 +61,12 @@ Per model, from the facts of runner/nodefacts.py (recorded as `compile
 model.nodes` when the compile has a node number, tree or count finding).
 Names are cut to 31 characters (MDL-BIN-007), and nodes that share a name
 are told apart by their parent and their order among its children of that
-name (nodefacts.unique_labels), unless a shared name is a parent or the
-model has a supermodel ("unique names" below means that):
+name (nodefacts.unique_labels; with a supermodel, its paths are walked by
+name). A shared name that is a parent is told apart only in a model with no
+supermodel and no animations, where a part number binds nothing: a child's
+parent is the latest node of that name before it (fact
+`duplicate_parents`); elsewhere such a model has no "unique names", which
+below means names told apart this way:
 
 - `renumbered`: node and animation node numbers (`nodes[X].number`,
   `animations[A].nodes[X].number`) when, with unique node names, the same
@@ -69,8 +74,9 @@ model has a supermodel ("unique names" below means that):
   compile's numbers are what MDL-NODE-010/020 give the ASCII's declaration
   order; no declaration order gives the original's numbers and stored tree
   together (nodefacts.reachable); every animation node is numbered by
-  MDL-NODE-040 against its own model's geometry in both; and no tree, name,
-  parent or missing-node finding is left unapproved;
+  MDL-NODE-040 against its own model's geometry in both (by name: of
+  geometry siblings sharing a name, the first stored one's number); and no
+  tree, name, parent or missing-node finding is left unapproved;
 - `supermodel-count`: model.node_count when the compile's count is the
   supermodel's header count + the model's nodes + 1 (MDL-NODE-030) with the
   supermodel found, the node count is the same in both, and the original's
@@ -135,7 +141,9 @@ results made before it have only `unstable_adjacency_only`):
   second compile does not have, and vertices at such corners that the second
   compile puts where the kept faces first use them (the first compile kept
   them where the dropped face used them first); every other vertex keeps its
-  order, the meshes' box, average and radius following from their vertices.
+  order, the meshes' box, average and radius following from their vertices
+  (a mesh whose every face had zero area has no vertices in the second
+  compile and the compiler's empty box; the model's box stays exact).
   Meshes are found in the original by their names cut to 31 characters.
 
 Byte-level kinds (the first three) need the two files to be the same length
