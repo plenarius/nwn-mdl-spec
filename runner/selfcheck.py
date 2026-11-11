@@ -583,7 +583,8 @@ def check_stability():
 def _rl_model(meshes, anims=()):
     """A model of trimesh nodes under a root: meshes are (name, mesh, ctrls),
     mesh {'pos', 'faces', 'list' (None: no index list), and optional 'uv'
-    (default: x and y), 'normal', 'render', 'shadow', 'specular'}; ctrls {name: value} as first keys; anims
+    (default: x and y), 'normal', 'tangent', 'handedness', 'render', 'shadow',
+    'specular'}; ctrls {name: value} as first keys; anims
     [(node, controller, [values])] as one animation."""
     def ctrl(name, values):
         cid, cols = {'position': (8, 3), 'orientation': (20, 4), 'scale': (36, 1)}[name]
@@ -601,6 +602,9 @@ def _rl_model(meshes, anims=()):
                     index_lists=[[c for t in lst for c in t]] if lst is not None else [],
                     vertices={'position': m['pos'], 'uv0': m.get('uv', [[p[0], p[1]] for p in m['pos']]),
                               'normal': m.get('normal', [[0, 0, 1]] * len(m['pos']))})
+        for k in ('tangent', 'handedness'):
+            if k in m:
+                mesh['vertices'][k] = m[k]
         nodes.append({'name': name, 'parent': 'root', 'type': 'trimesh', 'flags': 0x21, 'number': i + 1,
                       'inheritcolor': 0, 'controllers': [ctrl(k, [v]) for k, v in sorted(ctrls.items())],
                       'mesh': mesh})
@@ -640,6 +644,7 @@ def check_render_lists():
 
     orig = model(rec, don)
     N1, N2 = [[0, 0, 1]] * 4, [[0, 0.6, 0.8]] * 4
+    TX, TY = [[1, 0, 0]] * 4, [[0, 1, 0]] * 4
     # copies of d (normal N1) and of e (N2), at the same place, the e copy first
     two = dict(rec, pos=P + copies * 2, uv=[p[:2] for p in P] * 3, normal=[[0, 0, 1]] * 4 + N2 + N1,
                list=F + [[4, 5, 6], [4, 6, 7], [8, 9, 10], [8, 10, 11]])
@@ -670,7 +675,24 @@ def check_render_lists():
         ('coincident donors, one normal changed',
          model(two, dict(don, normal=N1), extra=[('e', dict(don, normal=N2), at2)]),
          model(own, dict(back, normal=N1), extra=[('e', dict(back, normal=N1), at2)]), 'fail', set()),
+        # the donor's own normals and tangents were never drawn: put back with
+        # the copies' ones, which the game drew
+        ('a donor given the copies\' normals and tangents',
+         model(dict(rec, tangent=TX * 2, handedness=[1] * 8),
+               dict(don, normal=[[0, 0, 0]] * 4, tangent=TY, handedness=[-1] * 4)),
+         model(dict(own, tangent=TX, handedness=[1] * 4), dict(back, tangent=TX, handedness=[1] * 4)),
+         'pass-approved', {'merged-render-lists'}),
+        ('a donor given a normal the game never drew', model(rec, dict(don, normal=[[0, 0, 0]] * 4)),
+         model(own, dict(back, normal=N2)), 'fail', set()),
+        ('a donor given a tangent the game never drew',
+         model(dict(rec, tangent=TX * 2, handedness=[1] * 8), dict(don, tangent=TY, handedness=[1] * 4)),
+         model(dict(own, tangent=TX, handedness=[1] * 4), dict(back, tangent=TY, handedness=[1] * 4)),
+         'fail', set()),
     ]
+    # findings beyond the base ones the passing cases approve
+    corner_kinds = {'a donor given the copies\' normals and tangents':
+                    [('compile', 'handedness'), ('compile', 'normal'), ('compile', 'tangent'),
+                     ('decompile', 'normal')]}
     for what, e, a, status, ids in cases:
         exp = mdlconf.normalise(e)
         exp['volatile'] = []
@@ -691,8 +713,8 @@ def check_render_lists():
                                                                sorted(ids), res['must'][:3]))
         if status == 'pass-approved' and res['status'] == status:
             kinds = sorted({(t, p.rsplit('.', 1)[1]) for t, p, m, _ in res['approved']})
-            if kinds != [('compile', 'render'), ('compile', 'triangles'), ('compile', 'vertex_count'),
-                         ('decompile', 'render'), ('decompile', 'triangles')]:
+            if kinds != sorted([('compile', 'render'), ('compile', 'triangles'), ('compile', 'vertex_count'),
+                                ('decompile', 'render'), ('decompile', 'triangles')] + corner_kinds.get(what, [])):
                 bad.append('%s: approved %s' % (what, kinds))
             if approvals.apply(json.loads(json.dumps(res)), full) != res:
                 bad.append('%s: scoring the result again changes it' % what)

@@ -85,14 +85,18 @@ finding):
   bad original tangents and baked ones needing nan-tangent-fill and
   tangents-baked; no node name used twice that is a parent or animated
   (other nodes sharing a name are told apart as #2, #3 ..., as the
-  comparison names them); every supermodel found, no skin
-  or animmesh receiver; every node that now draws another's triangles a
-  render-0 mesh without an index list in the original, drawing a
-  receiver's), the donors' render findings and the receivers' and donors' triangles and vertex_count
-  findings, in the decompile and the compile. A receiver's mesh facts pair
-  the compile with its own faces only (the start of its index list), so its
-  other findings go through the checks above, and a decompile finding of
-  these meshes that is not one of those three leaves the mesh failed.
+  comparison names them); every supermodel found, no skin or animmesh
+  receiver; every node that now draws another's triangles a render-0 mesh
+  without an index list in the original, drawing a receiver's): the donors'
+  render, normal, tangent and handedness findings (a donor's own normals and
+  tangents were never drawn; the copies the game drew are what the
+  condition compares, and found the same) and the receivers' and donors'
+  triangles and vertex_count findings, in the decompile and the compile. A
+  donor's other findings are checked with those three corner attributes left
+  out of its facts. A receiver's mesh facts pair the compile with its own
+  faces only (the start of its index list), so its other findings go
+  through the checks above. A decompile finding of these meshes that is not
+  one of those leaves the mesh failed.
 
 And one per model, about the second compile rather than a finding: a model
 whose MUST findings are all approved and whose second compile differs from
@@ -140,6 +144,9 @@ CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedne
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
 MESH_NODE = re.compile(r'^nodes\[([^\]]*)\]\.mesh$')
 MERGE_LEAVES = ('render', 'triangles', 'vertex_count')
+# A donor's own normals and tangents were never drawn (render 0); what the
+# game drew is the receiver's copy, which the world-space facts compare.
+DONOR_CORNERS = ('normal', 'tangent', 'handedness')
 
 
 class ApprovalsError(ValueError):
@@ -340,12 +347,25 @@ def apply(res, approvals):
         m = MESH_NODE.match(mesh)
         return m.group(1).lower() in rec | donors if m else False
 
+    def donor(mesh):
+        m = MESH_NODE.match(mesh)
+        return bool(m) and m.group(1).lower() in donors
+
     def merge_leaf(mesh, leaf):
         # the findings merged-render-lists covers on this mesh
-        if leaf == 'render':
-            m = MESH_NODE.match(mesh)
-            return bool(m) and m.group(1).lower() in donors
+        if leaf == 'render' or leaf in DONOR_CORNERS:
+            return donor(mesh)
         return leaf in MERGE_LEAVES and involved(mesh)
+
+    def mesh_facts(mesh):
+        # a donor's facts without the corner attributes the world-space
+        # comparison has already found the same where they were drawn
+        f = facts.get('compile ' + mesh)
+        if f and donor(mesh):
+            f = dict(f, differ={k: n for k, n in f['differ'].items() if k not in DONOR_CORNERS},
+                     differ_bad_tangent={k: n for k, n in f['differ_bad_tangent'].items()
+                                         if k not in DONOR_CORNERS})
+        return f
 
     meshes = {}
     for i, (test, path, msg) in enumerate(findings):
@@ -359,7 +379,7 @@ def apply(res, approvals):
         for mesh, items in meshes.items():
             merge = {i for i, _, leaf in items if merge_leaf(mesh, leaf)}
             leaves, needs = mesh_checks([leaf for i, t, leaf in items if i not in merge and t == 'compile'],
-                                        facts.get('compile ' + mesh))
+                                        mesh_facts(mesh))
             if merge:
                 needs = needs | merged_needs
             v = {i: 'merged-render-lists' if i in merge else leaves[leaf] if t == 'compile' else None

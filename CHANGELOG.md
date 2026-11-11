@@ -143,12 +143,15 @@ Corrections after the first draft:
   (`mdlconf.render_list_facts`): every drawn triangle and every shadow face
   of the original and the compile, in world space, paired one to one, with
   the drawing state, animation and corner attributes compared. When the
-  whole model draws and casts shadows as before, the donors' `render` and
-  the receivers' and donors' `triangles` and `vertex_count` findings are
-  approved, in the decompile and the compile; the meshes' other findings
-  still need their own entries. A receiver's mesh facts pair the compile
-  with its own faces, the start of its index list. On run 6's 1,177
-  render-list models (cleanmodels 3003980) it holds on 998.
+  whole model draws and casts shadows as before, the donors' `render`,
+  `normal`, `tangent` and `handedness` (their own, never drawn; the copies
+  the game drew are compared and found the same) and the receivers' and
+  donors' `triangles` and `vertex_count` findings are approved, in the
+  decompile and the compile; the meshes' other findings still need their
+  own entries. A receiver's mesh facts pair the compile with its own faces,
+  the start of its index list. On run 6's 1,177 render-list models
+  (cleanmodels 3003980) it holds on 998: 481 pass-approved, 511 unstable,
+  6 fail on other findings (node numbers, aabb trees, controller keys).
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when
