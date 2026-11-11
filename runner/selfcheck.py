@@ -107,7 +107,7 @@ def _view(meshes, names=None):
               'inheritcolor': 0, 'controllers': []}]
     for i, (name, m) in enumerate(zip(names, meshes)):
         v = {'position': m['pos'], 'uv0': m.get('uv', [[0, 0]] * len(m['pos']))}
-        for k in ('tangent', 'handedness', 'normal', 'bumpmap_slot3'):
+        for k in ('tangent', 'handedness', 'normal', 'bumpmap_slot3', 'bumpmap_slot5'):
             if k in m:
                 v[k] = m[k]
         faces = [{'v': t, 'material': 0, 'normal': [0, 0, 1], 'distance': 0, 'adjacent': [-1, -1, -1]}
@@ -152,6 +152,21 @@ def check_approvals():
         ('a zero-area face dropped', [degen], [merged], 'pass-approved',
          {'vertex-layout', 'dropped-zero-area-faces'}, None),
         ('a face with area dropped', [flat], [merged], 'fail', set(), None),
+        # NaN or junk tangents only on the vertices of a dropped zero-area
+        # face (nwp_map_*): never drawn, left out of the merge key; junk
+        # makes the reader take slot 3 for a bump-map stream, the kept
+        # vertices make it tangents
+        ('NaN tangents only where a dropped face was',
+         [dict(degen, tangent=[T[0]] * 6 + [[nan] * 3] * 3, handedness=[1] * 9)],
+         [dict(merged, tangent=T, handedness=[1] * 4)], 'pass-approved',
+         {'vertex-layout', 'dropped-zero-area-faces'}, None),
+        ('junk tangents only where a dropped face was',
+         [dict(degen, bumpmap_slot3=[T[0]] * 6 + [[7.4e28, 0, 0]] * 3, bumpmap_slot5=[1] * 9)],
+         [dict(merged, tangent=T, handedness=[1] * 4)], 'pass-approved',
+         {'vertex-layout', 'dropped-zero-area-faces'}, None),
+        ('junk tangents on a kept vertex too',
+         [dict(degen, bumpmap_slot3=[[7.4e28, 0, 0]] + [T[0]] * 5 + [[7.4e28, 0, 0]] * 3, bumpmap_slot5=[1] * 9)],
+         [dict(merged, tangent=T, handedness=[1] * 4)], 'fail', set(), None),
         ('NaN tangents filled', [dict(dup, tangent=[T[0], [nan] * 3, T[0], T[0], T[0], [0, 0, 0]],
                                       handedness=[1] * 6)],
          [dict(merged, tangent=[T[0], [0, 1, 0], T[0], [0, 1, 0]], handedness=[1] * 4)],
@@ -377,6 +392,23 @@ def check_node_facts():
          [('r', None, 0, d), ('m0', 'r', 2, 0), ('m1', 'r', 1, 1), ('z', 'r', 3, d)],
          [('r', None, d), ('m1', 'r', 1), ('m0', 'r', 0), ('z', 'r', d)], 'fail', set()),
     ]
+    # names used twice, paired by path (not by occurrence in the list)
+    cases += [
+        ('a name used twice, renumbered',
+         [('r', None, 0, d), ('a', 'r', 2, d), ('x', 'a', 3, d), ('b', 'r', 1, d), ('x', 'b', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('x', 'a', 2, d), ('b', 'r', 3, d), ('x', 'b', 4, d)],
+         [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('b', 'r', d), ('x', 'b', d)],
+         'pass-approved', {'renumbered'}),
+        ('a name used twice that is a parent',
+         [('r', None, 0, d), ('a', 'r', 2, d), ('x', 'a', 3, d), ('a', 'r', 1, d), ('y', 'a', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('x', 'a', 2, d), ('a', 'r', 3, d), ('y', 'a', 4, d)],
+         [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('a', 'r', d), ('y', 'a', d)], 'fail', set()),
+        # a 32-character name the compile cut to 31 (MDL-BIN-007): the facts
+        # cut it too, so the numbers approve
+        ('a 32-character name, renumbered', [('r', None, 0, d), ('n' * 32, 'r', 2, d), ('y', 'r', 1, d)],
+         [('r', None, 0, d), ('n' * 31, 'r', 1, d), ('y', 'r', 2, d)],
+         [('r', None, d), ('n' * 32, 'r', d), ('y', 'r', d)], 'pass-approved', {'renumbered', 'name-cut-31'}),
+    ]
     # T1: 24 children already in sort order that std::sort shuffles (zspec_tsort24's kind)
     kids = [('d%d' % i, 'r', i + 1, d) for i in range(20)] + [('m%d' % i, 'r', 21 + i, 1) for i in range(4)]
     key = {k[0]: (k[3] is not None, k[3] or 0) for k in kids}
@@ -401,6 +433,16 @@ def check_node_facts():
     cases.append(('T1 after the decompiler fix: tree back, numbers differ', [('r', None, 0, d)] + kids,
                   [('r', None, 0, d)] + [(n, 'r', D.index(n) + 1, byname[n][3]) for n in stored],
                   [('r', None, d)] + [(n, 'r', byname[n][3]) for n in D], 'pass-approved', {'renumbered'}))
+    # tree-sorted per parent: p1 held its children out of sort order (T2),
+    # p2 holds 24 sorted children with ties that std::sort would shuffle;
+    # the compile sorts p1's and keeps p2's (cleanmodels sorting per
+    # parent). Re-sorting the whole tree would shuffle p2's ties, so only
+    # the differing parent is compared.
+    p2 = [(n, 'p2', 10 + i, h) for i, (n, _, _, h) in enumerate(kids)]
+    head = [('r', None, 0, d), ('p1', 'r', 1, d), ('m1', 'p1', 2, 1), ('m0', 'p1', 3, 0), ('p2', 'r', 4, d)]
+    cases.append(('T2 on one parent, the other parent left as stored', head + p2,
+                  head[:2] + [head[3], head[2], head[4]] + p2,
+                  [(n, par, h) for n, par, _, h in head + p2], 'pass-approved', {'tree-sorted'}))
     for what, orig, comp, decl, status, ids in cases:
         exp = mdlconf.normalise(_tree(orig))
         exp['volatile'] = []
@@ -738,6 +780,146 @@ def _with(view, name, **mesh):
     return v
 
 
+def _score(exp, act, tests=('decompile', 'compile'), facts_extra=None):
+    """Compare a made-up model as the round trip does and score it under
+    layonara.json."""
+    import approvals
+    exp = mdlconf.normalise(exp)
+    exp['volatile'] = []
+    res = {'file': 'x', 'must': [], 'should': [], 'facts': {}, 'stable': True}
+    for test in tests:
+        rep = mdlconf.compare(exp, act, test, facts=True)
+        res['must'] += [[test, p, m] for lvl, p, m in rep.items if lvl == 'must']
+        res['facts'].update(rep.facts)
+    res['facts'].update(facts_extra or {})
+    return approvals.apply(res, approvals.load(os.path.join(HERE, 'approvals', 'layonara.json')))
+
+
+def check_round3():
+    """The checker fixes and approvals of 2026-11-11 (MDL pipeline Phase 2):
+    nodes and animations sharing a name, emitter textures, stale aabb trees,
+    dangly constraints and resref case, and vertices zero-area faces used
+    first (dead-face-vertices)."""
+    bad = []
+    pos = lambda v: {'id': 8, 'name': 'position', 'columns': 3, 'bezier': False, 'colbyte': 3,  # noqa: E731
+                     'keys': [{'t': 0, 'v': v}]}
+
+    def node(name, parent, ctrls=(), **extra):
+        return dict({'name': name, 'parent': parent, 'type': 'dummy', 'flags': 1, 'number': 0,
+                     'inheritcolor': 0, 'controllers': list(ctrls)}, **extra)
+
+    def model(nodes, anims=()):
+        return {'model': {'name': 'x', 'classification': 0, 'fog': 1, 'animationscale': 1, 'supermodel': 'NULL',
+                          'node_count': len(nodes), 'bmin': [0, 0, 0], 'bmax': [0, 0, 0], 'radius': 0},
+                'nodes': nodes, 'animations': list(anims), 'volatile': []}
+    # siblings sharing a name, stored in another order: paired by path, so
+    # only the tree differs, not their controllers
+    e = model([node('r', None), node('a', 'r'), node('x', 'a', [pos([1, 0, 0])]), node('b', 'r'),
+               node('x', 'b', [pos([2, 0, 0])])])
+    a = model([node('r', None), node('b', 'r'), node('x', 'b', [pos([2, 0, 0])]), node('a', 'r'),
+               node('x', 'a', [pos([1, 0, 0])])])
+    rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
+    if [p for lvl, p, _ in rep.items if lvl == 'must' and not p.endswith('.tree')]:
+        bad.append('nodes sharing a name: paired wrongly: %s' % [p for _, p, _ in rep.items])
+    # two animations of one name, paired in order
+    def anim(t):
+        return {'name': '2hreadyr', 'length': 1, 'transtime': t, 'animroot': 'r', 'events': [], 'node_count': 1,
+                'nodes': [node('r', None)]}
+    e = model([node('r', None)], [anim(0.5), anim(0.75)])
+    if [p for lvl, p, _ in mdlconf.compare(mdlconf.normalise(e), e, 'compile').items if lvl == 'must']:
+        bad.append('two animations of one name are not paired in order')
+    # a light's texture names compared without case
+    lt = dict(mdlconf.LIGHT_DEFAULTS, texturenames=['FXPA_LENSFLARE'])
+    e = model([node('r', None), node('l', 'r', type='light', flags=3, light=lt)])
+    a = json.loads(json.dumps(e))
+    a['nodes'][1]['light']['texturenames'] = ['fxpa_lensflare']
+    if [p for lvl, p, _ in mdlconf.compare(mdlconf.normalise(e), a, 'compile').items if lvl == 'must']:
+        bad.append('light texture names compared with case')
+    # emitters: an empty texture is no texture line; junk bytes on a chunk
+    # emitter are approved, elsewhere not
+    def emitter(tex, chunk):
+        return model([node('r', None), node('e', 'r', type='emitter', flags=5,
+                                             emitter=dict(mdlconf.EMITTER_DEFAULTS, texture=tex, chunkname=chunk))])
+    # (an ASCII has no texture line where a binary has '': the decompile)
+    for what, tex, chunk, got_tex, status in (
+            ('an empty texture, no texture line', '', 'chunk', None, 'pass'),
+            ('junk texture bytes on a chunk emitter', '\xff\xff\xff\xff', 'chunk', 'l>', 'pass-approved'),
+            ('junk texture bytes, no chunk', '\xff\xff\xff\xff', '', 'l>', 'fail'),
+            ('a texture name changed on a chunk emitter', 'fire', 'chunk', 'smoke', 'fail')):
+        e = emitter(tex, chunk)
+        a = json.loads(json.dumps(e))
+        if got_tex is None:
+            del a['nodes'][1]['emitter']['texture']
+        else:
+            a['nodes'][1]['emitter']['texture'] = got_tex
+        res = _score(e, a, ('decompile',) if got_tex is None else ('decompile', 'compile'))
+        if res['status'] != status:
+            bad.append('%s: %s, expected %s; left %s' % (what, res['status'], status, res['must'][:2]))
+    # a stale aabb tree: 3 leaves for 2 faces in the original, 2 in the compile
+    P = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
+    faces = [{'v': [0, 1, 2], 'material': 0, 'normal': [0, 0, 1], 'distance': 0, 'adjacent': [-1, -1, -1]},
+             {'v': [0, 2, 3], 'material': 0, 'normal': [0, 0, 1], 'distance': 0, 'adjacent': [-1, -1, -1]}]
+
+    def entry(lo, hi, face, plane=0):
+        return {'min': lo, 'max': hi, 'face': face, 'plane': plane}
+    good = [entry([0, 0, 0], [1, 1, 0], -1, 1), entry([0, 0, 0], [1, 1, 0], 0), entry([0, 0, 0], [1, 1, 0], 1)]
+    stale = [entry([0, 0, 0], [1, 1, 0], -1, 1), entry([0, 0, 0], [1, 1, 0], -1, 1), entry([0, 0, 0], [1, 1, 0], 0),
+             entry([0, 0, 0], [1, 1, 0], 2), entry([0, 0, 0], [1, 1, 0], 1)]
+
+    def walk(tree):
+        mesh = dict(mdlconf.AABB_DEFAULTS, vertex_count=4, face_count=2, faces=json.loads(json.dumps(faces)),
+                    index_lists=[[0, 1, 2, 0, 2, 3]], vertices={'position': P})
+        return model([node('r', None), node('w', 'r', type='aabb', flags=0x221, mesh=mesh, aabb=tree)])
+    for what, tree, status in (('a stale tree rebuilt', good, 'pass-approved'),
+                               ('a stale tree, a leaf box wrong',
+                                [good[0], good[1], entry([0, 0, 0], [2, 1, 0], 1)], 'fail')):
+        res = _score(walk(stale), walk(tree), ('compile',))
+        if res['status'] != status:
+            bad.append('%s: %s, expected %s; left %s' % (what, res['status'], status, res['must'][:2]))
+    # dangly constraints per drawn corner: a compile that splits vertices
+    dm = {'pos': P, 'tris': [[0, 1, 2], [0, 2, 3]]}
+    e = _view([dm])
+    e['nodes'][1].update(type='danglymesh', flags=0x121, dangly={'constraints': [0, 1, 2, 3], 'displacement': 0,
+                                                                   'tightness': 0, 'period': 0})
+    a = _view([{'pos': P + [P[0], P[2]], 'tris': [[0, 1, 2], [4, 5, 3]]}])
+    a['nodes'][1].update(type='danglymesh', flags=0x121, dangly={'constraints': [0, 1, 2, 3, 0, 2], 'displacement': 0,
+                                                                   'tightness': 0, 'period': 0})
+    rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
+    if any(p.endswith('.constraints') for _, p, _ in rep.items):
+        bad.append('dangly constraints compared per vertex, not per drawn corner')
+    a['nodes'][1]['dangly']['constraints'][4] = 9
+    if not any(p.endswith('.constraints') for _, p, _ in mdlconf.compare(mdlconf.normalise(e), a, 'compile').items):
+        bad.append('a dangly constraint changed at a drawn corner is not found')
+    # dead-face-vertices: vertices a dropped zero-area face used first. The
+    # original draws a zero-area triangle (Z, Z', X) and a kept one (Q0, Q1,
+    # Z); the first compile kept Z and X where that face used them, the
+    # second (from ASCII without it) has Z after Q0 and Q1 and no X. The
+    # mesh's name has 32 characters, cut to 31 in the compiles.
+    Z, X, Q0, Q1 = [5, 5, 0], [6, 5, 0], [0, 0, 0], [1, 0, 0]
+    long = 'm' * 32
+
+    def mview(name, posl, tris, iblist=None):
+        return {'nodes': [{'name': name, 'parent': None, 'type': 'trimesh', 'flags': 0x21, 'number': 0,
+                           'controllers': [],
+                           'mesh': {'vertex_count': len(posl), 'vertices': {'position': posl},
+                                    'faces': [{'v': t, 'adjacent': [-1, -1, -1]} for t in tris],
+                                    'index_lists': [[c for t in (iblist or tris) for c in t]],
+                                    'bmin': [min(p[k] for p in posl) for k in range(3)],
+                                    'bmax': [max(p[k] for p in posl) for k in range(3)],
+                                    'average': [0, 0, 0], 'radius': 0}}]}
+    orig = mview(long, [Z, Z, X, Q0, Q1], [[0, 1, 2], [3, 4, 0]])
+    for what, v1, v2, want in (
+            ('a vertex a dropped face used first', mview(long[:31], [Z, X, Q0, Q1], [[2, 3, 0]]),
+             mview(long[:31], [Q0, Q1, Z], [[0, 1, 2]]), {'dead_vertices': 2}),
+            ('another vertex moved', mview(long[:31], [Q1, Z, X, Q0], [[3, 0, 1]]),
+             mview(long[:31], [Q0, Q1, Z], [[0, 1, 2]]), None)):
+        v2['nodes'][0]['mesh'].update(bmin=v2['nodes'][0]['mesh']['bmin'], bmax=v2['nodes'][0]['mesh']['bmax'])
+        got = mdlconf.dead_vertices_explained(v1, v2, orig)
+        if got != want:
+            bad.append('dead-face-vertices, %s: %s, expected %s' % (what, got, want))
+    return bad
+
+
 def check_tangents_and_faces():
     """Left-out tangents are accepted only when the compile gives them back
     exactly; a conformance compile's face records must hold the golden's
@@ -778,6 +960,7 @@ def main():
                      ('expected files', check_expected), ('approvals', check_approvals),
                      ('node facts', check_node_facts), ('stability', check_stability),
                      ('tangents, faces', check_tangents_and_faces), ('render lists', check_render_lists),
+                     ('round 3', check_round3),
                      ('ksy', check_ksy)):
         bad = fn()
         print('%-16s %s' % (name, 'ok' if not bad else 'FAIL'))

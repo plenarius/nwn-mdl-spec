@@ -143,15 +143,33 @@ Corrections after the first draft:
   (`mdlconf.render_list_facts`): every drawn triangle and every shadow face
   of the original and the compile, in world space, paired one to one, with
   the drawing state, animation and corner attributes compared. When the
-  whole model draws and casts shadows as before, the donors' `render`,
-  `normal`, `tangent` and `handedness` (their own, never drawn; the copies
-  the game drew are compared and found the same) and the receivers' and
-  donors' `triangles` and `vertex_count` findings are approved, in the
-  decompile and the compile; the meshes' other findings still need their
-  own entries. A receiver's mesh facts pair the compile with its own faces,
-  the start of its index list. On run 6's 1,177 render-list models
-  (cleanmodels 3003980) it holds on 998: 481 pass-approved, 511 unstable,
-  6 fail on other findings (node numbers, aabb trees, controller keys).
+  whole model draws and casts shadows as before, the donors' `render` and
+  the receivers' and donors' `triangles` and `vertex_count` findings are
+  approved, in the decompile and the compile; the meshes' other findings
+  still need their own entries. A receiver's mesh facts pair the compile
+  with its own faces, the start of its index list. On run 6's 1,177
+  render-list models (cleanmodels 3003980) it holds on 998.
+- Runner, round 3 of the approvals (James 2026-11-11, MDL pipeline Phase 2):
+  `merged-render-lists` also covers the donors' own `normal`, `tangent` and
+  `handedness` findings (never drawn; the copies the game drew are compared
+  in world space and found the same). `dead-face-vertices` also covers
+  vertices a dropped zero-area face used first, which the second compile
+  orders by the kept faces (MDL-MESH-011, MDL-MESH-020), and finds meshes by
+  their 31-character names. New: `emitter-texture-junk` (a chunk emitter's
+  texture field holding bytes no ASCII can, left by an old compiler) and
+  `aabb-stale-tree` (an original walkmesh tree with more leaves than faces,
+  MDL-MESH-024, against a whole compiled tree). Checker fixes: nodes pair by
+  their path from the root (names cut to 31 characters, a shared name told
+  apart among its parent's children), in the comparison, the render-list
+  facts and the node-number facts (which now also cut names to 31);
+  animations of one name pair in order; an emitter with no texture line is
+  the binary's empty texture; light texture names compare without case;
+  dangly constraints compare per drawn corner in the compile too;
+  `tree-sorted` compares each differing parent's children with their own
+  sort, not the whole tree re-sorted; a mesh whose NaN, zero or junk
+  tangents are all on vertices only dropped zero-area faces use has those
+  tangents left out of its merge key and its slot-3 stream read by the kept
+  vertices (MDL-BIN-048). COUNTS_PLACEHOLDER
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when

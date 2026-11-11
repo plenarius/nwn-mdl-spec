@@ -190,16 +190,17 @@ def stored_order(root, kids_of, key):
 
 class Geo:
     """A geometry tree from a view's nodes (binary: stored depth-first),
-    names lower-cased. `unique` is False when two nodes share a name, which
-    these facts do not follow."""
+    names lower-cased and cut to 31 characters as the game's compiler stores
+    them (MDL-BIN-007). `unique` is False when two nodes share a name
+    (model_facts gives such nodes labels first, unique_labels)."""
 
     def __init__(self, nodes):
-        self.names = [n['name'].lower() for n in nodes]
+        self.names = [n['name'].lower()[:31] for n in nodes]
         self.unique = len(set(self.names)) == len(self.names)
         self.parent, self.kids, self.num, self.key = {}, {}, {}, {}
         for n in nodes:
-            nm = n['name'].lower()
-            p = n['parent'].lower() if n.get('parent') else None
+            nm = n['name'].lower()[:31]
+            p = n['parent'].lower()[:31] if n.get('parent') else None
             mesh = bool(n.get('flags', 0) & F_MESH)
             self.parent.setdefault(nm, p)
             self.num.setdefault(nm, n.get('number'))
@@ -231,11 +232,11 @@ class Super:
         name before it in the stored (depth-first) order."""
         bypath, latest = {}, {}
         for i, n in enumerate(view['nodes']):
-            nm = n['name'].lower()
+            nm = n['name'].lower()[:31]
             if i == 0:
                 path = ROOT
             else:
-                pp = latest.get((n.get('parent') or '').lower())
+                pp = latest.get((n.get('parent') or '').lower()[:31])
                 if pp is None:
                     continue
                 path = pp + (nm,)
@@ -281,7 +282,8 @@ def ascii_supermodel(text):
 
 def ascii_declarations(text):
     """The geometry nodes of an ASCII model in declaration order: a list of
-    (name, parent, (is a mesh, transparencyhint)), names lower-cased; the
+    (name, parent, (is a mesh, transparencyhint)), names lower-cased and
+    cut to 31 characters (MDL-BIN-007); the
     parent is None for NULL and False when the node has no parent line. The
     structural words are matched case-sensitively, as the engine does
     (spec/ascii.md)."""
@@ -297,12 +299,12 @@ def ascii_declarations(text):
         if low == 'endmodelgeom':
             break
         if w[0] == 'node' and len(w) > 2:
-            cur = [w[2].lower(), False, w[1].lower() in MESH_TYPES, 0]
+            cur = [w[2].lower()[:31], False, w[1].lower() in MESH_TYPES, 0]
             out.append(cur)
         elif w[0] == 'endnode':
             cur = None
         elif cur is not None and w[0] == 'parent' and len(w) > 1:
-            cur[1] = None if w[1].upper() == 'NULL' else w[1].lower()
+            cur[1] = None if w[1].upper() == 'NULL' else w[1].lower()[:31]
         elif cur is not None and low == 'transparencyhint' and len(w) > 1:
             try:
                 cur[3] = int(w[1])
@@ -380,11 +382,11 @@ def anim_mismatches(view, geo):
     for a in view.get('animations', []):
         latest = {}
         for i, n in enumerate(a['nodes']):
-            nm = n['name'].lower()
+            nm = n['name'].lower()[:31]
             if i == 0:
                 path = ROOT
             else:
-                pp = latest.get((n.get('parent') or '').lower())
+                pp = latest.get((n.get('parent') or '').lower()[:31])
                 path = pp + (nm,) if pp is not None else None
             if path is not None:
                 latest[nm] = path
@@ -401,19 +403,61 @@ def anim_mismatches(view, geo):
 
 # ------------------------------------------------------------ the facts
 
+def unique_labels(trees):
+    """Labels that tell apart nodes sharing a name, the same in every tree:
+    `trees` is a list of [(name, parent)] lists (names lower-case, cut to 31
+    characters). A name used once in each tree keeps it; a name used more
+    often is labelled name#parent#k, k its occurrence among its parent's
+    children of that name in the list's order. None when a shared name is a
+    parent in any tree (which of them a child names is then a guess)."""
+    dup = set()
+    for t in trees:
+        names = [n for n, _ in t]
+        dup |= {n for n in names if names.count(n) > 1}
+    if any(p in dup for t in trees for _, p in t):
+        return None
+    out = []
+    for t in trees:
+        count, labels = {}, []
+        for n, p in t:
+            if n in dup:
+                k = count[(n, p)] = count.get((n, p), 0) + 1
+                labels.append('%s#%s#%d' % (n, p, k))
+            else:
+                labels.append(n)
+        out.append(labels)
+    return out
+
+
+def _relabelled(nodes, labels):
+    return [dict(n, name=lab) for n, lab in zip(nodes, labels)]
+
+
 def model_facts(exp, act, ascii_text, sup):
     """What the approvals need about a compile's node numbers and order:
     `exp` the original's view, `act` the compile's, `ascii_text` the ASCII it
     was compiled from, `sup` the supermodel the compile used (a Super; None
-    when there is none or it was not found)."""
-    o, c = Geo(exp['nodes']), Geo(act['nodes'])
+    when there is none or it was not found). Names are cut to 31 characters
+    (MDL-BIN-007). Nodes that share a name are told apart by unique_labels
+    (`duplicates`: how many names are shared); when a shared name is a
+    parent, or the model has a supermodel, `unique` is False and nothing
+    else is computed."""
+    def pairs(nodes):
+        return [(n['name'].lower()[:31], n['parent'].lower()[:31] if n.get('parent') else None) for n in nodes]
     decl = ascii_declarations(ascii_text)
     sname = (exp['model'].get('supermodel') or '').lower()
     sname = '' if sname == 'null' else sname
-    f = {'unique': o.unique and c.unique and len({d[0] for d in decl}) == len(decl),
+    trees = [pairs(exp['nodes']), pairs(act['nodes']), [(n, p or None) for n, p, _ in decl]]
+    labels = unique_labels(trees)
+    dups = len({n for t in trees for n, _ in t if [m for m, _ in t].count(n) > 1})
+    if labels is not None and dups and sname:
+        labels = None  # supermodel paths go by name
+    f = {'unique': labels is not None,
          'supermodel': sname,
          'node_count': [exp['model'].get('node_count'), act['model'].get('node_count'),
-                        len(o.names), len(c.names)]}
+                        len(exp['nodes']), len(act['nodes'])]}
+    if dups:
+        f['duplicates'] = dups
     anims = {}
     am = {x['name'].lower(): x for x in act.get('animations', [])}
     for ea in exp.get('animations', []):
@@ -421,23 +465,33 @@ def model_facts(exp, act, ascii_text, sup):
         if aa is not None and ea.get('node_count') != aa.get('node_count'):
             anims[ea['name'].lower()] = {
                 'node_count': [ea.get('node_count'), aa.get('node_count'), len(ea['nodes']), len(aa['nodes'])],
-                'same_names': sorted(n['name'].lower() for n in ea['nodes'])
-                == sorted(n['name'].lower() for n in aa['nodes'])}
+                'same_names': sorted(n['name'].lower()[:31] for n in ea['nodes'])
+                == sorted(n['name'].lower()[:31] for n in aa['nodes'])}
     if anims:
         f['animations'] = anims
     if sname:
         f['supermodel_count'] = sup.count if sup is not None else None
     else:
         sup = None
-    if not f['unique']:
+    if labels is None:
         return f
+    o, c = Geo(_relabelled(exp['nodes'], labels[0])), Geo(_relabelled(act['nodes'], labels[1]))
+    decl = [(lab, p if p is not False else False, k) for lab, (_, p, k) in zip(labels[2], decl)]
+
+    def anim_view(view):
+        # animation nodes labelled as their geometry nodes are
+        out = []
+        for a in view.get('animations', []):
+            al = unique_labels([pairs(a['nodes'])])
+            out.append(dict(a, nodes=_relabelled(a['nodes'], al[0]) if al else a['nodes']))
+        return {'animations': out}
     f['same_nodes'] = sorted(o.parent.items(), key=str) == sorted(c.parent.items(), key=str)
     if sname and sup is None:
         return f
     ref = ref_numbers([(n, p) for n, p, _ in decl], sup)
     f['numbers_by_rule'] = all(c.num[n] == ref.get(n) for n in c.names)
     f['reachable'] = reachable(o, sup)
-    f['anim_mismatches'] = [anim_mismatches(exp, o), anim_mismatches(act, c)]
+    f['anim_mismatches'] = [anim_mismatches(anim_view(exp), o), anim_mismatches(anim_view(act), c)]
     if o.names != c.names and f['same_nodes']:
         # the original's stored tree with the transparency sort applied
         resorted = stored_order(o.root, o.kids, o.key)
@@ -447,6 +501,10 @@ def model_facts(exp, act, ascii_text, sup):
             'differing_parents': len(differ),
             'differing_unsorted': sum(1 for p in differ if needs_sort([o.key[x] for x in o.kids[p]])
                                       and not in_sort_order(o.kids[p], o.key)),
+            # differing parents whose compiled children are their original
+            # children with the transparency sort applied, parent by parent
+            # (a parent whose children do not differ needs nothing)
+            'differing_resorted': sum(1 for p in differ if c.kids.get(p) == sort_children(o.kids[p], o.key)),
             # differing nodes where std::sort moves equal children (more than
             # 16): a stable sort of the stored order would keep them
             'ties_moved': sum(1 for p in differ if needs_sort([o.key[x] for x in o.kids[p]])
@@ -534,3 +592,48 @@ def aabb_facts(exp, act):
     if any(x['plane'] != y['plane'] for x, y in zip(exp, act) if x['face'] != -1):
         f['ties'] = -1  # a leaf's plane differs: not a tie
     return f
+
+
+def aabb_stale_facts(emesh, exp, amesh, act):
+    """For an aabb tree whose entry count differs: the leaves and faces of
+    the original and the compile, and whether the compile's tree is whole
+    and true to its faces: a tree (aabb_entries) whose leaves name each of
+    its faces once, each leaf's box that face's box, and each inner box the
+    union of its children's (all within 1e-4). The original's tree can hold
+    more leaves than faces when faces were deleted after it was built
+    (MDL-MESH-024)."""
+    def leaves(entries):
+        return [e['face'] for e in entries if e['face'] != -1]
+    nf = len(amesh.get('faces', []))
+    f = {'leaves': [len(leaves(exp)), len(leaves(act))],
+         'faces': [len(emesh.get('faces', [])), nf],
+         'complete': sorted(leaves(act)) == list(range(nf)), 'boxes_fit': False}
+    inner = aabb_entries(act)
+    if inner is None or not f['complete']:
+        return f
+    pos = amesh.get('vertices', {}).get('position', [])
+
+    def near(x, y):
+        try:
+            return all(abs(float(a) - float(b)) <= 1e-4 * max(1.0, abs(float(a)), abs(float(b)))
+                       for a, b in zip(x, y)) and len(x) == len(y)
+        except (TypeError, ValueError):
+            return False
+    try:
+        for e in act:
+            if e['face'] != -1:
+                ps = [pos[i] for i in amesh['faces'][e['face']]['v']]
+                lo = [min(float(p[k]) for p in ps) for k in range(3)]
+                hi = [max(float(p[k]) for p in ps) for k in range(3)]
+                if not (near(e['min'], lo) and near(e['max'], hi)):
+                    return f
+        for i, left, right in inner:
+            lo = [min(float(act[left]['min'][k]), float(act[right]['min'][k])) for k in range(3)]
+            hi = [max(float(act[left]['max'][k]), float(act[right]['max'][k])) for k in range(3)]
+            if not (near(act[i]['min'], lo) and near(act[i]['max'], hi)):
+                return f
+    except (IndexError, KeyError, TypeError, ValueError):
+        return f
+    f['boxes_fit'] = True
+    return f
+

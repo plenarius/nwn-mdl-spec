@@ -138,7 +138,8 @@ implements (`vertex-layout`, `dropped-zero-area-faces`, `nan-tangent-fill`,
 `tangents-baked`, `water-texanim-169`, `name-cut-31`, `renumbered`,
 `supermodel-count`, `anim-header-count`, `tree-sorted`, `aabb-plane-tie`,
 `unstable-adjacency-only`, `signed-zero`, `bounds-ulp`,
-`dead-face-vertices`, `merged-render-lists`); `condition` says in
+`dead-face-vertices`, `merged-render-lists`, `emitter-texture-junk`,
+`aabb-stale-tree`); `condition` says in
 words what it checks. Leaving an entry out of the file leaves its findings
 failed, together with every other finding on the same mesh.
 [approvals/layonara.json](approvals/layonara.json) is Layonara's.

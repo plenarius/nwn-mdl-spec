@@ -390,7 +390,10 @@ def mesh_facts(e, a, own_nodes):
     corner which attributes differ (with the tolerances of compare_mesh),
     including skin weights, dangly constraints and face materials. Also the
     number of distinct vertices the original draws by the game's merge key
-    (MDL-MESH-010, floats compared exactly). For a receiver of a merged
+    (MDL-MESH-010, floats compared exactly; a NaN, zero or junk tangent on a
+    vertex only dropped zero-area triangles use is left out of its key, and
+    the slot-3 stream is then read as tangents when the kept vertices make it
+    one, MDL-BIN-048: `undrawn_bad_tangents`, `slot3_read_on_kept`). For a receiver of a merged
     render list (merged_list) only its own faces' triangles, the start of
     its index list, are paired (`merged_list`: [faces, list triangles])."""
     em, am = e['mesh'], a['mesh']
@@ -476,6 +479,31 @@ def mesh_facts(e, a, own_nodes):
                 dropped.append(i)
             i += 1
         extra = len(at) - j
+    # A tangent stream (slot 3, MDL-BIN-048) whose NaN, zero or junk vectors
+    # are all on vertices only dropped zero-area triangles use: what is
+    # there is never drawn. Read the stream by the kept vertices, and leave
+    # those vertices' tangents out of the merge key below.
+    kept = {i for ti, _ in pairs for i in et[ti]}
+    undrawn_bad, slot3_on_kept = set(), False
+    if dropped and all(tri_area2(epos, et[ti]) == 0 for ti in dropped):
+        slot = 'tangent' if 'tangent' in ev else 'bumpmap_slot3' if 'bumpmap_slot3' in ev else None
+        vecs = ev.get(slot) or []
+
+        def unit(t):
+            if bad_tangent(t):
+                return False
+            q = sum(float(fval(c)) ** 2 for c in t[:3])
+            return 0.98 < q < 1.02
+        undrawn_bad = {i for ti in dropped for i in et[ti] if i not in kept and i < len(vecs) and not unit(vecs[i])}
+        if slot == 'bumpmap_slot3' and kept and not em.get('texanim_slots_used') and \
+                all(i < len(vecs) and unit(vecs[i]) for i in kept):
+            ev = dict(ev)
+            ev['tangent'] = ev.pop('bumpmap_slot3')
+            if 'bumpmap_slot5' in ev:
+                ev['handedness'] = ev.pop('bumpmap_slot5')
+            es = (es - {'bumpmap_slot3', 'bumpmap_slot5'}) | {k for k in ('tangent', 'handedness') if k in ev}
+            both = [k for k in CORNER_ATTRS if k in es and k in as_]
+            slot3_on_kept = True
     differ, at_bad = {}, {}
     etan = ev.get('tangent') if 'tangent' in both else None
     for ti, tj in pairs:
@@ -495,13 +523,26 @@ def mesh_facts(e, a, own_nodes):
     used = sorted({i for t in et for i in t})
     keys = set()
     streams = sorted(k for k in ev if isinstance(ev[k], list))
-    for i in used:
-        key = [ev[k][i] if i < len(ev[k]) else None for k in streams]
+    # A vertex whose tangent is never drawn (undrawn_bad) merges with any
+    # vertex equal in everything but the tangent.
+    untan = [k for k in streams if k not in ('tangent', 'handedness', 'bumpmap_slot3', 'bumpmap_slot5')]
+    loose = set()
+
+    def merge_key(i, ks):
+        key = [ev[k][i] if i < len(ev[k]) else None for k in ks]
         if ew is not None:
             key.append(weights(ew, i))
         if ec is not None:
             key.append(ec[i] if i < len(ec) else None)
-        keys.add(('nan', i) if _has_nan(key) else _freeze(key))
+        return ('nan', i) if _has_nan(key) else _freeze(key)
+    for i in used:
+        if i in undrawn_bad:
+            loose.add(merge_key(i, untan))
+        else:
+            keys.add(merge_key(i, streams))
+    if loose:
+        loose -= {merge_key(i, untan) for i in used if i not in undrawn_bad}
+        keys |= {('loose', k) for k in loose}
     f = {'vertices': [em.get('vertex_count'), am.get('vertex_count')],
          'distinct': len(keys),
          'triangles': [len(et), len(at)],
@@ -518,6 +559,10 @@ def mesh_facts(e, a, own_nodes):
          'aabb': bool(e['flags'] & 0x200)}
     if ml:
         f['merged_list'] = list(ml)
+    if undrawn_bad:
+        f['undrawn_bad_tangents'] = len(undrawn_bad)
+    if slot3_on_kept:
+        f['slot3_read_on_kept'] = True
     if dropped:
         f['dropped_max_area'] = max((x for x in areas if x is not None), default=None)
     if em.get('texanim_slots_used'):
@@ -651,19 +696,7 @@ def _draw_state(nd):
     return st
 
 
-def node_keys(view):
-    """Each node's key: its lower-case name, with #k for its k-th use of
-    the name (k > 1), as the comparison pairs nodes and names their paths
-    (compare_nodes)."""
-    seen, out = {}, []
-    for n in view['nodes']:
-        k = n['name'].lower()
-        seen[k] = seen.get(k, 0) + 1
-        out.append(k if seen[k] == 1 else '%s#%d' % (k, seen[k]))
-    return out
-
-
-def _rl_tris(view, mode, moving):
+def _rl_tris(view, mode, moving, labels):
     """The triangles a model draws ('draw': each mesh with render != 0, from
     its first index list, MDL-BIN-049) or projects as shadow volumes
     ('shadow': each mesh with shadow or beaming != 0, from its face list), in
@@ -671,7 +704,6 @@ def _rl_tris(view, mode, moving):
     or never drawn). An entry is None when a corner is out of range or not
     finite."""
     xf = _world(view)
-    keys = node_keys(view)
     out = []
     for i, nd in enumerate(view['nodes']):
         m = nd.get('mesh')
@@ -721,7 +753,7 @@ def _rl_tris(view, mode, moving):
             if not all(math.isfinite(x) for cn in corners for x in cn['p'] + cn.get('uv0', ())):
                 out.append(None)
                 continue
-            out.append({'node': keys[i], 'state': st, 'moving': mv, 'corners': corners,
+            out.append({'node': labels[i], 'state': st, 'moving': mv, 'corners': corners,
                         'zero': tri_area2(pos, tri) == 0})
     return out
 
@@ -872,12 +904,13 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
     triangles than their faces (merged_list); `donor_candidates` the
     original's meshes with render 0, no index list and faces; `moved` the
     compiled nodes that draw triangles another node drew in the original,
-    with those nodes. Nodes are named by node_keys (a name used twice gets
-    #2). `ambiguous` lists the node names used by more than one node in
+    with those nodes. Nodes are named by node_labels (paired by path; a name
+    used twice gets #2 as in the findings). `ambiguous` lists the node names used by more than one node in
     either model that a lookup by name depends on: a parent or an animated
     node."""
     rec, cand, deformed = [], [], 0
-    for key, nd in zip(node_keys(exp), exp['nodes']):
+    elab, clab = node_labels(exp['nodes'], comp['nodes'])
+    for key, nd in zip(elab, exp['nodes']):
         m = nd.get('mesh')
         if not m or nd['flags'] & mdlview.F_AABB:
             continue
@@ -899,8 +932,8 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
     f = {'receivers': rec, 'donor_candidates': cand, 'receivers_deformed': deformed,
          'ambiguous': sorted(dup & used)}
     for mode in ('draw', 'shadow'):
-        ot = _rl_tris(exp, mode, moving['original'])
-        ct = _rl_tris(comp, mode, moving['compiled'])
+        ot = _rl_tris(exp, mode, moving['original'], elab)
+        ct = _rl_tris(comp, mode, moving['compiled'], clab)
         f[mode] = _rl_compare(ot, ct)
     return f
 
@@ -913,7 +946,19 @@ LIGHT_DEFAULTS = {'flareradius': 0, 'flaresizes': [], 'flarepositions': [], 'fla
                   'texturenames': [], 'lightpriority': 5, 'ambientonly': 0, 'ndynamictype': 1,
                   'affectdynamic': 1, 'shadow': 1, 'generateflare': 0, 'fadinglight': 1}
 EMITTER_DEFAULTS = {'deadspace': 0, 'blastradius': 0, 'blastlength': 0, 'spawntype': 0, 'chunkname': '',
-                    'twosidedtex': 0, 'loop': 0, 'renderorder': 0, 'flags': 0}
+                    'texture': '', 'twosidedtex': 0, 'loop': 0, 'renderorder': 0, 'flags': 0}
+# Resource names: compared without case (resrefs are case-insensitive).
+RESREF_LISTS = ('texturenames',)
+
+
+def emitter_facts(em):
+    """For an emitter whose texture differs: its chunk name, and whether the
+    original's texture field holds a byte outside 0x20-0x7e before its first
+    NUL (uninitialised memory an old compiler wrote; no ASCII can hold it)."""
+    tex = em.get('texture') or ''
+    chunk = em.get('chunkname') or ''
+    return {'chunkname': '' if chunk.upper() == 'NULL' else chunk,
+            'texture_junk': any(not 0x20 <= ord(ch) <= 0x7e for ch in tex)}
 
 
 def compare_section(r, path, exp, act, defaults, profile, volatile, tol=1e-5):
@@ -929,6 +974,10 @@ def compare_section(r, path, exp, act, defaults, profile, volatile, tol=1e-5):
             nul = lambda t: '' if t.upper() == 'NULL' else t.lower()  # noqa: E731
             if nul(ev) != nul(av):
                 r.must(p, 'expected %r, got %r' % (ev, av))
+        elif k in RESREF_LISTS and isinstance(ev, list) and isinstance(av, list) and \
+                all(isinstance(x, str) for x in ev + av):
+            if [x.lower() for x in ev] != [x.lower() for x in av]:
+                r.must(p, 'expected %s, got %s' % (ev, av))
         elif not vclose(ev, av, tol):
             r.must(p, 'expected %s, got %s' % (ev, av))
 
@@ -1105,6 +1154,46 @@ def cut_names(names):
     return cut, shared
 
 
+def node_paths(nodes):
+    """Each node's path from the root, for pairing nodes: a tuple of (name,
+    k), names lower-cased and cut to 31 characters as the game's compiler
+    stores them (MDL-BIN-007), k the node's occurrence among its parent's
+    children of that name. A node's parent is the latest node of its parent
+    name before it (in stored depth-first order, or in declaration order,
+    a parent comes before its children). A node whose parent is not found
+    is placed under ('?', 1)."""
+    latest, count, out = {}, {}, []
+    for i, n in enumerate(nodes):
+        nm = n['name'].lower()[:31]
+        par = n.get('parent')
+        par = par.lower()[:31] if par and par.upper() != 'NULL' else None
+        if par is None:
+            base = ()
+        else:
+            pi = latest.get(par)
+            base = out[pi] if pi is not None else (('?', 1),)
+        k = count[(base, nm)] = count.get((base, nm), 0) + 1
+        out.append(base + ((nm, k),))
+        latest[nm] = i
+    return out
+
+
+def node_labels(exp_nodes, act_nodes):
+    """Names for the nodes of two trees, paired by path (node_paths): the
+    original's lower-case name, with #k for its k-th use of the name in the
+    list (k > 1), as the comparison names its findings; a compiled node takes
+    its original's label, and one without an original its own name with
+    `?`."""
+    seen, elab = {}, []
+    for n in exp_nodes:
+        k = n['name'].lower()
+        seen[k] = seen.get(k, 0) + 1
+        elab.append(k if seen[k] == 1 else '%s#%d' % (k, seen[k]))
+    bypath = dict(zip(node_paths(exp_nodes), elab))
+    alab = [bypath.get(pt, n['name'].lower() + '?') for pt, n in zip(node_paths(act_nodes), act_nodes)]
+    return elab, alab
+
+
 def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
     ecut, eshared = cut_names([n['name'] for n in exp_nodes])
     long_names = {n['name'].lower() for n in exp_nodes if len(n['name']) == 32}
@@ -1125,27 +1214,21 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             r.facts[profile + ' ' + base + '.tree'] = {
                 'names_cut_only': True, 'cut': sorted(long_names),
                 'unique': not any(c[:31] in eshared for c in long_names)}
-    # Match by name and occurrence: a name used twice (zspec_super) pairs
-    # the first with the first and so on.
-    def keyed(nodes):
-        seen, out = {}, []
-        for n in nodes:
-            k = node_key(n)
-            seen[k] = seen.get(k, 0) + 1
-            out.append(((k, seen[k]), n))
-        return out
-    amap = dict(keyed(act_nodes))
-    exp_keys = {node_key(n) for n in exp_nodes}
-    for i, (ek, e) in enumerate(keyed(exp_nodes)):
-        p = '%s[%s]' % (base, e['name']) if ek[1] == 1 else '%s[%s#%d]' % (base, e['name'], ek[1])
-        a = amap.get(ek)
-        cut = (ek[0][:31], ek[1])
-        if a is None and len(ek[0]) == 32 and cut in amap and cut[0] not in exp_keys and cut[0] not in eshared:
-            # A 32-character name the compile cut to 31 (MDL-BIN-007), paired
-            # with that node when no other node of the original has the name.
-            a = amap[cut]
+    # Pair by path from the root (node_paths): a name used twice (zspec_super)
+    # pairs by its place in the tree, and a 32-character name with the one
+    # the compile cut to 31 (MDL-BIN-007). Paths are named by the original's
+    # names and their occurrence in the whole list (`#2`).
+    amap = {pt: a for pt, a in zip(node_paths(act_nodes), act_nodes)}
+    seen = {}
+    for i, (e, ept) in enumerate(zip(exp_nodes, node_paths(exp_nodes))):
+        k = seen[node_key(e)] = seen.get(node_key(e), 0) + 1
+        p = '%s[%s]' % (base, e['name']) if k == 1 else '%s[%s#%d]' % (base, e['name'], k)
+        a = amap.get(ept)
+        if a is not None and e['name'].lower() != a['name'].lower():
+            # A 32-character name the compile cut to 31 (MDL-BIN-007); the
+            # facts say whether no other node of the original has the name.
             r.must(p + '.name', 'expected %r, got %r: cut to 31 characters' % (e['name'], a['name']))
-            if r.facts is not None:
+            if r.facts is not None and name_cut(e['name'], a['name']):
                 r.facts[profile + ' ' + p + '.name'] = {'name_cut': [e['name'], a['name']], 'unique': True}
         if a is None:
             r.must(p, 'missing')
@@ -1170,16 +1253,20 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
         if 'light' in e and not anim:
             compare_section(r, p + '.light', e['light'], a.get('light'), LIGHT_DEFAULTS, profile, vol)
         if 'emitter' in e and not anim:
+            before = len(r.items)
             compare_section(r, p + '.emitter', e['emitter'], a.get('emitter'), EMITTER_DEFAULTS, profile, vol)
+            if r.facts is not None and any(pth == p + '.emitter.texture' for _, pth, _ in r.items[before:]):
+                r.facts[profile + ' ' + p + '.emitter'] = emitter_facts(e['emitter'])
         if 'reference' in e and not anim:
             compare_section(r, p + '.reference', e['reference'], a.get('reference'),
                             {'refmodel': '', 'reattachable': 0}, profile, vol)
         if 'dangly' in e:
             ed = dict(e['dangly'])
             ad = dict(a.get('dangly') or {})
-            if profile == 'decompile' and 'mesh' in e and 'mesh' in a:
-                # constraints are per vertex; an ASCII may number vertices
-                # its own way, so compare them per drawn corner
+            if 'mesh' in e and 'mesh' in a:
+                # constraints are per vertex; an ASCII, or a compile that
+                # merged or cloned vertices otherwise, may number them its
+                # own way, so compare them per drawn corner
                 ec, ac = ed.pop('constraints', []), ad.pop('constraints', [])
                 bad = []
                 for ti, (x, y) in enumerate(zip(drawn(e['mesh']), drawn(a['mesh']))):
@@ -1205,6 +1292,8 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             ae = a.get('aabb') or []
             if len(ee) != len(ae):
                 r.must(p + '.aabb', 'expected %d tree entries, got %d' % (len(ee), len(ae)))
+                if r.facts is not None and profile == 'compile' and 'mesh' in e and 'mesh' in a:
+                    r.facts['compile ' + p + '.aabb'] = nodefacts.aabb_stale_facts(e['mesh'], ee, a['mesh'], ae)
             else:
                 for j, (x, y) in enumerate(zip(ee, ae)):
                     if not (vclose(x['min'], y['min'], 1e-4) and vclose(x['max'], y['max'], 1e-4) and x['face'] == y['face']):
@@ -1249,13 +1338,22 @@ def compare(exp, act, profile, facts=False):
             if not vclose(em.get(k), am.get(k), 1e-4):
                 r.should('model.' + k, 'expected %s, got %s' % (em.get(k), am.get(k)))
     compare_nodes(r, 'nodes', exp['nodes'], act['nodes'], profile, volatile, False)
-    amap = {a['name'].lower(): a for a in act.get('animations', [])}
+    # Animations pair by name and occurrence: a name used twice pairs the
+    # first with the first.
+    def occ(anims):
+        seen, out = {}, []
+        for a in anims:
+            k = a['name'].lower()
+            seen[k] = seen.get(k, 0) + 1
+            out.append((k, seen[k]))
+        return out
+    amap = dict(zip(occ(act.get('animations', [])), act.get('animations', [])))
     if [a['name'].lower() for a in exp['animations']] != [a['name'].lower() for a in act.get('animations', [])]:
         r.should('animations', 'order or set differs: expected %s, got %s'
                  % ([a['name'] for a in exp['animations']], [a['name'] for a in act.get('animations', [])]))
-    for ea in exp['animations']:
-        p = 'animations[%s]' % ea['name']
-        aa = amap.get(ea['name'].lower())
+    for (ek, n), ea in zip(occ(exp['animations']), exp['animations']):
+        p = 'animations[%s]' % ea['name'] if n == 1 else 'animations[%s#%d]' % (ea['name'], n)
+        aa = amap.get((ek, n))
         if aa is None:
             r.must(p, 'missing')
             continue
@@ -1794,14 +1892,19 @@ def _dead_vertices(mesh):
 
 def _without_vertices(node, dead):
     """A copy of a mesh node without the vertices `dead`, the others
-    renumbered in order: streams, face records, index lists, skin weights,
-    dangly constraints and animmesh sets."""
+    renumbered in order."""
+    gone = set(dead)
+    return _with_vertices(node, [i for i in range(node['mesh'].get('vertex_count', 0)) if i not in gone])
+
+
+def _with_vertices(node, keep):
+    """A copy of a mesh node holding the vertices `keep` (old numbers) in
+    that order: streams, face records, index lists, skin weights, dangly
+    constraints and animmesh sets."""
     import copy
     node = copy.deepcopy(node)
     m = node['mesh']
     nv = m.get('vertex_count', 0)
-    gone = set(dead)
-    keep = [i for i in range(nv) if i not in gone]
     remap = {o: n for n, o in enumerate(keep)}
     m['vertices'] = {k: ([vals[i] for i in keep] if isinstance(vals, list) and len(vals) == nv else vals)
                      for k, vals in m.get('vertices', {}).items()}
@@ -1813,7 +1916,7 @@ def _without_vertices(node, dead):
     if sk and len(sk.get('weights', [])) == nv:
         sk['weights'] = [sk['weights'][i] for i in keep]
         if 'out_of_tree' in sk:
-            sk['out_of_tree'] = [remap[i] for i in sk['out_of_tree'] if i in remap]
+            sk['out_of_tree'] = sorted(remap[i] for i in sk['out_of_tree'] if i in remap)
     dg = node.get('dangly')
     if dg and len(dg.get('constraints', [])) == nv:
         dg['constraints'] = [dg['constraints'][i] for i in keep]
@@ -1825,6 +1928,19 @@ def _without_vertices(node, dead):
     return node
 
 
+def _first_use(mesh):
+    """The vertices in the order the face records first use them (the merge
+    order, MDL-MESH-011), then those only an index list uses (tangent
+    clones, MDL-MESH-043), in their order."""
+    order, seen = [], set()
+    for f in mesh.get('faces', []):
+        for i in f['v']:
+            if i not in seen:
+                seen.add(i)
+                order.append(i)
+    return order + [i for i in range(mesh.get('vertex_count', 0)) if i not in seen]
+
+
 def _exact(view):
     """A view flattened, floats by their exact text (so -0.0 is not 0.0)."""
     return {k: (repr(v) if isinstance(v, float) else v) for k, v in flat(view)}
@@ -1832,32 +1948,43 @@ def _exact(view):
 
 def explain_dead_vertices(first, second, exp, v1=None, v2=None):
     """{'dead_vertices': n[, 'adjacency': faces]} when the second compile is
-    the first without the vertices no face of the first uses, each of them at
-    the position of a corner of a zero-area triangle the original draws (the
-    compile dropped that face, MDL-MESH-020, and kept its vertices), with the
-    other vertices renumbered in order; the meshes' bounding box, average and
-    radius may differ there (computed from the vertices, MDL-MESH-050), and
-    their box must be that of their own vertices; face adjacency may differ
-    (counted). None when anything else differs."""
+    the first without the vertices no face of the first uses, and with the
+    vertices a dropped face used first moved to where the kept faces first
+    use them: each such vertex at the position of a corner of a zero-area
+    triangle the original draws (the compile dropped that face,
+    MDL-MESH-020, after merging its corners, MDL-MESH-011, so it kept its
+    vertices where that face first used them; the ASCII has no such face,
+    so the second compile orders them by the kept faces). Every other
+    vertex keeps its order. The meshes' bounding box, average and radius
+    may differ there (computed from the vertices, MDL-MESH-050), and their
+    box must be that of their own vertices; face adjacency may differ
+    (counted). n counts the vertices dropped and moved. None when anything
+    else differs."""
     return dead_vertices_explained(v1 or mdlview.read_binary(first), v2 or mdlview.read_binary(second), exp)
 
 
 def dead_vertices_explained(v1, v2, exp):
-    """explain_dead_vertices on the two compiles' views (changed in place)."""
+    """explain_dead_vertices on the two compiles' views (changed in place).
+    The original's meshes are found by their names cut to 31 characters,
+    as the compile stores them (MDL-BIN-007)."""
     n1, n2 = v1['nodes'], v2['nodes']
     if [n['name'] for n in n1] != [n['name'] for n in n2]:
         return None
-    orig = {n['name'].lower(): n for n in exp['nodes']}
-    dead_total = adj = 0
+    orig = {}
+    for n in exp['nodes']:
+        orig.setdefault(n['name'].lower()[:31], n)
+    total = adj = 0
     for i, (a, b) in enumerate(zip(n1, n2)):
         if 'mesh' not in a or 'mesh' not in b:
             continue
-        dead = _dead_vertices(a['mesh'])
         if _dead_vertices(b['mesh']):
             return None
-        if not dead:
+        dead = _dead_vertices(a['mesh'])
+        order = [k for k in _first_use(a['mesh']) if k not in set(dead)]
+        alive = [k for k in range(a['mesh'].get('vertex_count', 0)) if k not in set(dead)]
+        if not dead and order == alive:
             continue
-        o = orig.get(a['name'].lower())
+        o = orig.get(a['name'].lower()[:31])
         if o is None or 'mesh' not in o:
             return None
         opos = o['mesh'].get('vertices', {}).get('position', [])
@@ -1866,18 +1993,24 @@ def dead_vertices_explained(v1, v2, exp):
             if tri_area2(opos, tri) == 0:
                 corners.update(_freeze(opos[k]) for k in tri)
         pos1 = a['mesh']['vertices'].get('position', [])
-        if not all(_freeze(pos1[k]) in corners for k in dead):
+        at_corner = {k for k in alive + dead if _freeze(pos1[k]) in corners}
+        if not set(dead) <= at_corner:
             return None
-        a = _without_vertices(a, dead)
+        # only vertices at such corners change their order
+        if [k for k in order if k not in at_corner] != [k for k in alive if k not in at_corner]:
+            return None
+        rank = {k: j for j, k in enumerate(alive)}
+        moved = {k for j, k in enumerate(order) if rank[k] != j and k in at_corner}
+        a = _with_vertices(a, order)
         for m, src in ((a['mesh'], pos1), (b['mesh'], b['mesh']['vertices'].get('position', []))):
             if not src or [min(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmin') or []] or \
                     [max(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmax') or []]:
                 return None
             for k in ('bmin', 'bmax', 'average', 'radius'):
                 m.pop(k, None)
-        dead_total += len(dead)
+        total += len(dead) + len(moved)
         n1[i], n2[i] = a, b
-    if not dead_total:
+    if not total:
         return None
     for a, b in zip(n1, n2):
         for x, y in zip(a.get('mesh', {}).get('faces', []), b.get('mesh', {}).get('faces', [])):
@@ -1886,7 +2019,7 @@ def dead_vertices_explained(v1, v2, exp):
                 x['adjacent'] = y['adjacent']
     if _exact(v1) != _exact(v2):
         return None
-    out = {'dead_vertices': dead_total}
+    out = {'dead_vertices': total}
     if adj:
         out['adjacency'] = adj
     return out

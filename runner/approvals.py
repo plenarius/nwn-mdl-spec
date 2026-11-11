@@ -45,8 +45,23 @@ Then each finding gets the check that explains it:
   (MDL-BIN-007) when no other node of the original has the cut name, and a
   tree finding whose only difference is such names.
 
+Per node, from the facts the comparison records:
+
+- `emitter-texture-junk`: an emitter's texture (decompile and compile) when
+  its chunk name is not empty and the original's texture field holds a byte
+  outside 0x20-0x7e before its first NUL (mdlconf.emitter_facts);
+- `aabb-stale-tree`: an aabb node's entry count, in the compile, when the
+  original's tree has more leaves than its mesh has faces (MDL-MESH-024),
+  and the compile's tree names each of its faces once, with each leaf's box
+  its face's and each inner box its children's union, and the face count is
+  the same (nodefacts.aabb_stale_facts).
+
 Per model, from the facts of runner/nodefacts.py (recorded as `compile
-model.nodes` when the compile has a node number, tree or count finding):
+model.nodes` when the compile has a node number, tree or count finding).
+Names are cut to 31 characters (MDL-BIN-007), and nodes that share a name
+are told apart by their parent and their order among its children of that
+name (nodefacts.unique_labels), unless a shared name is a parent or the
+model has a supermodel ("unique names" below means that):
 
 - `renumbered`: node and animation node numbers (`nodes[X].number`,
   `animations[A].nodes[X].number`) when, with unique node names, the same
@@ -64,9 +79,10 @@ model.nodes` when the compile has a node number, tree or count finding):
   count is not the size of its animation tree, the compile's is (MDL-NODE-042),
   and both trees have the same nodes;
 - `tree-sorted`: nodes.tree when, with unique names and the same nodes and
-  parents, the compiled tree is the original's stored tree with the
-  transparency sort applied (MDL-NODE-012, nodefacts.engine_sort), and every
-  node whose children differ held them out of sort order in the original
+  parents, every node whose children differ has as compiled children its
+  original children with the transparency sort applied (MDL-NODE-012,
+  nodefacts.engine_sort; parent by parent, so that a parent left as stored
+  is not re-sorted), and held them out of sort order in the original
   (no ASCII gives them; the fact `ties_moved` counts those where std::sort
   also moves equal children, past 16, and is reported, not a condition);
 - `aabb-plane-tie`: aabb[j].plane when the aabb trees have the same boxes and
@@ -111,8 +127,11 @@ results made before it have only `unstable_adjacency_only`):
   component;
 - `dead-face-vertices` (dead_vertices): vertices no face of the first compile
   uses, each at a corner of a zero-area triangle of the original, which the
-  second compile does not have (the rest renumbered in order, the meshes'
-  box, average and radius following from their vertices).
+  second compile does not have, and vertices at such corners that the second
+  compile puts where the kept faces first use them (the first compile kept
+  them where the dropped face used them first); every other vertex keeps its
+  order, the meshes' box, average and radius following from their vertices.
+  Meshes are found in the original by their names cut to 31 characters.
 
 Byte-level kinds (the first three) need the two files to be the same length
 and byte for byte the same apart from them. The model passes as
@@ -128,17 +147,20 @@ FORMAT = 'mdlconf-approvals/1'
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
           'water-texanim-169', 'name-cut-31', 'renumbered', 'supermodel-count', 'anim-header-count',
           'tree-sorted', 'aabb-plane-tie', 'unstable-adjacency-only', 'signed-zero', 'bounds-ulp',
-          'dead-face-vertices', 'merged-render-lists')
+          'dead-face-vertices', 'merged-render-lists', 'emitter-texture-junk', 'aabb-stale-tree')
 STABILITY = ('stability', 'binary2')  # the approved finding of an approved instability
 UNSTABLE = {  # kind in unstable_explained: (check, message)
     'adjacency': ('unstable-adjacency-only', 'the adjacency of %d faces'),
     'signed_zero': ('signed-zero', '%d float(s) 0.0 in one compile and -0.0 in the other'),
     'bounds_ulp': ('bounds-ulp', '%d model bounding box float(s), by 1 ulp'),
-    'dead_vertices': ('dead-face-vertices', '%d vertices only zero-area faces of the original used'),
+    'dead_vertices': ('dead-face-vertices', '%d vertices zero-area faces of the original used, left unused '
+                                            'or first used by them'),
 }
 NUMBER = re.compile(r'^(nodes|animations\[[^\]]*\]\.nodes)\[[^\]]*\]\.number$')
 ANIM_COUNT = re.compile(r'^animations\[(.*)\]\.node_count$')
 PLANE = re.compile(r'^(nodes\[[^\]]*\])\.aabb\[\d+\]\.plane$')
+EMITTER_TEXTURE = re.compile(r'^(nodes\[[^\]]*\]\.emitter)\.texture$')
+AABB_COUNT = re.compile(r'^(nodes\[[^\]]*\])\.aabb$')
 TREE_BLOCKERS = ('.tree', '.parent', '.name')
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
@@ -246,7 +268,7 @@ def merged_render_lists(rf):
     """(receivers, donors, checks relied on) when a model's merged render
     lists draw and cast shadows as in the original (`compile
     model.render_lists`, mdlconf.render_list_facts), else None. Receivers
-    and donors are node keys (mdlconf.node_keys: lower-case names, #k for a
+    and donors are node labels (mdlconf.node_labels: lower-case names, #k for a
     name's k-th node); donors are the meshes that now draw triangles a
     receiver drew."""
     if not rf or rf.get('error') or not rf.get('receivers') or rf.get('ambiguous', True):
@@ -297,11 +319,19 @@ def anim_header_count(mf, anim):
 
 def tree_sorted(mf):
     t = mf.get('tree') or {}
-    return bool(mf.get('unique') and mf.get('same_nodes') and t.get('resorted_equals_compile')
-                and t.get('differing_parents', 0) > 0 and t.get('differing_unsorted') == t['differing_parents'])
+    n = t.get('differing_parents', 0)
+    # per parent where the facts have it; results made before compare the
+    # whole tree resorted
+    resorted = t['differing_resorted'] == n if 'differing_resorted' in t else t.get('resorted_equals_compile')
+    return bool(mf.get('unique') and mf.get('same_nodes') and resorted
+                and n > 0 and t.get('differing_unsorted') == n)
 
 
 def node_check(test, path, facts):
+    m = EMITTER_TEXTURE.match(path)
+    if m:
+        e = facts.get('%s %s' % (test, m.group(1))) or {}
+        return 'emitter-texture-junk' if e.get('chunkname') and e.get('texture_junk') else None
     f = facts.get('%s %s' % (test, path))
     if f and f.get('unique'):
         if path.endswith('.tree') and f.get('names_cut_only'):
@@ -320,6 +350,13 @@ def node_check(test, path, facts):
     m = ANIM_COUNT.match(path)
     if m:
         return 'anim-header-count' if anim_header_count(mf, m.group(1)) else None
+    m = AABB_COUNT.match(path)
+    if m:
+        a = facts.get('compile %s.aabb' % m.group(1)) or {}
+        lv, fc = a.get('leaves') or [0, 0], a.get('faces') or [0, 0]
+        if lv[0] > fc[0] and a.get('complete') and a.get('boxes_fit') and fc[0] == fc[1]:
+            return 'aabb-stale-tree'
+        return None
     m = PLANE.match(path)
     if m:
         a = facts.get('compile %s.aabb' % m.group(1)) or {}
