@@ -463,9 +463,11 @@ def _alike(a, b, level):
 def pair_nodes(exp_nodes, act_nodes):
     """For each node of `exp_nodes`, the index of its node in `act_nodes`
     (None when there is none): paired by path (node_paths). Siblings that
-    share a name (the transparency sort, or a decompiler, can put them in
-    another order) pair first with one alike in everything _signature
-    holds, then with one alike in node type and transform, then in order."""
+    share a name pair by their order among those siblings, except where
+    what they hold tells them apart without doubt (the transparency sort, or
+    a decompiler, can put them in another order): a node and a sibling
+    alike (_alike) in everything _signature holds, or failing that in node
+    type and transform, and in nothing else on either side."""
     ep, ap = node_paths(exp_nodes), node_paths(act_nodes)
     egroups, agroups = {}, {}
     for i, pt in enumerate(ep):
@@ -477,15 +479,16 @@ def pair_nodes(exp_nodes, act_nodes):
         as_ = list(agroups.get(key, []))
         if len(es) > 1 or len(as_) > 1:
             for level in (0, 1):
-                for i in es:
-                    if out[i] is not None:
-                        continue
-                    sig = _signature(exp_nodes[i])
-                    for j in as_:
-                        if _alike(sig, _signature(act_nodes[j]), level):
+                es_left = [i for i in es if out[i] is None]
+                sig = {i: _signature(exp_nodes[i]) for i in es_left}
+                asig = {j: _signature(act_nodes[j]) for j in as_}
+                match = {i: [j for j in as_ if _alike(sig[i], asig[j], level)] for i in es_left}
+                for i in es_left:
+                    if len(match[i]) == 1:
+                        j = match[i][0]
+                        if sum(1 for k in es_left if j in match[k]) == 1:
                             out[i] = j
                             as_.remove(j)
-                            break
         for i in es:
             if out[i] is None and as_:
                 out[i] = as_.pop(0)

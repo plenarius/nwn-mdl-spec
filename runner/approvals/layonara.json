@@ -192,7 +192,7 @@
    "why": "Fixable in cleanmodels (decompiler order, supermodel walk), being fixed there; they stay failures (James, 2026-11-10)."
   },
   {
-   "what": "merged render lists that draw differently (drawing state, tangents, animated or scaled donors), controller keys, node-pairing artifacts, unstable models whose second compile differs in anything no entry approves (vertex order above all)",
+   "what": "merged render lists whose round trip draws or shadows differently from the original (a triangle lost or added, as plc_candle3 with cleanmodels 83c1922), controller keys, node-pairing artifacts, unstable models whose second compile differs in anything no entry approves (vertex order above all)",
    "why": "Not approved (James, 2026-11-09 and 2026-11-10)."
   }
  ]
