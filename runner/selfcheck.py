@@ -386,6 +386,20 @@ def check_node_facts():
     cases.append(('T1: >16 sorted children shuffled', [('r', None, 0, d)] + kids,
                   [('r', None, 0, d)] + [(n, 'r', byname[n][2], byname[n][3]) for n in shuffled],
                   [('r', None, d)] + [(k[0], 'r', k[3]) for k in kids], 'fail', set()))
+    # T1 after the decompiler fix (cleanmodels PR #140): the children declared
+    # in the order std::sort maps onto the stored one, so the tree comes back;
+    # the original numbered them in stored order, which no declaration gives
+    stored = [k[0] for k in kids]
+    idx = list(range(len(stored)))
+    N.engine_sort(idx, lambda x, y: N.key_less(key[stored[x]], key[stored[y]]))
+    D = [None] * len(stored)
+    for j, i in enumerate(idx):
+        D[i] = stored[j]
+    if N.sort_children(D, key) != stored:
+        bad.append('engine_sort: the inverse declaration order does not rebuild the stored order')
+    cases.append(('T1 after the decompiler fix: tree back, numbers differ', [('r', None, 0, d)] + kids,
+                  [('r', None, 0, d)] + [(n, 'r', D.index(n) + 1, byname[n][3]) for n in stored],
+                  [('r', None, d)] + [(n, 'r', byname[n][3]) for n in D], 'pass-approved', {'renumbered'}))
     for what, orig, comp, decl, status, ids in cases:
         exp = mdlconf.normalise(_tree(orig))
         exp['volatile'] = []
