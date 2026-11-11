@@ -147,7 +147,8 @@ Corrections after the first draft:
   the receivers' and donors' `triangles` and `vertex_count` findings are
   approved, in the decompile and the compile; the meshes' other findings
   still need their own entries. A receiver's mesh facts pair the compile
-  with its own faces, the start of its index list.
+  with its own faces, the start of its index list. On run 6's 1,177
+  render-list models (cleanmodels 3003980) it holds on 998.
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when
