@@ -399,10 +399,47 @@ def check_node_facts():
          [('r', None, 0, d), ('a', 'r', 1, d), ('x', 'a', 2, d), ('b', 'r', 3, d), ('x', 'b', 4, d)],
          [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('b', 'r', d), ('x', 'b', d)],
          'pass-approved', {'renumbered'}),
+        # a name used twice that is a parent, in a model with no animations
+        # and no supermodel: a child's parent is the latest node of that
+        # name before it (nodefacts.unique_labels with parents)
         ('a name used twice that is a parent',
          [('r', None, 0, d), ('a', 'r', 2, d), ('x', 'a', 3, d), ('a', 'r', 1, d), ('y', 'a', 4, d)],
          [('r', None, 0, d), ('a', 'r', 1, d), ('x', 'a', 2, d), ('a', 'r', 3, d), ('y', 'a', 4, d)],
-         [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('a', 'r', d), ('y', 'a', d)], 'fail', set()),
+         [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('a', 'r', d), ('y', 'a', d)],
+         'pass-approved', {'renumbered'}),
+        ('a name used twice that is a parent, a child moved to the other',
+         [('r', None, 0, d), ('a', 'r', 2, d), ('x', 'a', 3, d), ('a', 'r', 1, d), ('y', 'a', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('a', 'r', 3, d), ('y', 'a', 4, d), ('x', 'a', 2, d)],
+         [('r', None, d), ('a', 'r', d), ('a', 'r', d), ('y', 'a', d), ('x', 'a', d)], 'fail', set()),
+        # eld02_p18_01's kind: a child dummy named like the root, parent of
+        # the meshes declared after it
+        ('a child named like the root',
+         [('r', None, 0, d), ('l2', 'r', 2, d), ('l1', 'r', 1, d), ('r', 'r', 3, d), ('m0', 'r', 4, 0),
+          ('m1', 'r', 5, 0)],
+         [('r', None, 0, d), ('l2', 'r', 1, d), ('l1', 'r', 2, d), ('r', 'r', 3, d), ('m0', 'r', 4, 0),
+          ('m1', 'r', 5, 0)],
+         [('r', None, d), ('l2', 'r', d), ('l1', 'r', d), ('r', 'r', d), ('m0', 'r', 0), ('m1', 'r', 0)],
+         'pass-approved', {'renumbered'}),
+        # two labels of one 31-character name stay two (Geo keeps a label whole)
+        ('a 31-character name used twice, renumbered',
+         [('r', None, 0, d), ('a', 'r', 2, d), ('n' * 31, 'a', 3, d), ('b', 'r', 1, d), ('n' * 31, 'b', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('n' * 31, 'a', 2, d), ('b', 'r', 3, d), ('n' * 31, 'b', 4, d)],
+         [('r', None, d), ('a', 'r', d), ('n' * 31, 'a', d), ('b', 'r', d), ('n' * 31, 'b', d)],
+         'pass-approved', {'renumbered'}),
+        # a 32-character name the original already used twice is no new
+        # collision once cut (mdlconf.cut_names); two different 32-character
+        # names that cut to one are
+        ('a 32-character name used twice, cut',
+         [('r', None, 0, d), ('a', 'r', 1, d), ('n' * 32, 'a', 2, d), ('b', 'r', 3, d), ('n' * 32, 'b', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('n' * 31, 'a', 2, d), ('b', 'r', 3, d), ('n' * 31, 'b', 4, d)],
+         [('r', None, d), ('a', 'r', d), ('n' * 32, 'a', d), ('b', 'r', d), ('n' * 32, 'b', d)],
+         'pass-approved', {'name-cut-31'}),
+        ('two 32-character names that cut to one',
+         [('r', None, 0, d), ('a', 'r', 1, d), ('n' * 32, 'a', 2, d), ('b', 'r', 3, d),
+          ('n' * 31 + 'm', 'b', 4, d)],
+         [('r', None, 0, d), ('a', 'r', 1, d), ('n' * 31, 'a', 2, d), ('b', 'r', 3, d), ('n' * 31, 'b', 4, d)],
+         [('r', None, d), ('a', 'r', d), ('n' * 32, 'a', d), ('b', 'r', d), ('n' * 31 + 'm', 'b', d)],
+         'fail', set()),
         # a 32-character name the compile cut to 31 (MDL-BIN-007): the facts
         # cut it too, so the numbers approve
         ('a 32-character name, renumbered', [('r', None, 0, d), ('n' * 32, 'r', 2, d), ('y', 'r', 1, d)],
@@ -485,6 +522,57 @@ def check_node_facts():
     res = _node_result(exp, _tree(comp, 'sup', 7), _ascii(decl, 'sup'), None, full)
     if res['status'] != 'fail' or res.get('approved'):
         bad.append('a supermodel not found: %s %s' % (res['status'], res.get('approved')))
+    # a name used twice in a model with a supermodel (c_kenku_b, packox):
+    # labelled, and the supermodel walked by name (S2: the original numbered
+    # against an older supermodel of 5 nodes, in an order no declaration
+    # gives)
+    orig = [('r', None, 0, d), ('arm', 'r', 1, d), ('q', 'r', -1, d), ('x', 'q', 10, d), ('x', 'q', 9, d)]
+    comp = [('r', None, 0, d), ('arm', 'r', 1, d), ('q', 'r', -1, d), ('x', 'q', 7, d), ('x', 'q', 8, d)]
+    decl = [('r', None, d), ('arm', 'r', d), ('q', 'r', d), ('x', 'q', d), ('x', 'q', d)]
+    for what, cnums, status, ids in (
+            ('a name used twice, with a supermodel', (7, 8), 'pass-approved', {'renumbered', 'supermodel-count'}),
+            ('a name used twice, with a supermodel, not by the rule', (7, 9), 'fail', {'supermodel-count'})):
+        exp = mdlconf.normalise(_tree(orig, 'sup', 11))
+        exp['volatile'] = []
+        c = [t if t[0] != 'x' else None for t in comp]
+        c[3], c[4] = ('x', 'q', cnums[0], d), ('x', 'q', cnums[1], d)
+        res = _node_result(exp, _tree(c, 'sup', 9), _ascii(decl, 'sup'), sup, full)
+        got = {x[3] for x in res.get('approved', [])}
+        if res['status'] != status or got != ids:
+            bad.append('%s: %s %s, expected %s %s' % (what, res['status'], sorted(got), status, sorted(ids)))
+    # animation nodes of a name the geometry uses twice under one parent:
+    # MDL-NODE-040's walk matches names, so each takes the first stored
+    # geometry node's number (the 12 tiles of round 4)
+    geo_o = [('r', None, 0, d), ('x', 'r', 2, d), ('y', 'r', 1, d), ('x', 'r', 3, d)]
+    geo_c = [('r', None, 0, d), ('x', 'r', 1, d), ('y', 'r', 2, d), ('x', 'r', 3, d)]
+    decl = [('r', None, d), ('x', 'r', d), ('y', 'r', d), ('x', 'r', d)]
+    for what, oanim, canim, status in (
+            ('animation nodes of a name used twice', [2, 2], [1, 1], 'pass-approved'),
+            ('animation nodes bound to the second of the name', [2, 3], [1, 3], 'fail')):
+        exp = mdlconf.normalise(_tree(geo_o, anims=[('a', [('r', None, 0), ('x', 'r', oanim[0]),
+                                                            ('x', 'r', oanim[1])], 3)]))
+        exp['volatile'] = []
+        act = _tree(geo_c, anims=[('a', [('r', None, 0), ('x', 'r', canim[0]), ('x', 'r', canim[1])], 3)])
+        res = _node_result(exp, act, _ascii(decl), None, full)
+        got = {x[3] for x in res.get('approved', [])}
+        if res['status'] != status or (status == 'pass-approved') != (got == {'renumbered'}):
+            bad.append('%s: %s %s, expected %s' % (what, res['status'], sorted(got), status))
+    # a name used twice that is a parent is labelled only where nothing
+    # binds to a part number: not with animations, not with a supermodel
+    orig = [('r', None, 0, d), ('a', 'r', 2, d), ('x', 'a', 3, d), ('a', 'r', 1, d), ('y', 'a', 4, d)]
+    comp = [('r', None, 0, d), ('a', 'r', 1, d), ('x', 'a', 2, d), ('a', 'r', 3, d), ('y', 'a', 4, d)]
+    decl = [('r', None, d), ('a', 'r', d), ('x', 'a', d), ('a', 'r', d), ('y', 'a', d)]
+    for what, sname, scount, ccount, anims in (
+            ('a name used twice that is a parent, animated', 'NULL', None, None,
+             [('a', [('r', None, 0)], 1)]),
+            ('a name used twice that is a parent, with a supermodel', 'sup', 9, 9, [])):
+        exp = mdlconf.normalise(_tree(orig, sname, scount, anims=anims))
+        exp['volatile'] = []
+        res = _node_result(exp, _tree(comp, sname, ccount, anims=anims), _ascii(decl, sname),
+                           sup if sname != 'NULL' else None, full)
+        mf = res['facts'].get('compile model.nodes') or {}
+        if res['status'] != 'fail' or 'renumbered' in {x[3] for x in res.get('approved', [])} or mf.get('unique'):
+            bad.append('%s: %s %s' % (what, res['status'], res.get('approved')))
     # an ASCII supermodel numbered by the rules (MDL-NODE-010)
     asup = N.Super.from_ascii(_ascii([('sr', None, d), ('hand', 'arm', d), ('arm', 'sr', d)]), None)
     if asup.count != 3 or asup.bypath != {N.ROOT: 0, N.ROOT + ('arm',): 2, N.ROOT + ('arm', 'hand'): 1}:
@@ -591,6 +679,28 @@ def check_stability():
              mesh_view(P, [[0, 2, 3], [0, 1, 2]]), None),
             ('no vertex dropped', mesh_view(P, [[0, 1, 2], [0, 2, 3]]), mesh_view(P, [[0, 2, 3], [0, 1, 2]]), None)):
         got = mdlconf.dead_vertices_explained(v1, v2, degen)
+        if got != want:
+            bad.append('dead vertices, %s: %s, expected %s' % (what, got, want))
+    # a mesh whose every face has zero area (ttd01_g01_02's plane45): the
+    # first compile keeps its merged vertices and no face, the second has
+    # no vertices, and that mesh's box is the compiler's empty one
+    flat3 = mdlconf.normalise(_view([{'pos': [[2, 2, 0], [2, 2, 0], [3, 3, 0]], 'tris': [[0, 1, 2]]}]))
+
+    def emptied(model_bmin=(0, 0, 0)):
+        v = _view([{'pos': [], 'tris': []}])
+        v['nodes'][1]['mesh'].update(vertices={}, bmin=[0, 0, 0], bmax=[0, 0, 0], average=[0, 0, 0], radius=0.0)
+        v['model']['bmin'] = list(model_bmin)
+        return v
+    for what, v1, v2, want in (
+            ('every face zero-area, no vertices left', mesh_view([[2, 2, 0], [3, 3, 0]], []), emptied(),
+             {'dead_vertices': 2}),
+            ('every face zero-area, the model box changed', mesh_view([[2, 2, 0], [3, 3, 0]], []),
+             emptied((1, 0, 0)), None),
+            ('no vertices left, one not at a zero-area corner', mesh_view([[2, 2, 0], [5, 5, 0]], []), emptied(),
+             None),
+            ('no vertices left, a face kept in the first', mesh_view([[2, 2, 0], [3, 3, 0], [3, 2, 0]], [[0, 1, 2]]),
+             emptied(), None)):
+        got = mdlconf.dead_vertices_explained(v1, v2, flat3)
         if got != want:
             bad.append('dead vertices, %s: %s, expected %s' % (what, got, want))
     # approving them

@@ -1200,12 +1200,13 @@ def dfs_order(nodes):
 
 def cut_names(names):
     """Each name as the game's compiler stores it (MDL-BIN-007: at most 31
-    characters), lower-case; with the set of those that two names share."""
+    characters), lower-case; with the set of those that two different names
+    become (a name the list already uses twice is no new collision)."""
     cut = [n[:31].lower() for n in names]
-    seen, shared = set(), set()
-    for c in cut:
-        (shared if c in seen else seen).add(c)
-    return cut, shared
+    full = {}
+    for n, c in zip(names, cut):
+        full.setdefault(c, set()).add(n.lower())
+    return cut, {c for c, f in full.items() if len(f) > 1}
 
 
 node_paths = nodefacts.node_paths
@@ -1947,6 +1948,9 @@ def _with_vertices(node, keep):
     m['vertices'] = {k: ([vals[i] for i in keep] if isinstance(vals, list) and len(vals) == nv else vals)
                      for k, vals in m.get('vertices', {}).items()}
     m['vertex_count'] = len(keep)
+    if not keep:
+        # a mesh left with no vertices has no streams (the reader gives none)
+        m['vertices'] = {k: v for k, v in m['vertices'].items() if not (isinstance(v, list) and not v)}
     for f in m.get('faces', []):
         f['v'] = [remap.get(i, -1) for i in f['v']]
     m['index_lists'] = [[remap.get(i, -1) for i in il] for il in m.get('index_lists') or []]
@@ -2042,6 +2046,14 @@ def dead_vertices_explained(v1, v2, exp):
         moved = {k for j, k in enumerate(order) if rank[k] != j and k in at_corner}
         a = _with_vertices(a, order)
         for m, src in ((a['mesh'], pos1), (b['mesh'], b['mesh']['vertices'].get('position', []))):
+            if m is b['mesh'] and not order and not src and not m.get('vertex_count'):
+                # every face of the mesh had zero area: the first compile
+                # kept their vertices and no face, the second has neither,
+                # and its box, average and radius are the compiler's for an
+                # empty mesh (the model's box is compared as it is)
+                for k in ('bmin', 'bmax', 'average', 'radius'):
+                    m.pop(k, None)
+                continue
             if not src or [min(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmin') or []] or \
                     [max(fval(p[k]) for p in src) for k in range(3)] != [fval(x) for x in m.get('bmax') or []]:
                 return None
