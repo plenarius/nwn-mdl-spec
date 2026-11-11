@@ -430,23 +430,42 @@ def node_paths(nodes):
 def _signature(n):
     """What tells apart siblings of one name: node type, the first keys of
     position and orientation, and a mesh's vertex count and first vertex."""
+    def floats(v):
+        try:
+            return tuple(float(x) for x in v)
+        except (TypeError, ValueError):
+            return None
+
     def first(name):
         for c in n.get('controllers', []):
             if c.get('name') == name and c.get('keys'):
-                return tuple(round(float(x), 4) if isinstance(x, (int, float)) else x
-                             for x in (c['keys'][0].get('v') or []))
+                return floats(c['keys'][0].get('v') or [])
         return None
     m = n.get('mesh') or {}
     pos = (m.get('vertices') or {}).get('position') or []
-    v0 = tuple(round(float(x), 4) if isinstance(x, (int, float)) else x for x in pos[0]) if pos else None
-    return (n.get('flags'), first('position'), first('orientation'), m.get('vertex_count'), v0)
+    return (n.get('flags'), first('position'), first('orientation'), m.get('vertex_count'),
+            floats(pos[0]) if pos else None)
+
+
+def _alike(a, b, level):
+    """Two signatures alike: in everything (level 0), or in node type and
+    transform only (level 1; an ASCII mesh numbers its vertices its own
+    way), floats within 1e-4."""
+    def near(x, y):
+        if x is None or y is None:
+            return x is y
+        return len(x) == len(y) and all(abs(p - q) <= 1e-4 * max(1.0, abs(p), abs(q)) for p, q in zip(x, y))
+    if a[0] != b[0] or not near(a[1], b[1]) or not near(a[2], b[2]):
+        return False
+    return level > 0 or (a[3] == b[3] and near(a[4], b[4]))
 
 
 def pair_nodes(exp_nodes, act_nodes):
     """For each node of `exp_nodes`, the index of its node in `act_nodes`
-    (None when there is none): paired by path (node_paths); siblings that
-    share a name pair first with one alike in node_signature (the
-    transparency sort can swap them), then in order."""
+    (None when there is none): paired by path (node_paths). Siblings that
+    share a name (the transparency sort, or a decompiler, can put them in
+    another order) pair first with one alike in everything _signature
+    holds, then with one alike in node type and transform, then in order."""
     ep, ap = node_paths(exp_nodes), node_paths(act_nodes)
     egroups, agroups = {}, {}
     for i, pt in enumerate(ep):
@@ -457,13 +476,16 @@ def pair_nodes(exp_nodes, act_nodes):
     for key, es in egroups.items():
         as_ = list(agroups.get(key, []))
         if len(es) > 1 or len(as_) > 1:
-            for i in es:
-                sig = _signature(exp_nodes[i])
-                for j in as_:
-                    if _signature(act_nodes[j]) == sig:
-                        out[i] = j
-                        as_.remove(j)
-                        break
+            for level in (0, 1):
+                for i in es:
+                    if out[i] is not None:
+                        continue
+                    sig = _signature(exp_nodes[i])
+                    for j in as_:
+                        if _alike(sig, _signature(act_nodes[j]), level):
+                            out[i] = j
+                            as_.remove(j)
+                            break
         for i in es:
             if out[i] is None and as_:
                 out[i] = as_.pop(0)

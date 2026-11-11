@@ -860,6 +860,16 @@ def check_round3():
     rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
     if [p for lvl, p, _ in rep.items if lvl == 'must' and not p.endswith('.tree')]:
         bad.append('swapped siblings of one name: paired wrongly: %s' % [p for _, p, _ in rep.items])
+    # the same in the decompile: an ASCII mesh numbers its vertices its own
+    # way, so siblings pair by their transform
+    def mesh_node(name, x, verts):
+        return node(name, 'r', [pos([x, 0, 0])], type='trimesh', flags=0x21,
+                    mesh={'vertex_count': len(verts), 'vertices': {'position': verts}})
+    e = model([node('r', None), mesh_node('g', 0, [[0, 0, 0], [1, 0, 0]]), mesh_node('g', 5, [[2, 0, 0]])])
+    a = model([node('r', None), mesh_node('g', 5, [[9, 9, 9]]), mesh_node('g', 0, [[1, 0, 0]])])
+    if any(p.endswith('.controllers[position].keys[0].v') for _, p, _ in
+           mdlconf.compare(mdlconf.normalise(e), a, 'decompile').items):
+        bad.append('siblings of one name declared in another order: paired wrongly')
     # two animations of one name, paired in order
     def anim(t):
         return {'name': '2hreadyr', 'length': 1, 'transtime': t, 'animroot': 'r', 'events': [], 'node_count': 1,
