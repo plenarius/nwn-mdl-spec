@@ -73,6 +73,26 @@ model.nodes` when the compile has a node number, tree or count finding):
   faces and every differing plane, in the original and in the compile, is at
   a tie of MDL-MESH-052's axis rule (nodefacts.aabb_facts).
 
+Per model, from the facts of mdlconf.render_list_facts (recorded as
+`compile model.render_lists` when the original has merged render lists,
+MDL-BIN-053, and the round trip has a render, triangles or vertex_count
+finding):
+
+- `merged-render-lists`: when the whole model draws and casts shadows as
+  the original does, compared in world space (every drawn triangle and
+  every shadow face paired one to one, apart from original triangles of zero
+  area; the same drawing state, animation and corner attributes per pair,
+  bad original tangents and baked ones needing nan-tangent-fill and
+  tangents-baked; no node name used twice where a parent, an animated node,
+  a receiver or a donor is looked up by it; every supermodel found, no skin
+  or animmesh receiver; every node that now draws another's triangles a render-0 mesh
+  without an index list in the original, drawing a receiver's), the donors'
+  render findings and the receivers' and donors' triangles and vertex_count
+  findings, in the decompile and the compile. A receiver's mesh facts pair
+  the compile with its own faces only (the start of its index list), so its
+  other findings go through the checks above, and a decompile finding of
+  these meshes that is not one of those three leaves the mesh failed.
+
 And one per model, about the second compile rather than a finding: a model
 whose MUST findings are all approved and whose second compile differs from
 the first, where every difference is of a kind an entry approves
@@ -220,7 +240,7 @@ def merged_render_lists(rf):
     model.render_lists`, mdlconf.render_list_facts), else None. Receivers
     and donors are lower-case node names; donors are the meshes that now
     draw triangles a receiver drew."""
-    if not rf or rf.get('error') or not rf.get('receivers') or not rf.get('unique'):
+    if not rf or rf.get('error') or not rf.get('receivers') or rf.get('ambiguous', True):
         return None
     if rf.get('supermodel_missing') or rf.get('receivers_deformed'):
         return None

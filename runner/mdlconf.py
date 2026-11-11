@@ -390,7 +390,9 @@ def mesh_facts(e, a, own_nodes):
     corner which attributes differ (with the tolerances of compare_mesh),
     including skin weights, dangly constraints and face materials. Also the
     number of distinct vertices the original draws by the game's merge key
-    (MDL-MESH-010, floats compared exactly)."""
+    (MDL-MESH-010, floats compared exactly). For a receiver of a merged
+    render list (merged_list) only its own faces' triangles, the start of
+    its index list, are paired (`merged_list`: [faces, list triangles])."""
     em, am = e['mesh'], a['mesh']
     et, at = drawn(em), drawn(am)
     ml = merged_list(em)
@@ -726,16 +728,57 @@ def _rl_rotation(a, b):
     return None
 
 
+def _rl_diff(a, b, r):
+    """What differs between two paired triangles, b's corner (j + r) % 3 at
+    a's corner j: {'state': [fields], 'moving': bool, 'corners': {attr: n},
+    'bad_tangent': n, 'tangent_baked': n}."""
+    d = {'state': [k for k, v in a['state'].items() if b['state'].get(k) != v],
+         'moving': a['moving'] != b['moving'], 'corners': {}, 'bad_tangent': 0, 'tangent_baked': 0}
+    white = (255, 255, 255, 255)
+
+    def bump(k):
+        d['corners'][k] = d['corners'].get(k, 0) + 1
+    for jj in range(3):
+        x, y = a['corners'][jj], b['corners'][(jj + r) % 3]
+        for k in ('uv1', 'uv2', 'uv3'):
+            if (k in x) != (k in y) or (k in x and not vclose(list(x[k]), list(y[k]), RL_TOL[k])):
+                bump(k)
+        if ('n' in x) != ('n' in y) or ('n' in x and not vclose(list(x['n']), list(y['n']), RL_TOL['normal'])):
+            bump('normal')
+        if 't' in x and x['bad_t']:
+            d['bad_tangent'] += 1  # what the original drew here is undefined (MDL-BIN-048)
+        elif 't' in x and 't' in y:
+            if not vclose(list(x['t']), list(y['t']), RL_TOL['tangent']):
+                bump('tangent')
+            if x.get('h') != y.get('h'):
+                bump('handedness')
+        elif 't' in y:
+            d['tangent_baked'] += 1  # the compile baked tangents the original had none of
+        elif 't' in x:
+            bump('tangent')
+        if x.get('c', white) != y.get('c', white):
+            bump('color')
+    return d
+
+
 def _rl_pair(orig, comp):
     """Pair each original triangle with one compiled triangle at the same
-    place (corners within RL_PAIR, in the same winding), the same node first
-    and then any node. Returns (pairs [(i, j, r)], lost [i], extra [j])."""
+    place (corners within RL_PAIR, in the same winding). Where several are
+    there (coincident triangles), one that matches in everything _rl_diff
+    compares is taken first, then one of the same node, then any. So the
+    pairs show no difference exactly when both draw the same triangles with
+    the same attributes, coincident ones included. Returns (pairs [(i, j,
+    r)], lost [i], extra [j])."""
     grid = {}
     for j, tr in enumerate(comp):
         if tr is not None:
             grid.setdefault(_rl_cell(tr), []).append(j)
     used, pairs, done = set(), [], set()
-    for same_node in (True, False):
+
+    def exact(i, j, r):
+        d = _rl_diff(orig[i], comp[j], r)
+        return not (d['state'] or d['moving'] or d['corners'])
+    for same_node, same_all in ((True, True), (False, True), (True, False), (False, False)):
         for i, tr in enumerate(orig):
             if tr is None or i in done:
                 continue
@@ -746,7 +789,7 @@ def _rl_pair(orig, comp):
                     if j in used or (same_node and comp[j]['node'] != tr['node']):
                         continue
                     r = _rl_rotation(tr, comp[j])
-                    if r is not None:
+                    if r is not None and (not same_all or exact(i, j, r)):
                         found = (j, r)
                         break
                 if found:
@@ -768,44 +811,24 @@ def _rl_compare(orig, comp):
          'extra': len(extra), 'extra_nonzero': sum(1 for j in extra if not comp[j]['zero']),
          'state_differ': {}, 'moving_differ': 0, 'corner_differ': {}, 'bad_tangent': 0, 'tangent_baked': 0,
          'max_delta': {'position': 0.0, 'uv0': 0.0}, 'moved': {}}
-
-    def bump(d, k):
-        d[k] = d.get(k, 0) + 1
-
-    white = (255, 255, 255, 255)
     for i, j, r in pairs:
         a, b = orig[i], comp[j]
         if a['node'] != b['node']:
             f['moved'].setdefault(b['node'], set()).add(a['node'])
-        for k, v in a['state'].items():
-            if b['state'].get(k) != v:
-                bump(f['state_differ'], k)
-        if a['moving'] != b['moving']:
-            f['moving_differ'] += 1
+        d = _rl_diff(a, b, r)
+        for k in d['state']:
+            f['state_differ'][k] = f['state_differ'].get(k, 0) + 1
+        f['moving_differ'] += d['moving']
+        for k, n in d['corners'].items():
+            f['corner_differ'][k] = f['corner_differ'].get(k, 0) + n
+        f['bad_tangent'] += d['bad_tangent']
+        f['tangent_baked'] += d['tangent_baked']
         for jj in range(3):
             x, y = a['corners'][jj], b['corners'][(jj + r) % 3]
             f['max_delta']['position'] = max(f['max_delta']['position'],
                                              max(abs(x['p'][k] - y['p'][k]) for k in range(3)))
             if 'uv0' in x:
                 f['max_delta']['uv0'] = max(f['max_delta']['uv0'], max(abs(x['uv0'][k] - y['uv0'][k]) for k in range(2)))
-            for k in ('uv1', 'uv2', 'uv3'):
-                if (k in x) != (k in y) or (k in x and not vclose(list(x[k]), list(y[k]), RL_TOL[k])):
-                    bump(f['corner_differ'], k)
-            if ('n' in x) != ('n' in y) or ('n' in x and not vclose(list(x['n']), list(y['n']), RL_TOL['normal'])):
-                bump(f['corner_differ'], 'normal')
-            if 't' in x and x['bad_t']:
-                f['bad_tangent'] += 1  # what the original drew here is undefined (MDL-BIN-048)
-            elif 't' in x and 't' in y:
-                if not vclose(list(x['t']), list(y['t']), RL_TOL['tangent']):
-                    bump(f['corner_differ'], 'tangent')
-                if x.get('h') != y.get('h'):
-                    bump(f['corner_differ'], 'handedness')
-            elif 't' in y:
-                f['tangent_baked'] += 1  # the compile baked tangents the original had none of
-            elif 't' in x:
-                bump(f['corner_differ'], 'tangent')
-            if x.get('c', white) != y.get('c', white):
-                bump(f['corner_differ'], 'color')
     f['moved'] = {k: sorted(v) for k, v in sorted(f['moved'].items())}
     return f
 
@@ -815,28 +838,30 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
     its compile against the original, compared across the whole model in
     world space (for the approval merged-render-lists, runner/approvals.py).
 
-    Every drawn triangle (meshes with render != 0, from the index list) and
-    every shadow face (meshes with shadow or beaming != 0, from the face list,
-    whatever render says: MDL-MESH-063) of each model is placed in world space
-    (first keys of position, orientation and scale up the parent chain) and
-    paired one to one with a triangle of the other model at the same place
-    (corners within RL_PAIR, winding kept), the same node first. Per pair the
-    drawing state (RL_STATE, node type, alpha, selfillumcolor), whether an
-    animation (the model's own or its supermodel's, `super_moving`) moves or
-    fades the drawing node or an ancestor, and the corners' UV1-3, normal,
-    tangent, handedness and colour are compared. Tangents the original holds
-    as NaN, infinite or zero are counted apart (`bad_tangent`), as are
-    tangents only the compile has (`tangent_baked`). A triangle left without
-    a pair is counted, and whether it has area.
+    Every drawn triangle (meshes with render != 0, from the index list,
+    MDL-MESH-065) and every shadow face (meshes with shadow or beaming != 0,
+    from the face list, whatever render says: MDL-MESH-066) of each model is
+    placed in world space (first keys of position, orientation and scale up
+    the parent chain) and paired one to one with a triangle of the other
+    model at the same place (_rl_pair). Per pair the drawing state
+    (RL_STATE, node type, alpha, selfillumcolor), whether an animation (the
+    model's own or its supermodel's, `super_moving`) moves or fades the
+    drawing node or an ancestor, and the corners' UV1-3, normal, tangent,
+    handedness and colour are compared; a shadow face only by its corners'
+    positions and its shadow, beaming, alpha and animation. Tangents the
+    original holds as NaN, infinite or zero are counted apart
+    (`bad_tangent`), as are tangents only the compile has (`tangent_baked`).
+    A triangle left without a pair is counted, and whether it has area.
 
     `receivers` are the original's meshes whose index list holds more
     triangles than their faces (merged_list); `donor_candidates` the
     original's meshes with render 0, no index list and faces; `moved` the
     compiled nodes that draw triangles another node drew in the original,
-    with those nodes."""
-    rec, cand, names, deformed = [], [], [], 0
+    with those nodes. `ambiguous` lists the node names used by more than one
+    node in either model that a name lookup here depends on: a parent, an
+    animated node, a receiver or a donor candidate."""
+    rec, cand, deformed = [], [], 0
     for nd in exp['nodes']:
-        names.append(nd['name'].lower())
         m = nd.get('mesh')
         if not m or nd['flags'] & mdlview.F_AABB:
             continue
@@ -847,14 +872,20 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
         il = m.get('index_lists') or []
         if not m.get('render') and not (il and il[0]) and m.get('faces'):
             cand.append(nd['name'].lower())
+    moving = {'original': animated_names(exp) | set(super_moving), 'compiled': animated_names(comp) | set(super_moving)}
+    used = set(rec) | set(cand) | moving['original'] | moving['compiled']
+    dup = set()
+    for view in (exp, comp):
+        names = [n['name'].lower() for n in view['nodes']]
+        dup |= {n for n in names if names.count(n) > 1}
+        used |= {(n.get('parent') or '').lower() for n in view['nodes']}
     f = {'receivers': rec, 'donor_candidates': cand, 'receivers_deformed': deformed,
-         'unique': len(set(names)) == len(names)}
+         'ambiguous': sorted(dup & used)}
     for mode in ('draw', 'shadow'):
-        ot = _rl_tris(exp, mode, animated_names(exp) | super_moving)
-        ct = _rl_tris(comp, mode, animated_names(comp) | super_moving)
+        ot = _rl_tris(exp, mode, moving['original'])
+        ct = _rl_tris(comp, mode, moving['compiled'])
         f[mode] = _rl_compare(ot, ct)
     return f
-
 
 MESH_DEFAULTS = {'diffuse': [1, 1, 1], 'ambient': [1, 1, 1], 'specular': [0, 0, 0], 'shininess': 1,
                  'shadow': 1, 'beaming': 0, 'render': 1, 'transparencyhint': 0, 'renderhint': 0,

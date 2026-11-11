@@ -324,13 +324,17 @@ whose vertices are appended to its own; each donor keeps its faces but has
 render 0 and an empty index list. The engine draws index lists
 (MDL-BIN-049), so such a model looks whole while its faces are not what it
 draws. A reader that writes ASCII, which holds faces only, MUST NOT lose the
-copies. Writing each donor whose triangles are all among a receiver's
-copies with render 1 draws the same triangles, as a mesh of its own. Their
-normals are the copy's, not the donor's: where a donor's back-to-back faces
+copies. A donor is not drawn (render 0, MDL-MESH-065) but casts its own
+faces' shadow when its `shadow` or `beaming` is set, and a receiver's copies
+cast none (shadows are built from face lists, MDL-MESH-066). Writing each
+donor whose triangles are all among a receiver's copies with render 1 draws
+the same triangles, as a mesh of its own, and leaves the shadows as they
+were. Their normals are the copy's, not the donor's: where a donor's back-to-back faces
 share a vertex, its stored normal is (0, 0, 0) while the copy holds the
 normalised one (MDL-MESH-032), so a reader SHOULD give such a donor the
 copy's normals, turned from the receiver's frame into the donor's. A donor that an animation moves was drawn still, as part of the
-receiver; written with render 1, it moves. *Confirmed (in game): Layonara's
+receiver; written with render 1, it moves. *Not drawn at render 0, and
+shadows from face lists: confirmed in code, not in game (E69). Confirmed (in game): Layonara's
 tin01 tiles (third-party, not here) drew whole walls as binaries and lost
 their lower walls through a faces-only round trip (nwn-module#476). Written
 with their donors at render 1 and compiled again, those tiles and the other
@@ -344,7 +348,10 @@ tts02, ttf02 and tcn01 tiles, dag_ placeables) and 342 in Layonara's haks
 hold merged meshes, and every copy matches a render-0 donor's faces
 (texture coordinates exactly, side lengths within 1 mm). This build's
 compiler does not merge: its compile of such tiles' ASCII keeps one index
-list per mesh (the same report).*
+list per mesh (the same report). Shadows and drawing state (2026-11-11,
+Layonara's 1,158 models with merged meshes in round trip run 6, compared in
+world space, static): with the donors at render 1, the shadow faces pair
+one to one with the originals' in all of them.*
 
 ## Uninitialised fields
 

@@ -85,9 +85,11 @@ what would settle it.
 - **Merged meshes (MDL-BIN-053).** Which compiler wrote them is not known:
   the base game ships them and this build's compiler does not make them,
   which points at BioWare's earlier compiler; no older compiler was run.
-  Whether the engine would draw a render-0 mesh that has an index list is
-  not shown by them either, since every donor's list is empty. An in-game
-  probe with render 0 and a full index list would settle it.
+  Settled in code (2026-11-11, E69, MDL-MESH-065): a render-0 mesh is never
+  drawn, whatever its index list holds, and shadows follow `shadow` and
+  `beaming` and the face list, not `render` (MDL-MESH-066). Not checked in
+  game: an in-game probe with render 0 and a full index list, and one with
+  render 0 and shadow 1, would confirm both.
 
 - **The stale AABB tree** after a degenerate walkmesh face is deleted
   (MDL-MESH-024): what pathfinding and collision do with leaves pointing past
