@@ -466,8 +466,9 @@ def pair_nodes(exp_nodes, act_nodes):
     share a name pair by their order among those siblings, except where
     what they hold tells them apart without doubt (the transparency sort, or
     a decompiler, can put them in another order): a node and a sibling
-    alike (_alike) in everything _signature holds, or failing that in node
-    type and transform, and in nothing else on either side."""
+    alike (_alike) in node type and transform, and in nothing else on
+    either side. Mesh data is not used: a round trip changes vertex counts
+    by design (a receiver drops its copies' vertices, tangent clones)."""
     ep, ap = node_paths(exp_nodes), node_paths(act_nodes)
     egroups, agroups = {}, {}
     for i, pt in enumerate(ep):
@@ -478,7 +479,7 @@ def pair_nodes(exp_nodes, act_nodes):
     for key, es in egroups.items():
         as_ = list(agroups.get(key, []))
         if len(es) > 1 or len(as_) > 1:
-            for level in (0, 1):
+            for level in (1,):
                 es_left = [i for i in es if out[i] is None]
                 sig = {i: _signature(exp_nodes[i]) for i in es_left}
                 asig = {j: _signature(act_nodes[j]) for j in as_}
