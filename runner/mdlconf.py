@@ -1187,8 +1187,9 @@ def _roundtrip_one(job):
             steps[step] = dst
         data = {k: open(v, 'rb').read() for k, v in steps.items()}
         try:
+            first = mdlview.BinaryParts(data['binary'])
             acts = [('decompile', mdlview.read_ascii(data['ascii'].decode('latin-1'))),
-                    ('compile', mdlview.read_binary(data['binary']))]
+                    ('compile', first.view)]
         except Exception as e:  # noqa: BLE001
             res.update(status='error', reason='cannot read the output: %s' % e)
             return res
@@ -1214,10 +1215,16 @@ def _roundtrip_one(job):
         # tell a model whose findings are all approved from an unstable one.
         res['stable'] = data['binary2'] == data['binary']
         if not res['stable']:
-            res['unstable_fields'] = unstable_fields(acts[1][1], data['binary2'])
-            res['unstable_adjacency_only'] = adjacency_only(data['binary'], data['binary2'])
+            # one read of the second compile for all three (the views are
+            # changed by explain_unstable, so it comes last)
             try:
-                why = explain_unstable(data['binary'], data['binary2'], exp)
+                second = mdlview.BinaryParts(data['binary2'])
+            except Exception:  # noqa: BLE001 - unreadable: unexplained
+                second = None
+            res['unstable_fields'] = unstable_fields(acts[1][1], data['binary2'], second)
+            res['unstable_adjacency_only'] = adjacency_only(data['binary'], data['binary2'], first, second)
+            try:
+                why = explain_unstable(data['binary'], data['binary2'], exp, first, second) if second else None
             except Exception:  # noqa: BLE001 - unexplained
                 why = None
             if why:
@@ -1234,16 +1241,19 @@ def _roundtrip_one(job):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def adjacency_only(first, second):
+def adjacency_only(first, second, p1=None, p2=None):
     """How many face records differ between two compiles that are byte
     for byte the same apart from the faces' adjacency fields (MDL-BIN-044,
     MDL-MESH-022), in face records found at the same offsets in both; 0 when
-    anything else differs (or the files are the same, or cannot be read)."""
+    anything else differs (or the files are the same, or cannot be read).
+    p1, p2: the files' mdlview.BinaryParts, when already read."""
     if first == second or len(first) != len(second):
         return 0
     try:
-        x, xo = mdlview.face_adjacency_masked(first)
-        y, yo = mdlview.face_adjacency_masked(second)
+        p1 = p1 or mdlview.BinaryParts(first)
+        p2 = p2 or mdlview.BinaryParts(second)
+        x, xo = p1.adjacency_masked(), p1.face_records
+        y, yo = p2.adjacency_masked(), p2.face_records
     except Exception:  # noqa: BLE001 - unreadable: not shown to differ only there
         return 0
     if xo != yo or x != y:
@@ -1310,7 +1320,7 @@ def _ulps(a, b):
     return abs(ordered(a) - ordered(b))
 
 
-def explain_bytes(first, second):
+def explain_bytes(first, second, p1=None, p2=None):
     """{kind: count} when two compiles of the same length differ only in
     (a) the adjacency fields of face records at the same offsets in both
     (MDL-BIN-044), (b) float fields (as the reader reads them) that are 0.0
@@ -1318,18 +1328,20 @@ def explain_bytes(first, second):
     at most 1 ulp each; None when anything else differs."""
     if first == second or len(first) != len(second):
         return None
-    x, xo = mdlview.face_adjacency_masked(first)
-    y, yo = mdlview.face_adjacency_masked(second)
+    p1 = p1 or mdlview.BinaryParts(first)
+    p2 = p2 or mdlview.BinaryParts(second)
+    x, xo = p1.adjacency_masked(), p1.face_records
+    y, yo = p2.adjacency_masked(), p2.face_records
     if xo != yo:
         return None
-    floats = mdlview.float_fields(first) & mdlview.float_fields(second)
+    diff = [i for i, (u, v) in enumerate(zip(x, y)) if u != v]
+    floats = p1.floats & p2.floats if diff else set()
     words = set()
-    for i in range(len(x)):
-        if x[i] != y[i]:
-            w = next((i - k for k in range(4) if i - k in floats), None)
-            if w is None:
-                return None
-            words.add(w)
+    for i in diff:
+        w = next((i - k for k in range(4) if i - k in floats), None)
+        if w is None:
+            return None
+        words.add(w)
     out = {}
     adj = sum(1 for o in xo if first[o + 20:o + 26] != second[o + 20:o + 26])
     if adj:
@@ -1394,7 +1406,7 @@ def _exact(view):
     return {k: (repr(v) if isinstance(v, float) else v) for k, v in flat(view)}
 
 
-def explain_dead_vertices(first, second, exp):
+def explain_dead_vertices(first, second, exp, v1=None, v2=None):
     """{'dead_vertices': n[, 'adjacency': faces]} when the second compile is
     the first without the vertices no face of the first uses, each of them at
     the position of a corner of a zero-area triangle the original draws (the
@@ -1403,7 +1415,7 @@ def explain_dead_vertices(first, second, exp):
     radius may differ there (computed from the vertices, MDL-MESH-050), and
     their box must be that of their own vertices; face adjacency may differ
     (counted). None when anything else differs."""
-    return dead_vertices_explained(mdlview.read_binary(first), mdlview.read_binary(second), exp)
+    return dead_vertices_explained(v1 or mdlview.read_binary(first), v2 or mdlview.read_binary(second), exp)
 
 
 def dead_vertices_explained(v1, v2, exp):
@@ -1456,19 +1468,23 @@ def dead_vertices_explained(v1, v2, exp):
     return out
 
 
-def explain_unstable(first, second, exp):
+def explain_unstable(first, second, exp, p1=None, p2=None):
     """Why the second compile differs from the first, as {kind: count}, when
     every difference is of a known kind (explain_bytes, or
-    explain_dead_vertices); None otherwise."""
-    return explain_bytes(first, second) or explain_dead_vertices(first, second, exp)
+    explain_dead_vertices); None otherwise. p1, p2: the files'
+    mdlview.BinaryParts, when already read (their views are changed)."""
+    p1 = p1 or mdlview.BinaryParts(first)
+    p2 = p2 or mdlview.BinaryParts(second)
+    return explain_bytes(first, second, p1, p2) or explain_dead_vertices(first, second, exp, p1.view, p2.view)
 
 
-def unstable_fields(first, second_data):
+def unstable_fields(first, second_data, second=None):
     """What differs between the first compile (its view) and the second
-    (bytes): {path with indices taken out: count}, the ten most common."""
+    (bytes, or its mdlview.BinaryParts): {path with indices taken out:
+    count}, the ten most common."""
     try:
         x = dict(flat(first))
-        y = dict(flat(mdlview.read_binary(second_data)))
+        y = dict(flat(second.view if second is not None else mdlview.read_binary(second_data)))
     except Exception as e:  # noqa: BLE001
         return {'cannot read the second compile: %s' % e: 1}
     counts = {}

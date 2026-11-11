@@ -478,28 +478,48 @@ def read_binary(data):
     return _read_binary(_Bin(data))
 
 
+class BinaryParts:
+    """One read of a binary model: its view, the offsets of the face records
+    the reader found, and of every 4-byte field it read as a float (vertex
+    streams, face normals and distances, bounds, controller keys and values,
+    the header floats)."""
+
+    def __init__(self, data):
+        b = _Bin(data)
+        self.data = data
+        self.view = _read_binary(b)
+        self.face_records = sorted(b.face_records)
+        self._spans = b.float_spans
+        self._floats = None
+
+    @property
+    def floats(self):
+        if self._floats is None:
+            self._floats = set()
+            for off, n in self._spans:
+                self._floats.update(range(off, off + 4 * n, 4))
+        return self._floats
+
+    def adjacency_masked(self):
+        """The file with the adjacency fields of every face record (three
+        int16 at +20 of each 32-byte record) set to zero."""
+        out = bytearray(self.data)
+        for o in self.face_records:
+            out[o + 20:o + 26] = bytes(6)
+        return bytes(out)
+
+
 def face_adjacency_masked(data):
     """The file with the adjacency fields of every face record the reader
     finds (three int16 at +20 of each 32-byte record, MDL-BIN face list)
     set to zero, and the sorted offsets of those records."""
-    b = _Bin(data)
-    _read_binary(b)
-    out = bytearray(data)
-    for o in b.face_records:
-        out[o + 20:o + 26] = bytes(6)
-    return bytes(out), sorted(b.face_records)
+    p = BinaryParts(data)
+    return p.adjacency_masked(), p.face_records
 
 
 def float_fields(data):
-    """The file offsets of every 4-byte field the reader reads as a float
-    (vertex streams, face normals and distances, bounds, controller keys and
-    values, and the header floats)."""
-    b = _Bin(data)
-    _read_binary(b)
-    out = set()
-    for off, n in b.float_spans:
-        out.update(range(off, off + 4 * n, 4))
-    return out
+    """The file offsets of every 4-byte field the reader reads as a float."""
+    return BinaryParts(data).floats
 
 
 def _read_binary(b):
