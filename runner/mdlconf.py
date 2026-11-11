@@ -2034,8 +2034,9 @@ def dead_vertices_explained(v1, v2, exp):
         if _dead_vertices(b['mesh']):
             return None
         dead = _dead_vertices(a['mesh'])
-        order = [k for k in _first_use(a['mesh']) if k not in set(dead)]
-        alive = [k for k in range(a['mesh'].get('vertex_count', 0)) if k not in set(dead)]
+        deadset = set(dead)
+        order = [k for k in _first_use(a['mesh']) if k not in deadset]
+        alive = [k for k in range(a['mesh'].get('vertex_count', 0)) if k not in deadset]
         if not dead and order == alive:
             continue
         o = orig.get(a['name'].lower()[:31])
@@ -2048,7 +2049,7 @@ def dead_vertices_explained(v1, v2, exp):
                 corners.update(_freeze(opos[k]) for k in tri)
         pos1 = a['mesh']['vertices'].get('position', [])
         at_corner = {k for k in alive + dead if _freeze(pos1[k]) in corners}
-        if not set(dead) <= at_corner:
+        if not deadset <= at_corner:
             return None
         # only vertices at such corners change their order
         if [k for k in order if k not in at_corner] != [k for k in alive if k not in at_corner]:
