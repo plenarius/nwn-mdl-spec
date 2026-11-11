@@ -103,7 +103,7 @@ python3 runner/mdlconf.py view FILE
   gives the original's numbers and tree, whether the animations follow
   MDL-NODE-040 in both, the tree resorted by MDL-NODE-012, and the header
   counts; and, when the original has merged render lists (MDL-BIN-053) and
-  a mesh has a render, triangles or vertex_count finding, `compile
+  a mesh has a render, triangles, vertex_count, face_count or shadow finding, `compile
   model.render_lists` (`mdlconf.render_list_facts`): every triangle the
   original and the compile draw and every shadow face they cast, in world
   space, paired one to one, with what differs per pair (drawing state,

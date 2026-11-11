@@ -1812,7 +1812,9 @@ def adjacency_only(first, second, p1=None, p2=None):
 
 
 NODE_FINDING = re.compile(r'(\.number|\.tree|node_count)$')
-MERGE_FINDING = re.compile(r'\.mesh\.(render|triangles|vertex_count)$')
+# a donor restored or folded (spec/binary.md, after MDL-BIN-053) leaves any of
+# these on the receivers and donors
+MERGE_FINDING = re.compile(r'\.mesh\.(render|triangles|vertex_count|face_count|shadow)$')
 _SUPERS = {}
 
 

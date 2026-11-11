@@ -91,8 +91,8 @@ model has a supermodel ("unique names" below means that):
 
 Per model, from the facts of mdlconf.render_list_facts (recorded as
 `compile model.render_lists` when the original has merged render lists,
-MDL-BIN-053, and the round trip has a render, triangles or vertex_count
-finding):
+MDL-BIN-053, and the round trip has a render, triangles, vertex_count,
+face_count or shadow finding):
 
 - `merged-render-lists` (merged_render_lists, merged_node_check): when the
   whole model draws as the original does, compared in world space (every
