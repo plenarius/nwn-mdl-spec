@@ -629,7 +629,7 @@ def _rl_model(meshes, anims=()):
     'specular'}; ctrls {name: value} as first keys; anims
     [(node, controller, [values])] as one animation."""
     def ctrl(name, values):
-        cid, cols = {'position': (8, 3), 'orientation': (20, 4), 'scale': (36, 1)}[name]
+        cid, cols = {'position': (8, 3), 'orientation': (20, 4), 'scale': (36, 1), 'alpha': (128, 1)}[name]
         return {'id': cid, 'name': name, 'columns': cols, 'bezier': False, 'colbyte': cols,
                 'keys': [{'t': i, 'v': v} for i, v in enumerate(values)]}
     nodes = [{'name': 'root', 'parent': None, 'type': 'dummy', 'flags': 1, 'number': 0,
@@ -726,15 +726,34 @@ def check_render_lists():
          'pass-approved', {'merged-render-lists'}),
         ('a donor given a normal the game never drew', model(rec, dict(don, normal=[[0, 0, 0]] * 4)),
          model(own, dict(back, normal=N2)), 'fail', set()),
+        # cleanmodels #141: a restored donor takes the receiver's settings
+        ('a donor given the receiver\'s specular', _with(model(rec, don), 'd', specular=[1, 1, 1]),
+         model(own, back), 'pass-approved', {'merged-render-lists'}),
+        ('a donor given the receiver\'s alpha', model(rec, don, dc=dict(at2, alpha=[0.5])),
+         model(own, back), 'pass-approved', {'merged-render-lists'}),
+        # folded: the copies written as the receiver's faces, the donor kept at
+        # render 0 with shadow 0; its shadow now comes from the copies
+        ('a scaled donor folded', model(rec, don, dc=dict(at2, scale=[1.5])),
+         model(dict(rec, faces=rec['list']), dict(don, shadow=0), dc=dict(at2, scale=[1.5])),
+         'pass-approved', {'merged-render-lists'}),
+        ('a donor folded in place', orig, model(dict(rec, faces=rec['list']), dict(don, shadow=0)),
+         'pass-approved', {'merged-render-lists'}),
+        ('a folded donor that still casts its shadow', model(rec, don, dc=dict(at2, scale=[1.5])),
+         model(dict(rec, faces=rec['list']), don, dc=dict(at2, scale=[1.5])), 'fail', set()),
         ('a donor given a tangent the game never drew',
          model(dict(rec, tangent=TX * 2, handedness=[1] * 8), dict(don, tangent=TY, handedness=[1] * 4)),
          model(dict(own, tangent=TX, handedness=[1] * 4), dict(back, tangent=TY, handedness=[1] * 4)),
          'fail', set()),
     ]
-    # findings beyond the base ones the passing cases approve
+    # findings beyond the base ones the passing cases approve, or all of them
     corner_kinds = {'a donor given the copies\' normals and tangents':
                     [('compile', 'handedness'), ('compile', 'normal'), ('compile', 'tangent'),
-                     ('decompile', 'normal')]}
+                     ('decompile', 'normal')],
+                    'a donor given the receiver\'s specular': [('compile', 'specular'), ('decompile', 'specular')],
+                    'a donor given the receiver\'s alpha':
+                    [('compile', 'controllers[alpha]'), ('decompile', 'controllers[alpha]')]}
+    folded_kinds = [('compile', 'face_count'), ('compile', 'shadow'), ('decompile', 'shadow')]
+    all_kinds = {'a scaled donor folded': folded_kinds, 'a donor folded in place': folded_kinds}
     for what, e, a, status, ids in cases:
         exp = mdlconf.normalise(e)
         exp['volatile'] = []
@@ -755,8 +774,10 @@ def check_render_lists():
                                                                sorted(ids), res['must'][:3]))
         if status == 'pass-approved' and res['status'] == status:
             kinds = sorted({(t, p.rsplit('.', 1)[1]) for t, p, m, _ in res['approved']})
-            if kinds != sorted([('compile', 'render'), ('compile', 'triangles'), ('compile', 'vertex_count'),
-                                ('decompile', 'render'), ('decompile', 'triangles')] + corner_kinds.get(what, [])):
+            want = all_kinds.get(what) or ([('compile', 'render'), ('compile', 'triangles'),
+                                            ('compile', 'vertex_count'), ('decompile', 'render'),
+                                            ('decompile', 'triangles')] + corner_kinds.get(what, []))
+            if kinds != sorted(want):
                 bad.append('%s: approved %s' % (what, kinds))
             if approvals.apply(json.loads(json.dumps(res)), full) != res:
                 bad.append('%s: scoring the result again changes it' % what)
@@ -769,6 +790,18 @@ def check_render_lists():
             approvals.apply(r2, full)
             if any(p.startswith('nodes[r].') for t, p, m, _ in r2.get('approved', [])):
                 bad.append('%s: receiver approved with another finding left' % what)
+    # a restored donor took the receiver's transparencyhint, so the compile
+    # sorts it after its sibling; the ASCII declares the original's order
+    import approvals
+    import nodefacts
+    d = None
+    e = mdlconf.normalise(_tree([('r', None, 0, d), ('a', 'r', 1, 0), ('b', 'r', 2, 1)]))
+    c = _tree([('r', None, 0, d), ('b', 'r', 2, 1), ('a', 'r', 1, 2)])
+    mf = nodefacts.model_facts(e, c, _ascii([('r', None, d), ('a', 'r', 2), ('b', 'r', 1)]), None)
+    for donors, want in (({'a'}, 'merged-render-lists'), ({'b'}, None)):
+        mr = {'receivers': set(), 'donors': donors, 'folded': set(), 'folding': set(), 'needs': set()}
+        if approvals.merged_node_check('nodes.tree', mr, mf) != want:
+            bad.append('tree re-sorted by a donor\'s taken hint, donors %s: not %s (%s)' % (donors, want, mf.get('tree')))
     return bad
 
 

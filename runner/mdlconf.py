@@ -807,6 +807,13 @@ def _rl_diff(a, b, r):
     return d
 
 
+def _rl_same_place(a, b):
+    """Whether two triangles have their corners at the same places (within
+    RL_PAIR), in the same winding, whatever else they hold."""
+    return any(all(max(abs(a['corners'][j]['p'][k] - b['corners'][(j + r) % 3]['p'][k]) for k in range(3))
+                   <= RL_PAIR['position'] for j in range(3)) for r in range(3))
+
+
 def _rl_pair(orig, comp):
     """Pair each original triangle with one compiled triangle at the same
     place (corners within RL_PAIR, in the same winding). Where several are
@@ -856,12 +863,28 @@ def _rl_compare(orig, comp):
          'lost': len(lost), 'lost_nonzero': sum(1 for i in lost if not orig[i]['zero']),
          'extra': len(extra), 'extra_nonzero': sum(1 for j in extra if not comp[j]['zero']),
          'state_differ': {}, 'moving_differ': 0, 'corner_differ': {}, 'bad_tangent': 0, 'tangent_baked': 0,
-         'max_delta': {'position': 0.0, 'uv0': 0.0}, 'moved': {}}
+         'max_delta': {'position': 0.0, 'uv0': 0.0}, 'moved': {},
+         # pairs whose state or animation differs, of the same node and of
+         # a node that took another's triangles
+         'same_node_differ': 0, 'moved_differ': 0, 'same_node_differ_by': {},
+         'lost_nodes': {}, 'extra_nodes': {}}
+    for i in lost:
+        if not orig[i]['zero']:
+            f['lost_nodes'][orig[i]['node']] = f['lost_nodes'].get(orig[i]['node'], 0) + 1
+    for j in extra:
+        f['extra_nodes'][comp[j]['node']] = f['extra_nodes'].get(comp[j]['node'], 0) + 1
     for i, j, r in pairs:
         a, b = orig[i], comp[j]
         if a['node'] != b['node']:
             f['moved'].setdefault(b['node'], set()).add(a['node'])
         d = _rl_diff(a, b, r)
+        if d['state'] or d['moving']:
+            f['moved_differ' if a['node'] != b['node'] else 'same_node_differ'] += 1
+            if a['node'] == b['node']:
+                by = f['same_node_differ_by'].setdefault(a['node'], [])
+                for k in d['state'] + (['moving'] if d['moving'] else []):
+                    if k not in by:
+                        by.append(k)
         for k in d['state']:
             f['state_differ'][k] = f['state_differ'].get(k, 0) + 1
         f['moving_differ'] += d['moving']
@@ -931,10 +954,41 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
         used |= {(n.get('parent') or '').lower() for n in view['nodes']}
     f = {'receivers': rec, 'donor_candidates': cand, 'receivers_deformed': deformed,
          'ambiguous': sorted(dup & used)}
+    tris = {}
     for mode in ('draw', 'shadow'):
         ot = _rl_tris(exp, mode, moving['original'], elab)
         ct = _rl_tris(comp, mode, moving['compiled'], clab)
         f[mode] = _rl_compare(ot, ct)
+        tris[mode] = (ot, ct)
+    # The compiled shadow faces no original one pairs with that lie where the
+    # original draws a triangle (a donor folded into its receiver casts its
+    # shadow from the copies, MDL-BIN-053)
+    drawn_o = tris['draw'][0]
+    grid = {}
+    for k, tr in enumerate(drawn_o):
+        if tr is not None:
+            grid.setdefault(_rl_cell(tr), []).append(k)
+    _, _, extra = _rl_pair(tris['shadow'][0], tris['shadow'][1])
+    on = 0
+    for j in extra:
+        tr = tris['shadow'][1][j]
+        c = _rl_cell(tr)
+        if any(_rl_same_place(drawn_o[k], tr)
+               for d in ((x, y, z) for x in (0, -1, 1) for y in (0, -1, 1) for z in (0, -1, 1))
+               for k in grid.get((c[0] + d[0], c[1] + d[1], c[2] + d[2]), ())):
+            on += 1
+    f['shadow']['extra_on_drawn'] = on
+    # the original's donor candidates as compiled ([render, shadow, beaming])
+    # and each receiver's [own faces, index-list triangles, compiled triangles]
+    cnodes = dict(zip(clab, comp['nodes']))
+    f['donors_compiled'] = {k: [cnodes[k]['mesh'].get('render'), cnodes[k]['mesh'].get('shadow'),
+                                cnodes[k]['mesh'].get('beaming')]
+                            for k in cand if k in cnodes and 'mesh' in cnodes[k]}
+    f['receiver_triangles'] = {}
+    for key, nd in zip(elab, exp['nodes']):
+        if key in rec and key in cnodes and 'mesh' in cnodes[key]:
+            ml = merged_list(nd['mesh'])
+            f['receiver_triangles'][key] = [ml[0], ml[1], len(drawn(cnodes[key]['mesh']))]
     return f
 
 MESH_DEFAULTS = {'diffuse': [1, 1, 1], 'ambient': [1, 1, 1], 'specular': [0, 0, 0], 'shininess': 1,

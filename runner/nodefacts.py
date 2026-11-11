@@ -509,6 +509,22 @@ def model_facts(exp, act, ascii_text, sup):
             # 16): a stable sort of the stored order would keep them
             'ties_moved': sum(1 for p in differ if needs_sort([o.key[x] for x in o.kids[p]])
                               and sort_children(o.kids[p], o.key) != sorted(o.kids[p], key=o.key.get))}
+        # The nodes whose sort key (is a mesh, transparencyhint) the compile
+        # changed, and whether every differing parent's children are the
+        # ASCII's declared children sorted by the compiled keys while the same
+        # declaration sorted by the original's keys gives the original's
+        # children: then the new keys alone re-sorted them (MDL-NODE-012).
+        dk = {}
+        for n, par, _ in decl:
+            if par:
+                dk.setdefault(par, []).append(n)
+        try:
+            f['tree']['hint_changed'] = sorted(n for n in o.key if n in c.key and o.key[n] != c.key[n])
+            f['tree']['declared_resorted'] = bool(differ) and all(
+                sort_children(dk.get(p, []), c.key) == c.kids.get(p) and
+                sort_children(dk.get(p, []), o.key) == o.kids[p] for p in differ)
+        except KeyError:
+            f['tree']['declared_resorted'] = False
     return f
 
 
