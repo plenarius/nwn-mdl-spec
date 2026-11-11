@@ -1355,6 +1355,15 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
                     compare_skin(r, p + '.skin', e, a, len(exp_nodes))
 
 
+def root_matches(anim):
+    """Whether an animation's animroot names one of its nodes, case for case
+    (findnode's strcmp, MDL-NODE-045); None for no animroot or NULL."""
+    root = anim.get('animroot') or ''
+    if not root or root.upper() == 'NULL':
+        return None
+    return any(n.get('name') == root for n in anim.get('nodes', []))
+
+
 def compare(exp, act, profile, facts=False):
     r = Report(facts)
     volatile = set(exp.get('volatile', []))
@@ -1399,6 +1408,13 @@ def compare(exp, act, profile, facts=False):
                 r.must('%s.%s' % (p, k), 'expected %s, got %s' % (ea[k], aa.get(k)))
         if (ea['animroot'] or '').lower() != (aa.get('animroot') or '').lower():
             r.must(p + '.animroot', 'expected %r, got %r' % (ea['animroot'], aa.get('animroot')))
+        elif root_matches(ea) != root_matches(aa):
+            # The engine matches the animroot case-sensitively (MDL-NODE-045):
+            # a change of case that makes it match a node, or stop matching
+            # one, changes what a compile of this output prunes.
+            r.must(p + '.animroot', '%r %s a node of the animation here, %r %s in the golden'
+                   % (aa.get('animroot'), 'matches' if root_matches(aa) else 'matches no',
+                      ea['animroot'], 'did' if root_matches(ea) else 'did not'))
         ev = [[e[0], e[1].lower()] for e in ea['events']]
         av = [[e[0], e[1].lower()] for e in aa.get('events', [])]
         if not vclose([x[0] for x in ev], [x[0] for x in av], 1e-5) or [x[1] for x in ev] != [x[1] for x in av]:

@@ -54,6 +54,8 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_name40` | a node name of 40 characters, past the 32-byte field | MDL-BIN-007 | golden |
 | `zspec_namelat` | a node name with a Latin-1 byte (0xF1, n with tilde) | MDL-BIN-007 | golden |
 | `zspec_animnum` | part numbers of animation nodes the geometry lacks: found by path, -1 under a matched parent, and under an unmatched one, declared out of tree order | MDL-NODE-040 | golden |
+| `zspec_animdup` | animations that share a name: `swing` twice with different data, `idle` between, and `SWING` | MDL-ASCII-062 | golden |
+| `zspec_animroot` | the animroot against the animation's own nodes: one it has (pruning), a name that exists nowhere, the name in another case, a node only the geometry has | MDL-NODE-045 | golden |
 | `zspec_animnogeo` | animation nodes the geometry lacks, declared trimesh, light, emitter and dummy with and without their type's keys: flags, sub-headers, controllers | MDL-NODE-044, MDL-NODE-041, MDL-NODE-040 | golden |
 | `zspec_light` | every light header field, flares, static light controllers; light spellings the engine does not read | MDL-BIN-040, MDL-ASCII-070, MDL-CTRL-011 | golden |
 | `zspec_merge` | vertex merging: groups and materials, UV splits, -0, degenerate faces, mirrorlist | MDL-MESH-010, MDL-MESH-011, MDL-MESH-020, MDL-MESH-021, MDL-MESH-050 | golden |
@@ -118,9 +120,13 @@ flags, part numbers), every controller (id, columns, bezier, keys within
 1e-5 relative), light, emitter, reference, dangly, AABB and animmesh data,
 mesh material fields, vertex and face counts, and every drawn corner's
 position, UVs, normal (1e-4), colour and tangent (1e-3) with its handedness
-sign. SHOULD checks: bounds, face normals, distances and adjacency, the
-vertex order, the column byte of bezier controllers, and controllers the
-golden lacks or has whose value is the default.
+sign. Animations pair by name and occurrence (a name used twice pairs the
+first with the first); each one's length, transtime, events, node tree and
+animroot are MUST, the animroot compared without case but required to match
+a node of its animation, case for case, exactly when the golden's does
+(MDL-NODE-045). SHOULD checks: bounds, face normals, distances and
+adjacency, the vertex order, the column byte of bezier controllers, and
+controllers the golden lacks or has whose value is the default.
 
 A **decompile** test runs the implementation on the golden, reads its ASCII
 the way the engine would (`runner/mdlview.py`, following spec/ascii.md) and

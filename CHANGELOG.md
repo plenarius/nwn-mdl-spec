@@ -19,6 +19,25 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-ASCII-062 (new probe zspec_animdup) and E70: animations that share a
+  name are all kept, in file order, each with its own data (the compiler's
+  `newanim` and the binary loader compare no names). The engine's
+  `FindAnimation` takes the first case-insensitive match, so the first copy
+  plays and later ones, in any case, never do. A compiler MUST keep them
+  all in order; a tool SHOULD warn about the repeat.
+- MDL-NODE-045 (new probe zspec_animroot) and E71: an animroot is looked up
+  case-sensitively among the animation's own nodes. A match prunes the
+  animation's tree to the path to it and its subtree (the node count stays
+  the ASCII's); no match (a name that exists nowhere, another case, a node
+  only the geometry has) logs "animroot … node not matching existing node"
+  and keeps the whole tree, so the animation plays on every node. The
+  animroot is stored as written either way. MDL-BIN-070 points to it.
+  The runner now fails (MUST) an animroot that matches a node, case for
+  case, where the golden's matches none, or the other way round.
+  cleanmodels (v4.16.1-7, 79afbc4) does not prune (`prune` keeps `leg`,
+  compile MUST) and its decompile lowercases `ARM` over the node `arm`, so
+  a recompile would prune (decompile MUST); it keeps both `swing` copies
+  in order (pass).
 - MDL-NODE-044 (new probe zspec_animnogeo): an animation node the geometry
   lacks is written as the type its own type word names, whatever keys it
   has. `node trimesh` gives 0x21 and an empty mesh header (with
