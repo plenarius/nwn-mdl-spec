@@ -44,11 +44,24 @@ def f32(x):
         return math.copysign(math.inf, x)
 
 
+_NUM = {}  # num() by value: models repeat their floats (0.0 and -0.0 both give 0)
+
+
 def num(x):
     """A float32 as the shortest decimal that reads back to the same float32
     (so the JSON stays readable); NaN and infinities as strings."""
     if isinstance(x, int):
         return x
+    r = _NUM.get(x)
+    if r is not None:
+        return r
+    r = _num(x)
+    if len(_NUM) < 1 << 20 and not math.isnan(x):
+        _NUM[x] = r
+    return r
+
+
+def _num(x):
     if math.isnan(x):
         return 'nan'
     if math.isinf(x):
@@ -129,6 +142,7 @@ class _Bin:
         self.d = data
         self.warnings = []
         self.face_records = set()  # model offsets of the 32-byte face records read
+        self.float_spans = []  # (offset, count) of every float32 field read
         if len(data) < 12:
             raise ValueError('file shorter than the 12-byte file header')
         zero, self.raw_off, self.raw_size = struct.unpack_from('<III', data, 0)
@@ -156,12 +170,17 @@ class _Bin:
         return struct.unpack_from('<i', self.d, off)[0] if self.ok(off, 4) else 0
 
     def f(self, off):
-        return struct.unpack_from('<f', self.d, off)[0] if self.ok(off, 4) else 0.0
+        if not self.ok(off, 4):
+            return 0.0
+        self.float_spans.append((off, 1))
+        return struct.unpack_from('<f', self.d, off)[0]
 
     def fs(self, off, n):
         if not self.ok(off, 4 * n):
             self.warnings.append('float array at %#x past the end' % off)
             return [0.0] * n
+        if n:
+            self.float_spans.append((off, n))
         return list(struct.unpack_from('<%df' % n, self.d, off))
 
     def s(self, off, n):
@@ -472,16 +491,48 @@ def read_binary(data):
     return _read_binary(_Bin(data))
 
 
+class BinaryParts:
+    """One read of a binary model: its view, the offsets of the face records
+    the reader found, and of every 4-byte field it read as a float (vertex
+    streams, face normals and distances, bounds, controller keys and values,
+    the header floats)."""
+
+    def __init__(self, data):
+        b = _Bin(data)
+        self.data = data
+        self.view = _read_binary(b)
+        self.face_records = sorted(b.face_records)
+        self._spans = b.float_spans
+        self._floats = None
+
+    @property
+    def floats(self):
+        if self._floats is None:
+            self._floats = set()
+            for off, n in self._spans:
+                self._floats.update(range(off, off + 4 * n, 4))
+        return self._floats
+
+    def adjacency_masked(self):
+        """The file with the adjacency fields of every face record (three
+        int16 at +20 of each 32-byte record) set to zero."""
+        out = bytearray(self.data)
+        for o in self.face_records:
+            out[o + 20:o + 26] = bytes(6)
+        return bytes(out)
+
+
 def face_adjacency_masked(data):
     """The file with the adjacency fields of every face record the reader
     finds (three int16 at +20 of each 32-byte record, MDL-BIN face list)
     set to zero, and the sorted offsets of those records."""
-    b = _Bin(data)
-    _read_binary(b)
-    out = bytearray(data)
-    for o in b.face_records:
-        out[o + 20:o + 26] = bytes(6)
-    return bytes(out), sorted(b.face_records)
+    p = BinaryParts(data)
+    return p.adjacency_masked(), p.face_records
+
+
+def float_fields(data):
+    """The file offsets of every 4-byte field the reader reads as a float."""
+    return BinaryParts(data).floats
 
 
 def _read_binary(b):

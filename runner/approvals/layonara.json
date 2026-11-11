@@ -1,60 +1,168 @@
 {
  "format": "mdlconf-approvals/1",
  "name": "layonara",
- "description": "Differences James approved for the round trip of Layonara's haks (MDL pipeline Phase 2, 2026-11-09). Each entry names a check in runner/approvals.py; a MUST finding is approved only when that check's condition holds on the mesh or node it is about. Approved findings are reported apart, never dropped.",
+ "description": "Differences James approved for the round trip of Layonara's haks (MDL pipeline Phase 2, 2026-11-09 and 2026-11-10). Each entry names a check in runner/approvals.py; a MUST finding is approved only when that check's condition holds on the mesh or node it is about. Approved findings are reported apart, never dropped.",
  "approvals": [
   {
    "id": "vertex-layout",
    "check": "vertex-layout",
-   "rules": ["MDL-MESH-010", "MDL-MESH-011", "MDL-MESH-012"],
+   "rules": [
+    "MDL-MESH-010",
+    "MDL-MESH-011",
+    "MDL-MESH-012"
+   ],
    "description": "The stored vertex count differs only because the original holds duplicate vertices that the game's compiler merges.",
    "condition": "On the mesh: every compiled triangle is paired, in order, with one of the original's; every paired corner keeps position, UV0-3, normal, tangent and handedness, colour, skin weights, dangly constraint and face material; the vertex streams are the same; and the compiled vertex count equals the number of distinct vertices the original draws by the merge key, floats compared exactly (for an AABB walkmesh, whose merge keeps some equal vertices apart, the corner match alone). Approves the mesh's vertex_count finding."
   },
   {
    "id": "dropped-zero-area-faces",
    "check": "dropped-zero-area-faces",
-   "rules": ["MDL-MESH-020"],
+   "rules": [
+    "MDL-MESH-020"
+   ],
    "description": "Faces whose corners merge into one vertex are deleted, as the game's compiler does; the original drew them with zero area.",
    "condition": "On the mesh: every original triangle the compile does not draw has zero area (two corners at the same position), every other one is paired in order with a compiled triangle and matches it corner for corner as for vertex-layout, the triangle and face counts differ by exactly the dropped triangles. Approves the mesh's triangles and face_count findings, and the per-corner findings that only the runner's in-order comparison shows (a dropped face shifts the triangles after it)."
   },
   {
    "id": "nan-tangent-fill",
    "check": "nan-tangent-fill",
-   "rules": ["MDL-BIN-048", "MDL-MESH-043"],
+   "rules": [
+    "MDL-BIN-048",
+    "MDL-MESH-043"
+   ],
    "description": "The original's tangent stream holds NaN, infinite or zero vectors; the compile writes a generated tangent there.",
    "condition": "On the mesh: as for vertex-layout, except that a paired corner's tangent or handedness may differ when the original's tangent at that corner is NaN, infinite or zero; every differing tangent or handedness corner is such a corner. Approves the mesh's tangent, handedness and vertex_count findings."
   },
   {
    "id": "tangents-baked",
    "check": "tangents-baked",
-   "rules": ["MDL-MESH-041", "MDL-MESH-042", "MDL-MESH-043"],
+   "rules": [
+    "MDL-MESH-041",
+    "MDL-MESH-042",
+    "MDL-MESH-043"
+   ],
    "description": "The original has no tangent stream and a normal-mapped material; the compile bakes tangents, as the game's compiler does, and clones vertices for them.",
    "condition": "On the mesh: the original has no tangent stream and the compile has one (with handedness), no other stream differs, and every paired corner matches as for vertex-layout. Approves the mesh's vertex_count finding."
   },
   {
    "id": "water-texanim-169",
    "check": "water-texanim-169",
-   "rules": ["MDL-BIN-048"],
+   "rules": [
+    "MDL-BIN-048"
+   ],
    "description": "1.69 water meshes use the texture animation slots for a bump-map stream, which ASCII has no place for.",
    "condition": "On the mesh: the original sets texture animation slots (0, 1, 2 or 4) and its slot-3 stream is read as a bump-map stream, not tangents; the compile has none of these; no other stream differs, and every paired corner matches as for vertex-layout. Approves the mesh's vertex_count finding."
   },
   {
    "id": "name-cut-31",
    "check": "name-cut-31",
-   "rules": ["MDL-BIN-007"],
+   "rules": [
+    "MDL-BIN-007"
+   ],
    "description": "A 32-character node name (older tools filled the field with no NUL) is stored as its first 31 characters, as the game's compiler does.",
    "condition": "The original's name (or parent name) is 32 characters, the compiled one is its first 31, and no other node of the original has that name once cut. Approves the node's name or parent finding, and a node tree finding when the compiled tree is the original's with those names cut and nothing else."
   },
   {
+   "id": "renumbered",
+   "check": "renumbered",
+   "rules": [
+    "MDL-NODE-010",
+    "MDL-NODE-020",
+    "MDL-NODE-040",
+    "MDL-NODE-043"
+   ],
+   "description": "Part numbers differ, but no declaration order the game's compiler could be given reproduces both the original's numbers and its tree (N2), or the original was numbered against another supermodel or none (S2, S4), or T1 once its tree comes back. The compile numbers the nodes as the game's compiler numbers its ASCII, and the animations bind to the same named nodes before and after (James, 2026-11-10).",
+   "condition": "On the model (runner/nodefacts.py, facts `compile model.nodes`): node names are unique; the original and the compile have the same nodes with the same parents; a supermodel the model names was found; the compile's part numbers are exactly what MDL-NODE-010 (MDL-NODE-020 with the supermodel, walking on through supermodel nodes numbered -1) gives the ASCII's declaration order; no declaration order makes the game's compiler give the original's numbers and stored tree together (nodefacts.reachable, which errs towards reachable); every animation node, in the original and in the compile, is numbered by MDL-NODE-040 against its own model's geometry; and no node tree, name, parent or missing-node finding of the model is left unapproved. Approves the model's nodes[X].number and animations[A].nodes[X].number findings. This covers T1 models once the decompiler declares their children so that the sort rebuilds the stored tree (cleanmodels PR #140): their numbers then differ as N2's do. It never approves the T1 tree finding itself (the >16-children shuffle, so no numbers of a model that still has it), numbers a part-number declaration order reproduces (N1, reachable) or the supermodel -1 walk (S3, numbers not by the rule)."
+  },
+  {
+   "id": "supermodel-count",
+   "check": "supermodel-count",
+   "rules": [
+    "MDL-NODE-030",
+    "MDL-NODE-020"
+   ],
+   "description": "The original was compiled against the base game's or an older supermodel, or as if it had none (S1, S2, S4); the compile counts against the supermodel the haks ship, as MDL-NODE-020/030 require (James, 2026-11-10).",
+   "condition": "On the model: it names a supermodel and the supermodel was found; the original and the compile have the same number of nodes; the compile's header node count is the supermodel's header count + the model's nodes + 1; the original's count is its own node count (compiled without the supermodel) or more. Approves model.node_count."
+  },
+  {
+   "id": "anim-header-count",
+   "check": "anim-header-count",
+   "rules": [
+    "MDL-NODE-042"
+   ],
+   "description": "The original's animation header holds a node count that is not the size of the animation's own tree (A2: a_ba's walk, 57 for 55 nodes); the compile writes the tree size (James, 2026-11-10).",
+   "condition": "On the animation: the original's header count differs from the number of nodes in its animation tree, the compile's equals the number in its own, both trees have the same number of nodes and the same node names. Approves animations[A].node_count."
+  },
+  {
+   "id": "tree-sorted",
+   "check": "tree-sorted",
+   "rules": [
+    "MDL-NODE-011",
+    "MDL-NODE-012"
+   ],
+   "description": "nwnmdlcomp left some children out of transparency order (T2); the game's compiler sorts every ASCII, so no ASCII reproduces the stored order, and the compile sorts them as the game would (a draw-order change; James, 2026-11-10).",
+   "condition": "On the model: node names are unique; the original and the compile have the same nodes with the same parents; the compiled tree is exactly the original's stored tree with MDL-NODE-012's sort (libstdc++'s std::sort with the transparency comparison, nodefacts.engine_sort) applied to each node's children; and every node whose children differ between the two held them out of the comparison's order in the original (no declaration order gives them). Where such a node has more than 16 children, std::sort also moves equal ones; that is the same sort of the same stored order, and approved with it. Approves nodes.tree. Never the >16-children shuffle of children already in order (T1)."
+  },
+  {
+   "id": "aabb-plane-tie",
+   "check": "aabb-plane-tie",
+   "rules": [
+    "MDL-MESH-052"
+   ],
+   "description": "An aabb inner node's plane differs where its children's box centres tie on the two largest axes, so float rounding picks the axis; either splits the boxes equally (Q4; James, 2026-11-10).",
+   "condition": "On the aabb node: the two trees have the same entries, boxes (within 1e-4) and faces, and the same inner/leaf shape; every inner entry whose plane differs has, in the original and in the compile, a plane whose axis has |centre delta| within 1e-4 of the largest |centre delta| over x, y and z (the children's box centres, right minus left) and whose sign is that delta's (-Z, 32, for a zero delta); no leaf's plane differs. Approves the node's aabb[j].plane finding (the runner reports the first)."
+  },
+  {
    "id": "unstable-adjacency-only",
    "check": "unstable-adjacency-only",
-   "rules": ["MDL-BIN-044", "MDL-MESH-022"],
+   "rules": [
+    "MDL-BIN-044",
+    "MDL-MESH-022"
+   ],
    "description": "Lost face-neighbour links (category 6), in the second compile: decompiling and compiling the compiled model again changes only which faces the face records name as neighbours. They are read only by the shadow volume (E68), where they change its cost, not the look (James, 2026-11-10).",
-   "condition": "On the model: every MUST finding is approved, and the second compile is byte for byte the first once the three adjacency fields (s2 at +20, +22, +24) of every face record the reader finds are set to zero in both, with the face records at the same offsets in both. Any other difference, vertex order included, leaves the model unstable. Approves the model's instability, reported as the finding `stability binary2` and counted as stable-except-adjacency."
+   "condition": "On the model: every MUST finding is approved, and every difference between the second compile and the first is of a kind an entry approves (mdlconf.explain_unstable); this entry's kind is the three adjacency fields (s2 at +20, +22, +24) of face records: for the byte-level kinds, the two files are byte for byte the same once those fields are set to zero in both, with the face records the reader finds at the same offsets in both; with dead-face-vertices, the faces' adjacency once the vertices are taken out. Any other difference, vertex order included, leaves the model unstable. Approves the model's instability, reported as the finding `stability binary2`."
+  },
+  {
+   "id": "dead-face-vertices",
+   "check": "dead-face-vertices",
+   "rules": [
+    "MDL-MESH-020",
+    "MDL-MESH-050"
+   ],
+   "description": "The original draws faces with two identical corners. The compile drops them as the game does, but the vertices they added stay in the binary; no ASCII describes vertices no face uses, so the second compile does not have them (James, 2026-11-10).",
+   "condition": "On the model: every MUST finding is approved; the two compiles have the same nodes; the second compile is the first without the vertices no face record or index list of the first uses (streams, skin weights, dangly constraints and animmesh sets; the other vertices renumbered in order in the faces and index lists), and has no such vertices itself; each of those vertices is at the position of a corner of a zero-area triangle the original draws in the same mesh; in a mesh that lost vertices the bounding box, average and radius may differ (MDL-MESH-050 computes them from the vertices) and each compile's box is exactly that of its own vertices; face adjacency may differ (with unstable-adjacency-only, counted). Everything else is the same, floats exactly. Approves the model's instability (`stability binary2`)."
+  },
+  {
+   "id": "bounds-ulp",
+   "check": "bounds-ulp",
+   "rules": [
+    "MDL-MESH-050"
+   ],
+   "description": "The second compile's model bounding box differs from the first's by 1 ulp (float rounding of the sum over the meshes; James, 2026-11-10).",
+   "condition": "On the model: every MUST finding is approved; the two compiles are the same length and byte for byte the same except, among the kinds approved, the model bounding box floats (geometry header +136..+159), each by at most 1 ulp. Approves the model's instability (`stability binary2`)."
+  },
+  {
+   "id": "signed-zero",
+   "check": "signed-zero",
+   "rules": [
+    "MDL-BIN-001"
+   ],
+   "description": "A float is 0.0 in one compile and -0.0 in the other (James, 2026-11-10).",
+   "condition": "On the model: every MUST finding is approved; the two compiles are the same length and byte for byte the same except, among the kinds approved, 4-byte fields the reader reads as floats that are 00000000 in one and 00000080 in the other; every other byte stays exact. Approves the model's instability (`stability binary2`)."
   }
  ],
  "not_approved": [
-  {"what": "face-neighbour (shadow) links, faces.adjacent, in the first compile", "why": "Always a SHOULD finding in the runner, so it never makes a model fail; nothing to approve. In the second compile, see unstable-adjacency-only."},
-  {"what": "merged render lists, node numbers and order (nodes[].number, nodes.tree, animation node numbers), aabb planes, controller keys, node-pairing artifacts, unstable models whose second compile differs in anything but face adjacency", "why": "Not approved (James, 2026-11-09; adjacency-only instability approved 2026-11-10)."}
+  {
+   "what": "face-neighbour (shadow) links, faces.adjacent, in the first compile",
+   "why": "Always a SHOULD finding in the runner, so it never makes a model fail; nothing to approve. In the second compile, see unstable-adjacency-only."
+  },
+  {
+   "what": "T1: a node with more than 16 children already in sort order, which std::sort shuffles when the decompiler declares them in stored order; N1: numbers a declaration in part-number order reproduces; S3: the supermodel walk stopping at a supermodel node numbered -1",
+   "why": "Fixable in cleanmodels (decompiler order, supermodel walk), being fixed there; they stay failures (James, 2026-11-10)."
+  },
+  {
+   "what": "merged render lists, controller keys, node-pairing artifacts, unstable models whose second compile differs in anything no entry approves (vertex order above all)",
+   "why": "Not approved (James, 2026-11-09 and 2026-11-10)."
+  }
  ]
 }

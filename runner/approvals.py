@@ -45,16 +45,54 @@ Then each finding gets the check that explains it:
   (MDL-BIN-007) when no other node of the original has the cut name, and a
   tree finding whose only difference is such names.
 
-And one per model, about the second compile rather than a finding:
+Per model, from the facts of runner/nodefacts.py (recorded as `compile
+model.nodes` when the compile has a node number, tree or count finding):
 
-- `unstable-adjacency-only`: a model whose MUST findings are all approved
-  and whose second compile differs from the first only in face records'
-  adjacency fields (MDL-BIN-044, MDL-MESH-022): byte for byte the same once
-  those fields are set to zero in both, with the face records at the same
-  offsets (mdlconf.adjacency_only, recorded as `unstable_adjacency_only`,
-  the number of faces whose adjacency differs). It passes as
-  `pass-approved`, with an approved finding `stability binary2` naming the
-  entry; any other difference leaves it `unstable`.
+- `renumbered`: node and animation node numbers (`nodes[X].number`,
+  `animations[A].nodes[X].number`) when, with unique node names, the same
+  nodes and parents and a supermodel found where the model names one: the
+  compile's numbers are what MDL-NODE-010/020 give the ASCII's declaration
+  order; no declaration order gives the original's numbers and stored tree
+  together (nodefacts.reachable); every animation node is numbered by
+  MDL-NODE-040 against its own model's geometry in both; and no tree, name,
+  parent or missing-node finding is left unapproved;
+- `supermodel-count`: model.node_count when the compile's count is the
+  supermodel's header count + the model's nodes + 1 (MDL-NODE-030) with the
+  supermodel found, the node count is the same in both, and the original's
+  count is its node count (compiled without the supermodel) or more than it;
+- `anim-header-count`: animations[A].node_count when the original's header
+  count is not the size of its animation tree, the compile's is (MDL-NODE-042),
+  and both trees have the same nodes;
+- `tree-sorted`: nodes.tree when, with unique names and the same nodes and
+  parents, the compiled tree is the original's stored tree with the
+  transparency sort applied (MDL-NODE-012, nodefacts.engine_sort), and every
+  node whose children differ held them out of sort order in the original
+  (no ASCII gives them; the fact `ties_moved` counts those where std::sort
+  also moves equal children, past 16, and is reported, not a condition);
+- `aabb-plane-tie`: aabb[j].plane when the aabb trees have the same boxes and
+  faces and every differing plane, in the original and in the compile, is at
+  a tie of MDL-MESH-052's axis rule (nodefacts.aabb_facts).
+
+And one per model, about the second compile rather than a finding: a model
+whose MUST findings are all approved and whose second compile differs from
+the first, where every difference is of a kind an entry approves
+(mdlconf.explain_unstable, recorded as `unstable_explained`, {kind: count};
+results made before it have only `unstable_adjacency_only`):
+
+- `unstable-adjacency-only` (adjacency): face records' adjacency fields
+  (MDL-BIN-044, MDL-MESH-022), the face records at the same offsets;
+- `signed-zero` (signed_zero): a float field 0.0 in one and -0.0 in the other;
+- `bounds-ulp` (bounds_ulp): the model's bounding box, by at most 1 ulp per
+  component;
+- `dead-face-vertices` (dead_vertices): vertices no face of the first compile
+  uses, each at a corner of a zero-area triangle of the original, which the
+  second compile does not have (the rest renumbered in order, the meshes'
+  box, average and radius following from their vertices).
+
+Byte-level kinds (the first three) need the two files to be the same length
+and byte for byte the same apart from them. The model passes as
+`pass-approved`, with an approved finding `stability binary2` per kind naming
+its entry; any other difference leaves it `unstable`.
 """
 import hashlib
 import json
@@ -63,8 +101,20 @@ import re
 FORMAT = 'mdlconf-approvals/1'
 
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
-          'water-texanim-169', 'name-cut-31', 'unstable-adjacency-only')
-STABILITY = ('stability', 'binary2')  # the approved finding of unstable-adjacency-only
+          'water-texanim-169', 'name-cut-31', 'renumbered', 'supermodel-count', 'anim-header-count',
+          'tree-sorted', 'aabb-plane-tie', 'unstable-adjacency-only', 'signed-zero', 'bounds-ulp',
+          'dead-face-vertices')
+STABILITY = ('stability', 'binary2')  # the approved finding of an approved instability
+UNSTABLE = {  # kind in unstable_explained: (check, message)
+    'adjacency': ('unstable-adjacency-only', 'the adjacency of %d faces'),
+    'signed_zero': ('signed-zero', '%d float(s) 0.0 in one compile and -0.0 in the other'),
+    'bounds_ulp': ('bounds-ulp', '%d model bounding box float(s), by 1 ulp'),
+    'dead_vertices': ('dead-face-vertices', '%d vertices only zero-area faces of the original used'),
+}
+NUMBER = re.compile(r'^(nodes|animations\[[^\]]*\]\.nodes)\[[^\]]*\]\.number$')
+ANIM_COUNT = re.compile(r'^animations\[(.*)\]\.node_count$')
+PLANE = re.compile(r'^(nodes\[[^\]]*\])\.aabb\[\d+\]\.plane$')
+TREE_BLOCKERS = ('.tree', '.parent', '.name')
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
 
@@ -160,14 +210,58 @@ def mesh_checks(leaves, f):
     return out, needs
 
 
+def renumbered(mf):
+    """The model facts allow approving node numbers (`renumbered`)."""
+    return bool(mf.get('unique') and mf.get('same_nodes') and mf.get('numbers_by_rule')
+                and mf.get('reachable') is False and mf.get('anim_mismatches') == [0, 0]
+                and (not mf.get('supermodel') or mf.get('supermodel_count') is not None))
+
+
+def supermodel_count(mf):
+    oc, cc, no, nc = (mf.get('node_count') or [None] * 4)
+    sc = mf.get('supermodel_count')
+    return bool(mf.get('supermodel') and isinstance(sc, int) and isinstance(oc, int) and no == nc
+                and cc == sc + nc + 1 and (oc == no or oc > no))
+
+
+def anim_header_count(mf, anim):
+    x = (mf.get('animations') or {}).get(anim.lower())
+    if not x:
+        return False
+    oh, ch, on, cn = x['node_count']
+    return oh != on and ch == cn and on == cn and x.get('same_names') is True
+
+
+def tree_sorted(mf):
+    t = mf.get('tree') or {}
+    return bool(mf.get('unique') and mf.get('same_nodes') and t.get('resorted_equals_compile')
+                and t.get('differing_parents', 0) > 0 and t.get('differing_unsorted') == t['differing_parents'])
+
+
 def node_check(test, path, facts):
     f = facts.get('%s %s' % (test, path))
-    if not f or not f.get('unique'):
+    if f and f.get('unique'):
+        if path.endswith('.tree') and f.get('names_cut_only'):
+            return 'name-cut-31'
+        if (path.endswith('.name') or path.endswith('.parent')) and f.get('name_cut'):
+            return 'name-cut-31'
+    if test != 'compile':
         return None
-    if path.endswith('.tree') and f.get('names_cut_only'):
-        return 'name-cut-31'
-    if (path.endswith('.name') or path.endswith('.parent')) and f.get('name_cut'):
-        return 'name-cut-31'
+    mf = facts.get('compile model.nodes') or {}
+    if path == 'nodes.tree':
+        return 'tree-sorted' if tree_sorted(mf) else None
+    if NUMBER.match(path):
+        return 'renumbered' if renumbered(mf) else None
+    if path == 'model.node_count':
+        return 'supermodel-count' if supermodel_count(mf) else None
+    m = ANIM_COUNT.match(path)
+    if m:
+        return 'anim-header-count' if anim_header_count(mf, m.group(1)) else None
+    m = PLANE.match(path)
+    if m:
+        a = facts.get('compile %s.aabb' % m.group(1)) or {}
+        if a.get('boxes_same') and a.get('planes_differ', 0) > 0 and a.get('ties') == a['planes_differ']:
+            return 'aabb-plane-tie'
     return None
 
 
@@ -200,14 +294,23 @@ def apply(res, approvals):
             if verdict[i] is None and not MESH_PATH.match(path):
                 c = node_check(test, path, facts)
                 verdict[i] = c if c in entries else None
+        # Numbers are approved only on the same tree: none of the tree, name,
+        # parent or missing-node findings may be left.
+        if any(c is None and (path.endswith(TREE_BLOCKERS) or msg == 'missing')
+               for (test, path, msg), c in zip(findings, verdict)):
+            verdict = [None if c == 'renumbered' else c for c in verdict]
     res['must'] = [x for x, c in zip(findings, verdict) if c is None]
     approved = [list(x) + [entries[c]['id']] for x, c in zip(findings, verdict) if c is not None]
     res.pop('reason', None)
-    adj = res.get('unstable_adjacency_only') or 0
-    if not res['must'] and stable is False and adj > 0 and 'unstable-adjacency-only' in entries:
-        approved.append(list(STABILITY) + [
-            'the second compile differs from the first only in the adjacency of %d faces' % adj,
-            entries['unstable-adjacency-only']['id']])
+    why = res.get('unstable_explained')
+    if not why and (res.get('unstable_adjacency_only') or 0) > 0:
+        why = {'adjacency': res['unstable_adjacency_only']}  # recorded before unstable_explained
+    if (not res['must'] and stable is False and why
+            and all(k in UNSTABLE and UNSTABLE[k][0] in entries for k in why)):
+        for k in sorted(why):
+            check, msg = UNSTABLE[k]
+            approved.append(list(STABILITY) + ['the second compile differs from the first in ' + msg % why[k],
+                                               entries[check]['id']])
         stable = True
     if approved:
         res['approved'] = approved
@@ -226,9 +329,10 @@ def apply(res, approvals):
     return res
 
 
-def stable_except_adjacency(res):
-    """Whether a scored result passes only through unstable-adjacency-only."""
-    return any(tuple(x[:2]) == STABILITY for x in res.get('approved', []))
+def stability_approved(res):
+    """The ids of the entries a scored result's second compile passes by
+    (empty when it is stable on its own)."""
+    return {x[3] for x in res.get('approved', []) if tuple(x[:2]) == STABILITY}
 
 
 def summary(results, approvals):
