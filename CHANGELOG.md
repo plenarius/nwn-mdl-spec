@@ -19,6 +19,26 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-MESH-065 (new probe zspec_animnrm): an animation's animmesh node is a
+  mesh of its own, and the game's compiler reads its `normals`. Given, they
+  are kept as written and the node keeps the geometry node's 4 vertices;
+  left out, they are computed from that node's smoothing groups, and the
+  animation node splits to 6 against the geometry node's 4. cleanmodels
+  (main, 3003980) drops them in compile and decompile: its compile of the
+  probe splits the node to 6 vertices, as it splits Layonara's
+  `vff_explword*` models from 40 to 48. MDL-BIN-050 now lets a reader use
+  an animmesh animation node's mesh header (stable in both compiles,
+  except `lightmapped`); MDL-ASCII-061 says to repeat the normals.
+- MDL-CTRL-036 (new probe zspec_dupctrl): a single-value controller line
+  given twice in a node (`shadowradius 5`, then `shadowradius 15`, as in a
+  Layonara `fx_flame01` light) gives two controllers, both written in
+  order; the engine applies them in turn, so the last one's value is the
+  one the node keeps (the same for a light's `radius` and a mesh's
+  `alpha`). cleanmodels (main) keeps only the last, which gives the same
+  value in game. The runner now pairs controllers of one id in order and
+  compares the last in full (earlier ones as SHOULD), and its ASCII reader
+  keeps a repeated single-value line as a second controller, as the engine
+  does.
 - MDL-NODE-020 covers a supermodel node numbered -1 (new probes zspec_mid
   and zspec_kid5): it still matches, takes -1, and the walk goes on to its
   children, which take the supermodel's numbers. cleanmodels (v4.17.5)

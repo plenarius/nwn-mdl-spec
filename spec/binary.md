@@ -352,9 +352,12 @@ list per mesh (the same report).*
 memory in the type-specific headers of **animation** nodes (mesh, emitter
 and light headers there), and in the fields named in MDL-BIN-051 and
 MDL-BIN-052. A reader MUST NOT use an animation node's sub-headers except
-the anim header and the mesh vertex count of an animmesh node (MDL-BIN-045).
-*Confirmed: goldens/run2 (zspec_anim's mesh triangle mode, cmbez01's emitter
-grid differ in animation nodes).*
+the anim header and the mesh header of an animmesh node, which holds that
+node's own mesh (MDL-BIN-045, MDL-MESH-065; its `lightmapped` byte is
+uninitialised, MDL-BIN-051). *Confirmed: goldens/run2 (zspec_anim's mesh
+triangle mode, cmbez01's emitter grid differ in animation nodes; the
+animation nodes of zspec_animmesh, zspec_animtv and zspec_animnrm differ
+only in `lightmapped`).*
 
 **MDL-BIN-051** The mesh `lightmapped` byte (+500) is not read from the
 ASCII (no `lightmapped` keyword in `MdlNodeTriMesh::InternalParseField`,

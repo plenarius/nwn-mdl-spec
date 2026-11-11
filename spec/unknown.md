@@ -31,6 +31,16 @@ what would settle it.
   client measurements (notes B.20a) found they change nothing on screen.
   Not re-checked here.
 
+- **Controllers of one id given twice in an animation** (MDL-CTRL-036).
+  The engine applies them in order there too, with the animation's blend
+  weight; during a transition (weight below 1) both would then contribute,
+  so writing only the last could change the blend. Inferred from
+  `MdlNode::InternalControl` (0x4990c0); not probed.
+- **A key list given twice** (`positionkey` twice in a node), or a key list
+  and a single value of one id: `AddGenericController` (0x4488d0) appends
+  to the node's list, so presumably both are kept, like single values
+  (MDL-CTRL-036). Not probed.
+
 ## ASCII
 
 - **Animation node controllers in a supermodel's animation**: whether an
@@ -64,6 +74,13 @@ what would settle it.
   than their fields**: truncation and collisions not probed.
 
 ## Meshes
+
+- **An animmesh whose animation node and geometry node differ in vertex
+  count** (MDL-MESH-065; e.g. the animation node's normals left out, so its
+  vertices split). The loader copies the sets with the animation node's
+  count (MDL-BIN-045) and the sets are indexed per vertex; presumably the
+  animation then moves the wrong vertices, or reads past the sets. Not
+  observed in game.
 
 - **Merged meshes (MDL-BIN-053).** Which compiler wrote them is not known:
   the base game ships them and this build's compiler does not make them,

@@ -190,7 +190,8 @@ its parent like a geometry node. *Confirmed: zspec_anim, zspec_animfx.*
 `animverts` count by the node's own vertex count and crashes (SIGFPE) when
 that is 0. *Confirmed: an earlier version of zspec_animmesh without them
 crashed `nwmain-linux compilemodel` in `MdlNodeAnimMesh::InternalPostProcess`
-at 0x4578c9 (`idivl`); E54.*
+at 0x4578c9 (`idivl`); E54.* Its `normals`, when given, are read too
+(MDL-MESH-065), so it should repeat the geometry node's normals as well.
 
 ## Words the engine does not read
 

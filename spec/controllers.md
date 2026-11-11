@@ -181,12 +181,34 @@ inferred from `CreateInstanceTreeR` 0x43c6b0 (a part starts at identity,
 behaviour.md, "Skin binding: further notes").*
 
 **MDL-CTRL-034** The controllers of a node are written in the order their
-keywords appear in the ASCII. Order has no effect the suite could find;
-it is not checked. *Observed: zspec_emitter.*
+keywords appear in the ASCII. Order has no effect the suite could find,
+except between controllers of one id (MDL-CTRL-036); otherwise it is not
+checked. *Observed: zspec_emitter, zspec_dupctrl.*
 
 **MDL-CTRL-035** In an animation, a node's single value (`position 0 0 1.5`
 in a `newanim` block) makes a one-key controller at time 0, like on a
 geometry node. *Confirmed: zspec_anim (animation `idle`).*
+
+**MDL-CTRL-036** A single-value controller line given twice in one node
+(`shadowradius 5`, later `shadowradius 15`) makes two controllers of the
+same id. The game's compiler writes both, in the order of their lines
+(MDL-CTRL-034); it neither drops nor merges either. The engine applies a
+node's controllers in their stored order, each overwriting the field: so on
+a geometry node the **last** one's value is the one the node keeps. A
+compiler SHOULD write both, as the game does, and MAY write only the last;
+it MUST NOT keep only the first or any other one, which changes the value
+in game. A decompiler that finds two SHOULD write both lines in order; if
+it writes one, it MUST write the last one's value. *Confirmed:
+zspec_dupctrl (light `up`: shadowradius and radius 5 then 15; light
+`down`: 15 then 5; mesh `quad`: alpha 0.25 then 0.75; each node keeps both
+controllers, in order); the order of application in code:
+`MdlNode::InternalControl` (0x4990c0) calls `NewController::Control`
+(0x498f20) for every controller in turn, `MdlNodeLight::InternalControl`
+(0x499180) hands over to it, and at `Gob::Reset` (0x499bd0) the blend
+weight is 1.0 (the float at 0x12ee9e4), so each one stores its value
+outright. The light's radius on screen was not observed in game. Repeated
+key lists, and repeated lines in an animation, are not probed (see
+[unknown.md](unknown.md)).*
 
 ## Evaluation (informative)
 
