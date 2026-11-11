@@ -45,10 +45,16 @@ what would settle it.
 
 - **Animation node controllers in a supermodel's animation**: whether an
   animation node with no controllers is always written. The game kept such
-  nodes in every probe (zspec_anim's root, zspec_kid's `hips`), but an
+  nodes in every probe (zspec_anim's root, zspec_kid's `hips`, zspec_animnogeo's
+  `t`, whose only key its type does not read), but an
   earlier engine compile of a third-party creature (cleanmodels' findings,
   answer 5) omitted its skin nodes from every animation. What decides it is
   unknown.
+- **Animation nodes the geometry lacks** (MDL-NODE-044): the game's
+  compiler writes them with their declared type and keys, numbered -1 or by
+  declaration index (MDL-NODE-040). Whether the engine binds such a node to
+  anything at run time (e.g. whether a door's `alphakey` on a node its
+  geometry lacks fades anything) is not observed in game.
 - **Overlong values.** A static controller line with more values than the
   controller's width (`scale 2 3 4`) was not probed: the probe line was in a
   node that dropped out of the tree. The engine reads up to some number of

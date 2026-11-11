@@ -109,7 +109,8 @@ supermodel), every one numbered as above.*
 
 **MDL-NODE-041** An animation node keeps the node type of its geometry node:
 its flags and full sub-headers are written (MDL-BIN-071), though only its
-controllers matter. A compiler SHOULD write the geometry node's flags.
+controllers matter. A compiler SHOULD write the geometry node's flags. A
+node the geometry lacks takes its own type word instead (MDL-NODE-044).
 *Confirmed: zspec_anim (`blade` 0x21 in `swing`), cmbez01; behaviour.md, "Animation blocks".*
 
 **MDL-NODE-042** An animation's node count is the number of nodes in its own
@@ -122,6 +123,33 @@ numbers under the same names stop posing their creatures. A compiler MUST
 therefore keep the numbering of MDL-NODE-010 and MDL-NODE-020. *Confirmed
 in game by the Moonglow Viewer session of 2026-10-07 (Moonglow notes B.19);
 not re-tested for this suite.*
+
+**MDL-NODE-044** An animation node whose path the geometry lacks
+(MDL-NODE-040) is written as the type its own type word names, whatever keys
+it has: `node trimesh` gives flags 0x21 and a mesh header, `node light` 0x3
+and a light header, `node emitter` 0x5 and an emitter header, `node dummy`
+0x1. A mesh header there is empty (no vertices, faces or textures, the
+default material fields), the same as the mesh header of an animation node
+the geometry has (MDL-BIN-071); no sub-header of such a node is meaningful
+(MDL-BIN-050). Its controllers are the keys its type reads, in the order of
+their lines (MDL-CTRL-034), the shared ones (position, orientation, scale)
+included; a key its type does not read is dropped (`alphakey` on a dummy),
+and the node is kept with no controllers. A compiler MUST write the
+controllers its declared type reads and SHOULD write that type's flags,
+whether or not the node has a key of its type (a `node trimesh` with only
+`positionkey` is still 0x21). A decompiler SHOULD write the type word the
+flags give (`trimesh` for 0x21, `light` for 0x3, `emitter` for 0x5), so a
+compile of its output gets the type back. *Confirmed: zspec_animnogeo
+(animation `open`, every node -1 under the matched root: trimesh `x`
+0x21 with position, alpha, orientation; light `y` 0x3 with color,
+position, radius; trimesh `z` 0x21 with selfillumcolor, scale; dummy `w`
+0x1 with position; trimesh `v`, only `positionkey`, 0x21 with position;
+emitter `u` 0x5 with birthrate, position; dummy `t`, only `alphakey`, 0x1
+with no controllers; mesh `m`, which the geometry has, the same empty mesh
+header as `x`, `z` and `v`). Layonara's `tvd_udoor_09`, compiled by an
+earlier compiler, stores its geometry-less `09_DWK_wg_closed` the same way
+(0x21, an alpha controller). What the engine does with such a node at run
+time is not observed (see [unknown.md](unknown.md)).*
 
 ## Worn models
 
