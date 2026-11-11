@@ -11,7 +11,8 @@
 5. Every golden decodes identically with ksy/nwn_mdl.ksy.
 6. The approvals (runner/approvals.py) and the facts behind them
    (runner/nodefacts.py, the round trip's stability explanations, accepted
-   left-out tangents, face-record indices) on goldens and made-up models.
+   left-out tangents, face-record indices, merged render lists in world
+   space) on goldens and made-up models.
 """
 import collections
 import glob
@@ -579,6 +580,142 @@ def check_stability():
     return bad
 
 
+def _rl_model(meshes, anims=()):
+    """A model of trimesh nodes under a root: meshes are (name, mesh, ctrls),
+    mesh {'pos', 'faces', 'list' (None: no index list), and optional 'uv'
+    (default: x and y), 'normal', 'render', 'shadow', 'specular'}; ctrls {name: value} as first keys; anims
+    [(node, controller, [values])] as one animation."""
+    def ctrl(name, values):
+        cid, cols = {'position': (8, 3), 'orientation': (20, 4), 'scale': (36, 1)}[name]
+        return {'id': cid, 'name': name, 'columns': cols, 'bezier': False, 'colbyte': cols,
+                'keys': [{'t': i, 'v': v} for i, v in enumerate(values)]}
+    nodes = [{'name': 'root', 'parent': None, 'type': 'dummy', 'flags': 1, 'number': 0,
+              'inheritcolor': 0, 'controllers': []}]
+    for i, (name, m, ctrls) in enumerate(meshes):
+        lst = m.get('list')
+        mesh = dict(mdlconf.MESH_DEFAULTS, render=m.get('render', 1), shadow=m.get('shadow', 1),
+                    specular=m.get('specular', [0, 0, 0]), textures=['tex', '', '', ''], triangle_mode=3,
+                    vertex_count=len(m['pos']), face_count=len(m['faces']),
+                    faces=[{'v': t, 'material': 0, 'normal': [0, 0, 1], 'distance': 0, 'adjacent': [-1, -1, -1]}
+                           for t in m['faces']],
+                    index_lists=[[c for t in lst for c in t]] if lst is not None else [],
+                    vertices={'position': m['pos'], 'uv0': m.get('uv', [[p[0], p[1]] for p in m['pos']]),
+                              'normal': m.get('normal', [[0, 0, 1]] * len(m['pos']))})
+        nodes.append({'name': name, 'parent': 'root', 'type': 'trimesh', 'flags': 0x21, 'number': i + 1,
+                      'inheritcolor': 0, 'controllers': [ctrl(k, [v]) for k, v in sorted(ctrls.items())],
+                      'mesh': mesh})
+    an = []
+    if anims:
+        an = [{'name': 'open', 'length': 1, 'transtime': 0, 'animroot': 'root', 'events': [],
+               'node_count': len(anims) + 1,
+               'nodes': [{'name': 'root', 'parent': None, 'type': 'dummy', 'flags': 1, 'number': 0,
+                          'controllers': []}] +
+                        [{'name': n, 'parent': 'root', 'type': 'trimesh', 'flags': 0x21, 'number': 1,
+                          'controllers': [ctrl(c, vals)]} for n, c, vals in anims]}]
+    return {'model': {'name': 'x', 'classification': 'tile', 'fog': 1, 'animationscale': 1,
+                      'supermodel': 'NULL', 'node_count': len(nodes), 'bmin': [0, 0, 0], 'bmax': [0, 0, 0],
+                      'radius': 0},
+            'nodes': nodes, 'animations': an, 'volatile': []}
+
+
+def check_render_lists():
+    """merged-render-lists (runner/approvals.py) on made-up merged models: a
+    receiver r drawing its own two faces and copies of the donor d's (render
+    0, no index list, at position (2, 0, 0)), put back with d at render 1."""
+    import approvals
+    bad = []
+    full = approvals.load(os.path.join(HERE, 'approvals', 'layonara.json'))
+    P = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0]]
+    F = [[0, 1, 2], [0, 2, 3]]
+    copies = [[p[0] + 2, p[1], p[2]] for p in P]
+    # the copies keep the donor's UVs
+    rec = {'pos': P + copies, 'uv': [p[:2] for p in P] * 2, 'faces': F, 'list': F + [[4, 5, 6], [4, 6, 7]]}
+    don = {'pos': P, 'faces': F, 'list': None, 'render': 0}
+    own = {'pos': P, 'faces': F, 'list': F}
+    back = dict(own)  # the donor put back: render 1, its own index list
+    at2 = {'position': [2, 0, 0]}
+
+    def model(r, d, dc=at2, anims=(), extra=()):
+        return _rl_model([('r', r, {}), ('d', d, dc)] + list(extra), anims)
+
+    orig = model(rec, don)
+    N1, N2 = [[0, 0, 1]] * 4, [[0, 0.6, 0.8]] * 4
+    # copies of d (normal N1) and of e (N2), at the same place, the e copy first
+    two = dict(rec, pos=P + copies * 2, uv=[p[:2] for p in P] * 3, normal=[[0, 0, 1]] * 4 + N2 + N1,
+               list=F + [[4, 5, 6], [4, 6, 7], [8, 9, 10], [8, 10, 11]])
+    hidden = {'pos': [[5, 0, 0], [6, 0, 0], [6, 1, 0]], 'faces': [[0, 1, 2]], 'list': None, 'render': 0,
+              'shadow': 0}
+    cases = [
+        # (what, original, compiled, expected status, approved ids)
+        ('donors put back at render 1', orig, model(own, dict(back)), 'pass-approved', {'merged-render-lists'}),
+        ('a donor drawn with its own specular',
+         _with(orig, 'd', specular=[1, 1, 1]), _with(model(own, dict(back)), 'd', specular=[1, 1, 1]),
+         'fail', set()),
+        ('a donor an animation moves', model(rec, don, anims=[('d', 'position', [[2, 0, 0], [2, 1, 0]])]),
+         model(own, back, anims=[('d', 'position', [[2, 0, 0], [2, 1, 0]])]), 'fail', set()),
+        ('a donor drawn at its scale', model(rec, don, dc=dict(at2, scale=[1.5])),
+         model(own, back, dc=dict(at2, scale=[1.5])), 'fail', set()),
+        ('a donor that no longer casts its shadow', orig, model(own, dict(back, shadow=0)), 'fail', set()),
+        ('a hidden mesh drawn', model(rec, don, extra=[('h', hidden, {})]),
+         model(own, back, extra=[('h', dict(hidden, render=1, list=[[0, 1, 2]]), {})]), 'fail', set()),
+        # two donors with coincident faces and different normals, each copied
+        # once: drawn the same whichever copy is paired with which donor
+        ('coincident donors put back', model(two, dict(don, normal=N1), extra=[('e', dict(don, normal=N2), at2)]),
+         model(own, dict(back, normal=N1), extra=[('e', dict(back, normal=N2), at2)]),
+         'pass-approved', {'merged-render-lists'}),
+        # the second donor has the first's name: told apart as d#2
+        ('donors sharing a name put back', model(two, dict(don, normal=N1), extra=[('d', dict(don, normal=N2), at2)]),
+         model(own, dict(back, normal=N1), extra=[('d', dict(back, normal=N2), at2)]),
+         'pass-approved', {'merged-render-lists'}),
+        ('coincident donors, one normal changed',
+         model(two, dict(don, normal=N1), extra=[('e', dict(don, normal=N2), at2)]),
+         model(own, dict(back, normal=N1), extra=[('e', dict(back, normal=N1), at2)]), 'fail', set()),
+    ]
+    for what, e, a, status, ids in cases:
+        exp = mdlconf.normalise(e)
+        exp['volatile'] = []
+        asc = json.loads(json.dumps(a))
+        for n in asc['nodes']:
+            if 'mesh' in n:
+                n['mesh']['index_lists'] = []  # ASCII: faces only
+        res = {'file': what, 'must': [], 'should': [], 'facts': {}, 'stable': True}
+        for test, act in (('decompile', asc), ('compile', a)):
+            rep = mdlconf.compare(exp, act, test, facts=True)
+            res['must'] += [[test, p, m] for lvl, p, m in rep.items if lvl == 'must']
+            res['facts'].update(rep.facts)
+        res['facts']['compile model.render_lists'] = mdlconf.render_list_facts(exp, a)
+        approvals.apply(res, full)
+        got = {x[3] for x in res.get('approved', [])}
+        if res['status'] != status or got != ids:
+            bad.append('%s: %s %s, expected %s %s; left %s' % (what, res['status'], sorted(got), status,
+                                                               sorted(ids), res['must'][:3]))
+        if status == 'pass-approved' and res['status'] == status:
+            kinds = sorted({(t, p.rsplit('.', 1)[1]) for t, p, m, _ in res['approved']})
+            if kinds != [('compile', 'render'), ('compile', 'triangles'), ('compile', 'vertex_count'),
+                         ('decompile', 'render'), ('decompile', 'triangles')]:
+                bad.append('%s: approved %s' % (what, kinds))
+            if approvals.apply(json.loads(json.dumps(res)), full) != res:
+                bad.append('%s: scoring the result again changes it' % what)
+            part = dict(full, entries={k: v for k, v in full['entries'].items() if k != 'merged-render-lists'})
+            if approvals.apply(json.loads(json.dumps(res)), part)['status'] != 'fail':
+                bad.append('%s: approved without the entry' % what)
+            # a finding on the receiver that is not the merge's leaves it failed
+            r2 = json.loads(json.dumps(res))
+            r2['must'].append(['compile', 'nodes[r].mesh.diffuse', 'expected [1, 1, 1], got [0, 0, 0]'])
+            approvals.apply(r2, full)
+            if any(p.startswith('nodes[r].') for t, p, m, _ in r2.get('approved', [])):
+                bad.append('%s: receiver approved with another finding left' % what)
+    return bad
+
+
+def _with(view, name, **mesh):
+    v = json.loads(json.dumps(view))
+    for n in v['nodes']:
+        if n['name'] == name:
+            n['mesh'].update(mesh)
+    return v
+
+
 def check_tangents_and_faces():
     """Left-out tangents are accepted only when the compile gives them back
     exactly; a conformance compile's face records must hold the golden's
@@ -618,7 +755,8 @@ def main():
     for name, fn in (('tables', check_tables), ('rule references', check_rules),
                      ('expected files', check_expected), ('approvals', check_approvals),
                      ('node facts', check_node_facts), ('stability', check_stability),
-                     ('tangents, faces', check_tangents_and_faces), ('ksy', check_ksy)):
+                     ('tangents, faces', check_tangents_and_faces), ('render lists', check_render_lists),
+                     ('ksy', check_ksy)):
         bad = fn()
         print('%-16s %s' % (name, 'ok' if not bad else 'FAIL'))
         for b in bad[:20]:

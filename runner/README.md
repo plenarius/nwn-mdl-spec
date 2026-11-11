@@ -102,8 +102,14 @@ python3 runner/mdlconf.py view FILE
   supermodel numbered by the same rules), whether any declaration order
   gives the original's numbers and tree, whether the animations follow
   MDL-NODE-040 in both, the tree resorted by MDL-NODE-012, and the header
-  counts. A decompile whose ASCII leaves out tangents the compile makes
-  again exactly has those notes in `accepted`.
+  counts; and, when the original has merged render lists (MDL-BIN-053) and
+  a mesh has a render, triangles or vertex_count finding, `compile
+  model.render_lists` (`mdlconf.render_list_facts`): every triangle the
+  original and the compile draw and every shadow face they cast, in world
+  space, paired one to one, with what differs per pair (drawing state,
+  animation, corner attributes) and what is left unpaired. A decompile
+  whose ASCII leaves out tangents the compile makes again exactly has those
+  notes in `accepted`.
 - `--approved FILE`: differences a project has agreed to live with
   ([approvals/](approvals/), checked by [approvals.py](approvals.py)). A
   MUST finding is approved only when its entry's condition holds on the
@@ -132,7 +138,7 @@ implements (`vertex-layout`, `dropped-zero-area-faces`, `nan-tangent-fill`,
 `tangents-baked`, `water-texanim-169`, `name-cut-31`, `renumbered`,
 `supermodel-count`, `anim-header-count`, `tree-sorted`, `aabb-plane-tie`,
 `unstable-adjacency-only`, `signed-zero`, `bounds-ulp`,
-`dead-face-vertices`); `condition` says in
+`dead-face-vertices`, `merged-render-lists`); `condition` says in
 words what it checks. Leaving an entry out of the file leaves its findings
 failed, together with every other finding on the same mesh.
 [approvals/layonara.json](approvals/layonara.json) is Layonara's.

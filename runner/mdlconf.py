@@ -390,9 +390,18 @@ def mesh_facts(e, a, own_nodes):
     corner which attributes differ (with the tolerances of compare_mesh),
     including skin weights, dangly constraints and face materials. Also the
     number of distinct vertices the original draws by the game's merge key
-    (MDL-MESH-010, floats compared exactly)."""
+    (MDL-MESH-010, floats compared exactly). For a receiver of a merged
+    render list (merged_list) only its own faces' triangles, the start of
+    its index list, are paired (`merged_list`: [faces, list triangles])."""
     em, am = e['mesh'], a['mesh']
     et, at = drawn(em), drawn(am)
+    ml = merged_list(em)
+    if ml:
+        # A receiver of a merged render list: its own faces' triangles come
+        # first in its index list, in face order, then the copies of other
+        # meshes' (MDL-BIN-049). The compile is paired with that beginning:
+        # where the copies are drawn is for merged-render-lists to judge.
+        et = et[:max(ml[0], len(at))]
     ev, av = em.get('vertices', {}), am.get('vertices', {})
     es, as_ = mesh_streams(em), mesh_streams(am)
     both = [k for k in CORNER_ATTRS if k in es and k in as_]
@@ -507,6 +516,8 @@ def mesh_facts(e, a, own_nodes):
          'streams_only_original': sorted(es - as_),
          'streams_only_compiled': sorted(as_ - es),
          'aabb': bool(e['flags'] & 0x200)}
+    if ml:
+        f['merged_list'] = list(ml)
     if dropped:
         f['dropped_max_area'] = max((x for x in areas if x is not None), default=None)
     if em.get('texanim_slots_used'):
@@ -519,6 +530,379 @@ def mesh_facts(e, a, own_nodes):
         f['constraints'] = constraints if constraints != 'same' or 'constraint' not in differ else 'differ'
     return f
 
+
+# ------------------------------------------------------------ merged render lists
+
+# What decides how a triangle is drawn besides its corners: the drawing
+# mesh's state, its node type, and the first key of its alpha and
+# selfillumcolor controllers (defaults 1 and 0 0 0).
+RL_STATE = ('textures', 'diffuse', 'ambient', 'specular', 'shininess', 'transparencyhint', 'renderhint',
+            'tilefade', 'beaming', 'rotatetexture', 'triangle_mode')
+RL_MOVING = ('position', 'orientation', 'scale', 'alpha', 'selfillumcolor')
+RL_PAIR = {'position': 1e-3, 'uv0': 1e-4}  # metres in world space; UV units
+RL_TOL = {'uv1': 1e-4, 'uv2': 1e-4, 'uv3': 1e-4, 'normal': 1e-3, 'tangent': 1e-2}
+RL_GRID = 0.01
+
+
+def merged_list(mesh):
+    """(own triangles, index-list triangles) of a receiver: a mesh whose first
+    index list holds more triangles than its face list (MDL-BIN-049: its own
+    faces' triangles in face order, then copies of other meshes'), else
+    None."""
+    il = mesh.get('index_lists') or []
+    n = len(il[0]) // 3 if il and il[0] else 0
+    nf = len(mesh.get('faces', []))
+    return (nf, n) if n > nf else None
+
+
+def _ff(x):
+    try:
+        return float(fval(x))
+    except (TypeError, ValueError):
+        return math.nan
+
+
+def _first_key(node, name):
+    for c in node.get('controllers', []):
+        if c.get('name') == name and c.get('keys'):
+            return c['keys'][0].get('v')
+    return None
+
+
+def _qmul(a, b):
+    ax, ay, az, aw = a
+    bx, by, bz, bw = b
+    return (aw * bx + ax * bw + ay * bz - az * by, aw * by - ax * bz + ay * bw + az * bx,
+            aw * bz + ax * by - ay * bx + az * bw, aw * bw - ax * bx - ay * by - az * bz)
+
+
+def _qrot(q, v):
+    x, y, z, w = q
+    tx, ty, tz = 2 * (y * v[2] - z * v[1]), 2 * (z * v[0] - x * v[2]), 2 * (x * v[1] - y * v[0])
+    return (v[0] + w * tx + (y * tz - z * ty), v[1] + w * ty + (z * tx - x * tz),
+            v[2] + w * tz + (x * ty - y * tx))
+
+
+def _world(view):
+    """Per node: (rotation, scale, translation, chain of node indices), from
+    the first key of each node's position, orientation and scale up the
+    parent chain; p_world = q * (s * p) + t."""
+    out, byname = [], {}
+    for i, nd in enumerate(view['nodes']):
+        pos, ori, sc = (_first_key(nd, k) for k in ('position', 'orientation', 'scale'))
+        t = tuple(_ff(c) for c in pos[:3]) if pos and len(pos) >= 3 else (0.0, 0.0, 0.0)
+        q = tuple(_ff(c) for c in ori[:4]) if ori and len(ori) >= 4 else (0.0, 0.0, 0.0, 1.0)
+        n = math.sqrt(sum(c * c for c in q)) if all(math.isfinite(c) for c in q) else 0
+        q = tuple(c / n for c in q) if n else (0.0, 0.0, 0.0, 1.0)
+        s = _ff(sc[0]) if sc else 1.0
+        pi = byname.get((nd.get('parent') or '').lower())
+        if pi is None:
+            out.append((q, s, t, (i,)))
+        else:
+            pq, ps, pt, chain = out[pi]
+            st = _qrot(pq, tuple(ps * c for c in t))
+            out.append((_qmul(pq, q), ps * s, tuple(st[k] + pt[k] for k in range(3)), chain + (i,)))
+        byname.setdefault(nd['name'].lower(), i)
+    return out
+
+
+def animated_names(view):
+    """The names of the nodes an animation moves or fades: a position,
+    orientation, scale, alpha or selfillumcolor controller with keys of more
+    than one value."""
+    out = set()
+    for an in view.get('animations', []):
+        for nd in an.get('nodes', []):
+            for c in nd.get('controllers', []):
+                if c.get('name') in RL_MOVING and len({_freeze(k.get('v')) for k in c.get('keys', [])}) > 1:
+                    out.add(nd['name'].lower())
+    return out
+
+
+def supermodel_animated(name, dirs, depth=0):
+    """animated_names of a supermodel and its own supermodels (their
+    animations play on this model's nodes of the same name), found as
+    find_supermodel finds them; None when one is named but not found."""
+    name = (name or '').strip().lower()
+    if not name or name == 'null':
+        return set()
+    if depth > 8:
+        return None
+    data = _supermodel_data(name, dirs)
+    if data is None:
+        return None
+    view = mdlview.read_binary(data) if data[:4] == b'\0\0\0\0' else mdlview.read_ascii(data.decode('latin-1'))
+    up = supermodel_animated(view['model'].get('supermodel'), dirs, depth + 1)
+    return None if up is None else up | animated_names(view)
+
+
+def _draw_state(nd):
+    m = nd['mesh']
+    st = {'type': nd['flags']}
+    for k in RL_STATE:
+        v = m.get(k)
+        if k == 'textures':
+            v = [('' if (t or '').upper() == 'NULL' else (t or '').lower()) for t in (v or [])]
+            v = v + [''] * (4 - len(v))
+        st[k] = _freeze(v)
+    a, s = _first_key(nd, 'alpha'), _first_key(nd, 'selfillumcolor')
+    st['alpha'] = _freeze(a[:1]) if a else (1,)
+    st['selfillumcolor'] = _freeze(s[:3]) if s else (0, 0, 0)
+    return st
+
+
+def node_keys(view):
+    """Each node's key: its lower-case name, with #k for its k-th use of
+    the name (k > 1), as the comparison pairs nodes and names their paths
+    (compare_nodes)."""
+    seen, out = {}, []
+    for n in view['nodes']:
+        k = n['name'].lower()
+        seen[k] = seen.get(k, 0) + 1
+        out.append(k if seen[k] == 1 else '%s#%d' % (k, seen[k]))
+    return out
+
+
+def _rl_tris(view, mode, moving):
+    """The triangles a model draws ('draw': each mesh with render != 0, from
+    its first index list, MDL-BIN-049) or projects as shadow volumes
+    ('shadow': each mesh with shadow or beaming != 0, from its face list), in
+    world space. Skins, animmeshes and AABB walkmeshes are left out (deformed,
+    or never drawn). An entry is None when a corner is out of range or not
+    finite."""
+    xf = _world(view)
+    keys = node_keys(view)
+    out = []
+    for i, nd in enumerate(view['nodes']):
+        m = nd.get('mesh')
+        if not m or nd['flags'] & (mdlview.F_SKIN | mdlview.F_ANIM | mdlview.F_AABB):
+            continue
+        if mode == 'draw':
+            if not m.get('render'):
+                continue
+            il = m.get('index_lists') or []
+            idx = il[0] if il else []
+            tl = [idx[k:k + 3] for k in range(0, len(idx) - 2, 3)]
+            st = _draw_state(nd)
+        else:
+            if not (m.get('shadow') or m.get('beaming')):
+                continue
+            tl = [f['v'] for f in m.get('faces', [])]
+            a = _first_key(nd, 'alpha')
+            st = {'shadow': m.get('shadow'), 'beaming': m.get('beaming'), 'alpha': _freeze(a[:1]) if a else (1,)}
+        q, s, t, chain = xf[i]
+        mv = any(view['nodes'][j]['name'].lower() in moving for j in chain)
+        v = m.get('vertices', {})
+        pos = v.get('position', [])
+        for tri in tl:
+            if len(tri) != 3 or any(not (0 <= c < len(pos)) for c in tri):
+                out.append(None)
+                continue
+            corners = []
+            for c in tri:
+                lp = [_ff(x) for x in pos[c]]
+                p = _qrot(q, tuple(s * x for x in lp))
+                cn = {'p': tuple(p[k] + t[k] for k in range(3))}
+                corners.append(cn)
+                if mode == 'shadow':
+                    continue  # a shadow volume is built from positions alone
+                for k in ('uv0', 'uv1', 'uv2', 'uv3'):
+                    if k in v and c < len(v[k]):
+                        cn[k] = tuple(_ff(x) for x in v[k][c])
+                if 'normal' in v and c < len(v['normal']):
+                    cn['n'] = _qrot(q, tuple(_ff(x) for x in v['normal'][c]))
+                if 'tangent' in v and c < len(v['tangent']):
+                    cn['bad_t'] = bad_tangent(v['tangent'][c])
+                    cn['t'] = _qrot(q, tuple(_ff(x) for x in v['tangent'][c]))
+                    if 'handedness' in v and c < len(v['handedness']):
+                        cn['h'] = _ff(v['handedness'][c]) < 0
+                if 'color' in v and c < len(v['color']):
+                    cn['c'] = tuple(v['color'][c])
+            if not all(math.isfinite(x) for cn in corners for x in cn['p'] + cn.get('uv0', ())):
+                out.append(None)
+                continue
+            out.append({'node': keys[i], 'state': st, 'moving': mv, 'corners': corners,
+                        'zero': tri_area2(pos, tri) == 0})
+    return out
+
+
+def _rl_cell(tr):
+    return tuple(int(math.floor(sum(cn['p'][k] for cn in tr['corners']) / 3 / RL_GRID)) for k in range(3))
+
+
+def _rl_rotation(a, b):
+    """r with a's corner j where b's corner (j + r) % 3 is (the winding kept),
+    within RL_PAIR, or None."""
+    for r in range(3):
+        if all(max(abs(x['p'][k] - y['p'][k]) for k in range(3)) <= RL_PAIR['position'] and
+               (('uv0' in x) == ('uv0' in y)) and
+               ('uv0' not in x or max(abs(x['uv0'][k] - y['uv0'][k]) for k in range(2)) <= RL_PAIR['uv0'])
+               for x, y in ((a['corners'][j], b['corners'][(j + r) % 3]) for j in range(3))):
+            return r
+    return None
+
+
+def _rl_diff(a, b, r):
+    """What differs between two paired triangles, b's corner (j + r) % 3 at
+    a's corner j: {'state': [fields], 'moving': bool, 'corners': {attr: n},
+    'bad_tangent': n, 'tangent_baked': n}."""
+    d = {'state': [k for k, v in a['state'].items() if b['state'].get(k) != v],
+         'moving': a['moving'] != b['moving'], 'corners': {}, 'bad_tangent': 0, 'tangent_baked': 0}
+    white = (255, 255, 255, 255)
+
+    def bump(k):
+        d['corners'][k] = d['corners'].get(k, 0) + 1
+    for jj in range(3):
+        x, y = a['corners'][jj], b['corners'][(jj + r) % 3]
+        for k in ('uv1', 'uv2', 'uv3'):
+            if (k in x) != (k in y) or (k in x and not vclose(list(x[k]), list(y[k]), RL_TOL[k])):
+                bump(k)
+        if ('n' in x) != ('n' in y) or ('n' in x and not vclose(list(x['n']), list(y['n']), RL_TOL['normal'])):
+            bump('normal')
+        if 't' in x and x['bad_t']:
+            d['bad_tangent'] += 1  # what the original drew here is undefined (MDL-BIN-048)
+        elif 't' in x and 't' in y:
+            if not vclose(list(x['t']), list(y['t']), RL_TOL['tangent']):
+                bump('tangent')
+            if x.get('h') != y.get('h'):
+                bump('handedness')
+        elif 't' in y:
+            d['tangent_baked'] += 1  # the compile baked tangents the original had none of
+        elif 't' in x:
+            bump('tangent')
+        if x.get('c', white) != y.get('c', white):
+            bump('color')
+    return d
+
+
+def _rl_pair(orig, comp):
+    """Pair each original triangle with one compiled triangle at the same
+    place (corners within RL_PAIR, in the same winding). Where several are
+    there (coincident triangles), one that matches in everything _rl_diff
+    compares is taken first, then one of the same node, then any. So the
+    pairs show no difference exactly when both draw the same triangles with
+    the same attributes, coincident ones included. Returns (pairs [(i, j,
+    r)], lost [i], extra [j])."""
+    grid = {}
+    for j, tr in enumerate(comp):
+        if tr is not None:
+            grid.setdefault(_rl_cell(tr), []).append(j)
+    used, pairs, done = set(), [], set()
+
+    def exact(i, j, r):
+        d = _rl_diff(orig[i], comp[j], r)
+        return not (d['state'] or d['moving'] or d['corners'])
+    for same_node, same_all in ((True, True), (False, True), (True, False), (False, False)):
+        for i, tr in enumerate(orig):
+            if tr is None or i in done:
+                continue
+            c = _rl_cell(tr)
+            found = None
+            for d in ((x, y, z) for x in (0, -1, 1) for y in (0, -1, 1) for z in (0, -1, 1)):
+                for j in grid.get((c[0] + d[0], c[1] + d[1], c[2] + d[2]), ()):
+                    if j in used or (same_node and comp[j]['node'] != tr['node']):
+                        continue
+                    r = _rl_rotation(tr, comp[j])
+                    if r is not None and (not same_all or exact(i, j, r)):
+                        found = (j, r)
+                        break
+                if found:
+                    break
+            if found:
+                used.add(found[0])
+                done.add(i)
+                pairs.append((i, found[0], found[1]))
+    lost = [i for i, tr in enumerate(orig) if tr is not None and i not in done]
+    extra = [j for j, tr in enumerate(comp) if tr is not None and j not in used]
+    return pairs, lost, extra
+
+
+def _rl_compare(orig, comp):
+    pairs, lost, extra = _rl_pair(orig, comp)
+    f = {'original': len(orig), 'compiled': len(comp), 'paired': len(pairs),
+         'unreadable': [sum(1 for t in orig if t is None), sum(1 for t in comp if t is None)],
+         'lost': len(lost), 'lost_nonzero': sum(1 for i in lost if not orig[i]['zero']),
+         'extra': len(extra), 'extra_nonzero': sum(1 for j in extra if not comp[j]['zero']),
+         'state_differ': {}, 'moving_differ': 0, 'corner_differ': {}, 'bad_tangent': 0, 'tangent_baked': 0,
+         'max_delta': {'position': 0.0, 'uv0': 0.0}, 'moved': {}}
+    for i, j, r in pairs:
+        a, b = orig[i], comp[j]
+        if a['node'] != b['node']:
+            f['moved'].setdefault(b['node'], set()).add(a['node'])
+        d = _rl_diff(a, b, r)
+        for k in d['state']:
+            f['state_differ'][k] = f['state_differ'].get(k, 0) + 1
+        f['moving_differ'] += d['moving']
+        for k, n in d['corners'].items():
+            f['corner_differ'][k] = f['corner_differ'].get(k, 0) + n
+        f['bad_tangent'] += d['bad_tangent']
+        f['tangent_baked'] += d['tangent_baked']
+        for jj in range(3):
+            x, y = a['corners'][jj], b['corners'][(jj + r) % 3]
+            f['max_delta']['position'] = max(f['max_delta']['position'],
+                                             max(abs(x['p'][k] - y['p'][k]) for k in range(3)))
+            if 'uv0' in x:
+                f['max_delta']['uv0'] = max(f['max_delta']['uv0'],
+                                            max(abs(x['uv0'][k] - y['uv0'][k]) for k in range(2)))
+    f['moved'] = {k: sorted(v) for k, v in sorted(f['moved'].items())}
+    return f
+
+
+def render_list_facts(exp, comp, super_moving=frozenset()):
+    """What a model with merged render lists draws and projects as shadows in
+    its compile against the original, compared across the whole model in
+    world space (for the approval merged-render-lists, runner/approvals.py).
+
+    Every drawn triangle (meshes with render != 0, from the index list,
+    MDL-MESH-066) and every shadow face (meshes with shadow or beaming != 0,
+    from the face list, whatever render says: MDL-MESH-067) of each model is
+    placed in world space (first keys of position, orientation and scale up
+    the parent chain) and paired one to one with a triangle of the other
+    model at the same place (_rl_pair). Per pair the drawing state
+    (RL_STATE, node type, alpha, selfillumcolor), whether an animation (the
+    model's own or its supermodel's, `super_moving`) moves or fades the
+    drawing node or an ancestor, and the corners' UV1-3, normal, tangent,
+    handedness and colour are compared; a shadow face only by its corners'
+    positions and its shadow, beaming, alpha and animation. Tangents the
+    original holds as NaN, infinite or zero are counted apart
+    (`bad_tangent`), as are tangents only the compile has (`tangent_baked`).
+    A triangle left without a pair is counted, and whether it has area.
+
+    `receivers` are the original's meshes whose index list holds more
+    triangles than their faces (merged_list); `donor_candidates` the
+    original's meshes with render 0, no index list and faces; `moved` the
+    compiled nodes that draw triangles another node drew in the original,
+    with those nodes. Nodes are named by node_keys (a name used twice gets
+    #2). `ambiguous` lists the node names used by more than one node in
+    either model that a lookup by name depends on: a parent or an animated
+    node."""
+    rec, cand, deformed = [], [], 0
+    for key, nd in zip(node_keys(exp), exp['nodes']):
+        m = nd.get('mesh')
+        if not m or nd['flags'] & mdlview.F_AABB:
+            continue
+        if merged_list(m):
+            rec.append(key)
+            if nd['flags'] & (mdlview.F_SKIN | mdlview.F_ANIM):
+                deformed += 1
+        il = m.get('index_lists') or []
+        if not m.get('render') and not (il and il[0]) and m.get('faces'):
+            cand.append(key)
+    moving = {'original': animated_names(exp) | set(super_moving),
+              'compiled': animated_names(comp) | set(super_moving)}
+    used = moving['original'] | moving['compiled']
+    dup = set()
+    for view in (exp, comp):
+        names = [n['name'].lower() for n in view['nodes']]
+        dup |= {n for n in names if names.count(n) > 1}
+        used |= {(n.get('parent') or '').lower() for n in view['nodes']}
+    f = {'receivers': rec, 'donor_candidates': cand, 'receivers_deformed': deformed,
+         'ambiguous': sorted(dup & used)}
+    for mode in ('draw', 'shadow'):
+        ot = _rl_tris(exp, mode, moving['original'])
+        ct = _rl_tris(comp, mode, moving['compiled'])
+        f[mode] = _rl_compare(ot, ct)
+    return f
 
 MESH_DEFAULTS = {'diffuse': [1, 1, 1], 'ambient': [1, 1, 1], 'specular': [0, 0, 0], 'shininess': 1,
                  'shadow': 1, 'beaming': 0, 'render': 1, 'transparencyhint': 0, 'renderhint': 0,
@@ -1224,6 +1608,17 @@ def _roundtrip_one(job):
             for lvl, pth, msg in rep.items:
                 res[lvl].append([test, pth, msg])
             facts.update(rep.facts)
+        if any(MERGE_FINDING.search(p) for _, p, _ in res['must']) and any(
+                'mesh' in n and merged_list(n['mesh']) for n in exp['nodes']):
+            try:
+                moving = supermodel_animated(exp['model'].get('supermodel'),
+                                             env['MDLCONF_RESOURCE_DIRS'].split(os.pathsep))
+                rf = render_list_facts(exp, acts[1][1], moving or frozenset())
+                if moving is None:
+                    rf['supermodel_missing'] = True
+                facts['compile model.render_lists'] = rf
+            except Exception as e:  # noqa: BLE001 - no facts, nothing approved
+                facts['compile model.render_lists'] = {'error': repr(e)}
         if any(t == 'compile' and NODE_FINDING.search(p) for t, p, _ in res['must']):
             try:
                 sup = find_supermodel(exp['model'].get('supermodel'), env['MDLCONF_RESOURCE_DIRS'].split(os.pathsep))
@@ -1283,6 +1678,7 @@ def adjacency_only(first, second, p1=None, p2=None):
 
 
 NODE_FINDING = re.compile(r'(\.number|\.tree|node_count)$')
+MERGE_FINDING = re.compile(r'\.mesh\.(render|triangles|vertex_count)$')
 _SUPERS = {}
 
 
@@ -1298,6 +1694,23 @@ def find_supermodel(name, dirs, depth=0):
     key = (name, tuple(dirs))
     if key in _SUPERS:
         return _SUPERS[key]
+    data = _supermodel_data(name, dirs)
+    sup = None
+    if data and data[:4] == b'\0\0\0\0':
+        sup = nodefacts.Super.from_binary(mdlview.read_binary(data))
+    elif data:
+        text = data.decode('latin-1')
+        parent = nodefacts.ascii_supermodel(text)
+        psup = find_supermodel(parent, dirs, depth + 1) if parent else None
+        if not parent or psup is not None:
+            sup = nodefacts.Super.from_ascii(text, psup)
+    _SUPERS[key] = sup
+    return sup
+
+
+def _supermodel_data(name, dirs):
+    """The bytes of the first <name>.mdl in the folders, else the base
+    game's (NWN_ROOT); None when not found."""
     data = None
     for d in dirs:
         for fn in (name + '.mdl', name.upper() + '.mdl'):
@@ -1314,17 +1727,7 @@ def find_supermodel(name, dirs, depth=0):
                 data = _SUPERS['archive'].get(name)
         except Exception:  # noqa: BLE001 - not found
             data = None
-    sup = None
-    if data and data[:4] == b'\0\0\0\0':
-        sup = nodefacts.Super.from_binary(mdlview.read_binary(data))
-    elif data:
-        text = data.decode('latin-1')
-        parent = nodefacts.ascii_supermodel(text)
-        psup = find_supermodel(parent, dirs, depth + 1) if parent else None
-        if not parent or psup is not None:
-            sup = nodefacts.Super.from_ascii(text, psup)
-    _SUPERS[key] = sup
-    return sup
+    return data
 
 
 M_BOUNDS = range(12 + 136, 12 + 160, 4)  # the model's bounding box (bmin, bmax), file offsets

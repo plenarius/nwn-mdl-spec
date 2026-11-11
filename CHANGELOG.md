@@ -127,6 +127,28 @@ Corrections after the first draft:
   `mdlconf.explain_unstable`. The >16-children shuffle, numbers a
   part-number declaration reproduces and the supermodel -1 walk stay
   failures.
+- MDL-MESH-066, MDL-MESH-067 (new) and E69, read in the client's
+  disassembly (not checked in game): a mesh with render 0 is never drawn,
+  whatever its index list holds (`PartTriMesh::IsPartRenderable`, called by
+  every draw path); a shadow volume is gated by `shadow` and `beaming`, not
+  `render`, and built from the face list (`PartTriMesh::Project`,
+  `GetProjectsShadows`). MDL-BIN-053 now says a render-0 donor casts its
+  faces' shadow and a receiver's copies cast none, so writing donors with
+  render 1 changes no shadow (Layonara's 1,158 merged models, compared in
+  world space). The unknown.md item on render-0 meshes with an index list is
+  settled in code. From the MDL pipeline Phase 2 render-list analysis.
+- Runner: approval `merged-render-lists` (runner/approvals/layonara.json,
+  James 2026-11-11). For a model with merged render lists (MDL-BIN-053) the
+  round trip records `compile model.render_lists`
+  (`mdlconf.render_list_facts`): every drawn triangle and every shadow face
+  of the original and the compile, in world space, paired one to one, with
+  the drawing state, animation and corner attributes compared. When the
+  whole model draws and casts shadows as before, the donors' `render` and
+  the receivers' and donors' `triangles` and `vertex_count` findings are
+  approved, in the decompile and the compile; the meshes' other findings
+  still need their own entries. A receiver's mesh facts pair the compile
+  with its own faces, the start of its index list. On run 6's 1,177
+  render-list models (cleanmodels 3003980) it holds on 998.
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when

@@ -651,3 +651,41 @@ neighbour (the lowest-numbered, E15), can drop out of the silhouette when a
 lit face and an unlit face do not name each other. *Confirmed (code, read in
 the disassembly; Ghidra decompiles in nwmain-analysis
 `decompiled/shadow/`). The look in game was not checked.*
+
+## What is drawn and what casts a shadow (E69, new)
+
+**E69 `render` gates drawing; `shadow` and `beaming` gate shadows.** The
+ASCII parser stores `render` at MdlNodeTriMesh +0x118 and `shadow` at +0x110
+(`MdlNodeTriMesh::InternalParseField` 0x44ced0: `render` at 0x44d860, `lea
+0x118(%r12)`; `shadow` at 0x44d900, `lea 0x110(%r12)`); `beaming` is the
+u4 between them, +0x114, in the binary's order (mesh +100, +104, +108,
+MDL-BIN-043).
+- **Drawing.** `MdlNodeTriMesh::InternalCreateInstance` (0x43cc80) sets the
+  new part's byte +0x96 to (node +0x118 ≠ 0) at 0x43ccb0-0x43ccbd.
+  `PartTriMesh::IsPartRenderable` (0x450e60) returns false unless part
+  +0x96 ≠ 0 and node +0x118 ≠ 0 (and the node has vertices: u2 +0x284 ≠ 0
+  or the pointer at +0x278 set). Every draw path calls it first:
+  `PartTriMesh::Draw` (0x4513dc), `PartAnimMesh::Draw` (0x45127c),
+  `PartAABB::Draw` (0x4515c9), `PartDanglyMesh::Draw` (0x451b6c),
+  `PartSkin::Draw` (0x4830cc), `Scene::AddPartsTreeToDrawBuckets` (0x460955,
+  0x460a9f) and `Scene::AddPartsToDrawBuckets` (0x475313, 0x47544b,
+  0x47574c); these are all ten calls in the binary. So a mesh with render 0
+  is never drawn, whatever its index list holds.
+- **Shadows.** `Gob::PartVolumeProject` (0x451e80, E68) walks the part tree
+  and leaves out a part, with its children, only when the part's byte +0x34
+  is 0 (`Gob::SetSubtreeEnabled`, 0x43c670). `PartTriMesh::Project`
+  (0x4524f0) returns at once when the 8 bytes at node +0x110 (`shadow` and
+  `beaming`) are zero (`cmpq $0x0,0x110(%r13)` at 0x45251e), and otherwise
+  when `PartTriMesh::GetProjectsShadows` (0x43cfa0, called at 0x45255d)
+  says no: that reads the dynamic-shadow settings
+  (`g_bNonCharacterDynamicShadows`) and compares the part's alpha with
+  `g_fShadowAlphaCutoff`. None of the three reads node +0x118 or part +0x96
+  or calls `IsPartRenderable`. The volume is then built from the face list
+  (E68), not the index list. So a mesh with render 0 and shadow (or beaming)
+  set casts its faces' shadow, and an index list's extra triangles cast
+  none.
+
+*Confirmed (code, read in the disassembly, 2026-11-11; not checked in game).
+Consistent with data, not a test of it: Layonara's 1,158 round-tripped
+models with merged meshes (MDL-BIN-053) project the same shadow faces in
+world space as the originals, donors at render 0 with shadow 1 included.*

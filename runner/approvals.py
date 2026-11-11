@@ -73,6 +73,27 @@ model.nodes` when the compile has a node number, tree or count finding):
   faces and every differing plane, in the original and in the compile, is at
   a tie of MDL-MESH-052's axis rule (nodefacts.aabb_facts).
 
+Per model, from the facts of mdlconf.render_list_facts (recorded as
+`compile model.render_lists` when the original has merged render lists,
+MDL-BIN-053, and the round trip has a render, triangles or vertex_count
+finding):
+
+- `merged-render-lists`: when the whole model draws and casts shadows as
+  the original does, compared in world space (every drawn triangle and
+  every shadow face paired one to one, apart from original triangles of zero
+  area; the same drawing state, animation and corner attributes per pair,
+  bad original tangents and baked ones needing nan-tangent-fill and
+  tangents-baked; no node name used twice that is a parent or animated
+  (other nodes sharing a name are told apart as #2, #3 ..., as the
+  comparison names them); every supermodel found, no skin
+  or animmesh receiver; every node that now draws another's triangles a
+  render-0 mesh without an index list in the original, drawing a
+  receiver's), the donors' render findings and the receivers' and donors' triangles and vertex_count
+  findings, in the decompile and the compile. A receiver's mesh facts pair
+  the compile with its own faces only (the start of its index list), so its
+  other findings go through the checks above, and a decompile finding of
+  these meshes that is not one of those three leaves the mesh failed.
+
 And one per model, about the second compile rather than a finding: a model
 whose MUST findings are all approved and whose second compile differs from
 the first, where every difference is of a kind an entry approves
@@ -103,7 +124,7 @@ FORMAT = 'mdlconf-approvals/1'
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
           'water-texanim-169', 'name-cut-31', 'renumbered', 'supermodel-count', 'anim-header-count',
           'tree-sorted', 'aabb-plane-tie', 'unstable-adjacency-only', 'signed-zero', 'bounds-ulp',
-          'dead-face-vertices')
+          'dead-face-vertices', 'merged-render-lists')
 STABILITY = ('stability', 'binary2')  # the approved finding of an approved instability
 UNSTABLE = {  # kind in unstable_explained: (check, message)
     'adjacency': ('unstable-adjacency-only', 'the adjacency of %d faces'),
@@ -117,6 +138,8 @@ PLANE = re.compile(r'^(nodes\[[^\]]*\])\.aabb\[\d+\]\.plane$')
 TREE_BLOCKERS = ('.tree', '.parent', '.name')
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
+MESH_NODE = re.compile(r'^nodes\[([^\]]*)\]\.mesh$')
+MERGE_LEAVES = ('render', 'triangles', 'vertex_count')
 
 
 class ApprovalsError(ValueError):
@@ -185,7 +208,9 @@ def mesh_checks(leaves, f):
             elif f['dropped']:
                 c = 'dropped-zero-area-faces'  # the in-order comparison shifted by a dropped face
         elif leaf == 'triangles':
-            c = 'dropped-zero-area-faces' if f['dropped'] and f['dropped'] == n_orig - n_comp else None
+            # a receiver's count includes the copies: merged-render-lists
+            c = ('dropped-zero-area-faces' if f['dropped'] and f['dropped'] == n_orig - n_comp
+                 and not f.get('merged_list') else None)
         elif leaf == 'face_count':
             if f['dropped'] and faces and faces[0] - faces[1] == f['dropped']:
                 c = 'dropped-zero-area-faces'
@@ -208,6 +233,37 @@ def mesh_checks(leaves, f):
     if water:
         needs.add('water-texanim-169')
     return out, needs
+
+
+def merged_render_lists(rf):
+    """(receivers, donors, checks relied on) when a model's merged render
+    lists draw and cast shadows as in the original (`compile
+    model.render_lists`, mdlconf.render_list_facts), else None. Receivers
+    and donors are node keys (mdlconf.node_keys: lower-case names, #k for a
+    name's k-th node); donors are the meshes that now draw triangles a
+    receiver drew."""
+    if not rf or rf.get('error') or not rf.get('receivers') or rf.get('ambiguous', True):
+        return None
+    if rf.get('supermodel_missing') or rf.get('receivers_deformed'):
+        return None
+    d, s = rf['draw'], rf['shadow']
+    for x in (d, s):
+        if any(x['unreadable']) or x['lost_nonzero'] or x['extra'] or x['state_differ'] or x['moving_differ']:
+            return None
+    if d['corner_differ']:
+        return None
+    rec, cand = set(rf['receivers']), set(rf['donor_candidates'])
+    moved = d['moved']
+    if any(n not in cand or not set(src) <= rec for n, src in moved.items()):
+        return None
+    needs = {'merged-render-lists'}
+    if d['bad_tangent']:
+        needs.add('nan-tangent-fill')
+    if d['tangent_baked']:
+        needs.add('tangents-baked')
+    if d['lost'] or s['lost']:
+        needs.add('dropped-zero-area-faces')
+    return rec, set(moved), needs
 
 
 def renumbered(mf):
@@ -277,19 +333,41 @@ def apply(res, approvals):
         stable = res['status'] == 'pass'  # made before 'stable' was recorded
     facts = res.get('facts', {})
     entries = approvals['entries'] if approvals else {}
+    merged = merged_render_lists(facts.get('compile model.render_lists')) if entries else None
+    rec, donors, merged_needs = merged or (set(), set(), set())
+
+    def involved(mesh):
+        m = MESH_NODE.match(mesh)
+        return m.group(1).lower() in rec | donors if m else False
+
+    def merge_leaf(mesh, leaf):
+        # the findings merged-render-lists covers on this mesh
+        if leaf == 'render':
+            m = MESH_NODE.match(mesh)
+            return bool(m) and m.group(1).lower() in donors
+        return leaf in MERGE_LEAVES and involved(mesh)
+
     meshes = {}
     for i, (test, path, msg) in enumerate(findings):
         m = MESH_PATH.match(path)
-        if test == 'compile' and m:
-            meshes.setdefault(m.group(1), []).append((i, m.group(2)))
+        # decompile findings only of the meshes in a merged render list:
+        # those are approved together with the mesh's compile findings
+        if m and (test == 'compile' or involved(m.group(1))):
+            meshes.setdefault(m.group(1), []).append((i, test, m.group(2)))
     verdict = [None] * len(findings)
     if entries:
         for mesh, items in meshes.items():
-            leaves, needs = mesh_checks([leaf for _, leaf in items], facts.get('compile ' + mesh))
-            if any(c is None or c not in entries for c in leaves.values()) or not needs <= set(entries):
+            merge = {i for i, _, leaf in items if merge_leaf(mesh, leaf)}
+            leaves, needs = mesh_checks([leaf for i, t, leaf in items if i not in merge and t == 'compile'],
+                                        facts.get('compile ' + mesh))
+            if merge:
+                needs = needs | merged_needs
+            v = {i: 'merged-render-lists' if i in merge else leaves[leaf] if t == 'compile' else None
+                 for i, t, leaf in items}
+            if any(c is None or c not in entries for c in v.values()) or not needs <= set(entries):
                 continue  # the whole mesh stays failed
-            for i, leaf in items:
-                verdict[i] = leaves[leaf]
+            for i, c in v.items():
+                verdict[i] = c
         for i, (test, path, msg) in enumerate(findings):
             if verdict[i] is None and not MESH_PATH.match(path):
                 c = node_check(test, path, facts)

@@ -269,3 +269,22 @@ with `transparency 1` to be blended. A checker SHOULD warn when a mesh has
 transparencyhint > 0 and a material that cannot be blended. *Confirmed:
 `PartTriMesh::GetIsOpaque` 0x43cee0, `Material::GetIsOpaque` 0x4c6190,
 `SharedMaterial::ParseField` 0x4c6760; in game, E67.*
+
+## Drawn and shadowed
+
+**MDL-MESH-066** A mesh with `render` 0 is never drawn, whatever its index
+list (MDL-BIN-049) holds; a mesh with `render` non-zero draws its index
+list. `render` does not decide shadows (MDL-MESH-067). *Confirmed (code,
+not checked in game): `PartTriMesh::IsPartRenderable` 0x450e60, called by
+every draw path, E69.*
+
+**MDL-MESH-067** A mesh casts a shadow volume when `shadow` or `beaming` is
+non-zero, whatever `render` says, and the volume is built from its face list
+(and stored adjacency, E68), not its index list: a render-0 mesh with
+`shadow 1` casts its faces' shadow, and triangles an index list draws beyond
+its mesh's faces (MDL-BIN-053) cast none. The game's dynamic-shadow settings
+and the part's alpha (against `g_fShadowAlphaCutoff`) can still turn it off.
+*Confirmed (code, not checked in game): `PartTriMesh::Project` 0x4524f0
+(the test of `shadow` and `beaming` at 0x45251e) and
+`PartTriMesh::GetProjectsShadows` 0x43cfa0, E69.*
+
