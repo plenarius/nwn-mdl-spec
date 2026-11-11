@@ -122,11 +122,14 @@ mesh material fields, vertex and face counts, and every drawn corner's
 position, UVs, normal (1e-4), colour and tangent (1e-3) with its handedness
 sign. Animations pair by name and occurrence (a name used twice pairs the
 first with the first); each one's length, transtime, events, node tree and
-animroot are MUST, the animroot compared without case but required to match
-a node of its animation, case for case, exactly when the golden's does
-(MDL-NODE-045). SHOULD checks: bounds, face normals, distances and
-adjacency, the vertex order, the column byte of bezier controllers, and
-controllers the golden lacks or has whose value is the default.
+animroot are MUST. The animroot is compared without case but must match a
+node of its animation, case for case, exactly when the golden's does; when
+the golden's tree is wider than its animroot's cut (a binary the game did
+not compile), any animroot that matches no node is accepted and one that
+matches a node fails (MDL-NODE-045). SHOULD checks: bounds, face normals,
+distances and adjacency, the vertex order, the column byte of bezier
+controllers, and controllers the golden lacks or has whose value is the
+default.
 
 A **decompile** test runs the implementation on the golden, reads its ASCII
 the way the engine would (`runner/mdlview.py`, following spec/ascii.md) and

@@ -1079,6 +1079,54 @@ def check_round3():
     return bad
 
 
+def check_animroot():
+    """MDL-NODE-045: the animroot a decompile writes must make a compile give
+    back the stored tree. A game-compiled tree is its animroot's cut, so the
+    animroot must match the same node, case for case; a tree wider than the
+    cut (a binary the game did not compile) needs one that matches none."""
+    bad = []
+
+    def node(name, parent):
+        return {'name': name, 'parent': parent, 'type': 'dummy', 'flags': 1, 'number': 0,
+                'inheritcolor': 0, 'controllers': []}
+    full = [node('r', None), node('arm', 'r'), node('hand', 'arm'), node('leg', 'r')]
+
+    def model(root, names):
+        nodes = [n for n in full if n['name'] in names]
+        an = {'name': 'a', 'length': 1, 'transtime': 0, 'animroot': root, 'events': [],
+              'node_count': len(nodes), 'nodes': nodes}
+        return {'model': {'name': 'x', 'classification': 0, 'fog': 1, 'animationscale': 1,
+                          'supermodel': 'NULL', 'node_count': 4, 'bmin': [0, 0, 0], 'bmax': [0, 0, 0],
+                          'radius': 0},
+                'nodes': full, 'animations': [an], 'volatile': []}
+    cut, whole = ('r', 'arm', 'hand'), ('r', 'arm', 'hand', 'leg')
+    if mdlconf.root_wider(model('arm', cut)['animations'][0]) or \
+            not mdlconf.root_wider(model('arm', whole)['animations'][0]) or \
+            mdlconf.root_wider(model('ARM', whole)['animations'][0]) or \
+            mdlconf.root_wider(model('r', whole)['animations'][0]):
+        bad.append('root_wider: wrong cut')
+    cases = [  # (golden animroot, golden tree, output animroot, a MUST expected)
+        ('arm', cut, 'arm', False),          # game-compiled, same node
+        ('arm', cut, 'ROOTDUMMY', True),     # game-compiled: must match the same node
+        ('ARM', whole, 'ARM', False),        # matched nothing: kept as stored
+        ('ARM', whole, 'arm', True),         # a case change that makes it match: a compile would cut
+        ('arm', whole, 'ROOTDUMMY', False),  # wider than the cut: matching none keeps it whole
+        ('arm', whole, 'NULL', False),
+        ('arm', whole, 'arm', True),         # wider: matching the node would cut leg
+        ('arm', whole, 'hand', True),
+    ]
+    for eroot, etree, aroot, want in cases:
+        e = mdlconf.normalise(model(eroot, etree))
+        a = model(aroot, etree)
+        for test in ('decompile', 'compile'):
+            got = any(lvl == 'must' and p.endswith('.animroot')
+                      for lvl, p, _ in mdlconf.compare(e, a, test).items)
+            if got != want:
+                bad.append('animroot %r over %s, output %r (%s): MUST %s'
+                           % (eroot, '+'.join(etree), aroot, test, 'missing' if want else 'raised'))
+    return bad
+
+
 def check_tangents_and_faces():
     """Left-out tangents are accepted only when the compile gives them back
     exactly; a conformance compile's face records must hold the golden's
@@ -1119,7 +1167,7 @@ def main():
                      ('expected files', check_expected), ('approvals', check_approvals),
                      ('node facts', check_node_facts), ('stability', check_stability),
                      ('tangents, faces', check_tangents_and_faces), ('render lists', check_render_lists),
-                     ('round 3', check_round3),
+                     ('round 3', check_round3), ('animroot', check_animroot),
                      ('ksy', check_ksy)):
         bad = fn()
         print('%-16s %s' % (name, 'ok' if not bad else 'FAIL'))

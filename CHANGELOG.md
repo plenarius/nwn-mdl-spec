@@ -32,8 +32,11 @@ Added:
   only the geometry has) logs "animroot … node not matching existing node"
   and keeps the whole tree, so the animation plays on every node. The
   animroot is stored as written either way. MDL-BIN-070 points to it.
-  The runner now fails (MUST) an animroot that matches a node, case for
-  case, where the golden's matches none, or the other way round.
+  A decompiler must write an animroot with which a compile gives back the
+  stored tree: for a game-compiled binary the stored animroot's node, case
+  for case; for a tree wider than the stored animroot's cut (9 Layonara
+  binaries another compiler wrote) one that matches no node. The runner
+  checks both (MUST).
   cleanmodels (v4.16.1-7, 79afbc4) does not prune (`prune` keeps `leg`,
   compile MUST) and its decompile lowercases `ARM` over the node `arm`, so
   a recompile would prune (decompile MUST); it keeps both `swing` copies
