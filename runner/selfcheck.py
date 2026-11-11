@@ -663,6 +663,10 @@ def check_render_lists():
         ('coincident donors put back', model(two, dict(don, normal=N1), extra=[('e', dict(don, normal=N2), at2)]),
          model(own, dict(back, normal=N1), extra=[('e', dict(back, normal=N2), at2)]),
          'pass-approved', {'merged-render-lists'}),
+        # the second donor has the first's name: told apart as d#2
+        ('donors sharing a name put back', model(two, dict(don, normal=N1), extra=[('d', dict(don, normal=N2), at2)]),
+         model(own, dict(back, normal=N1), extra=[('d', dict(back, normal=N2), at2)]),
+         'pass-approved', {'merged-render-lists'}),
         ('coincident donors, one normal changed',
          model(two, dict(don, normal=N1), extra=[('e', dict(don, normal=N2), at2)]),
          model(own, dict(back, normal=N1), extra=[('e', dict(back, normal=N1), at2)]), 'fail', set()),

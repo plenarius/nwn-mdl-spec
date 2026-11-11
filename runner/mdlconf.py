@@ -579,7 +579,8 @@ def _qmul(a, b):
 def _qrot(q, v):
     x, y, z, w = q
     tx, ty, tz = 2 * (y * v[2] - z * v[1]), 2 * (z * v[0] - x * v[2]), 2 * (x * v[1] - y * v[0])
-    return (v[0] + w * tx + (y * tz - z * ty), v[1] + w * ty + (z * tx - x * tz), v[2] + w * tz + (x * ty - y * tx))
+    return (v[0] + w * tx + (y * tz - z * ty), v[1] + w * ty + (z * tx - x * tz),
+            v[2] + w * tz + (x * ty - y * tx))
 
 
 def _world(view):
@@ -650,6 +651,18 @@ def _draw_state(nd):
     return st
 
 
+def node_keys(view):
+    """Each node's key: its lower-case name, with #k for its k-th use of
+    the name (k > 1), as the comparison pairs nodes and names their paths
+    (compare_nodes)."""
+    seen, out = {}, []
+    for n in view['nodes']:
+        k = n['name'].lower()
+        seen[k] = seen.get(k, 0) + 1
+        out.append(k if seen[k] == 1 else '%s#%d' % (k, seen[k]))
+    return out
+
+
 def _rl_tris(view, mode, moving):
     """The triangles a model draws ('draw': each mesh with render != 0, from
     its first index list, MDL-BIN-049) or projects as shadow volumes
@@ -658,6 +671,7 @@ def _rl_tris(view, mode, moving):
     or never drawn). An entry is None when a corner is out of range or not
     finite."""
     xf = _world(view)
+    keys = node_keys(view)
     out = []
     for i, nd in enumerate(view['nodes']):
         m = nd.get('mesh')
@@ -707,7 +721,7 @@ def _rl_tris(view, mode, moving):
             if not all(math.isfinite(x) for cn in corners for x in cn['p'] + cn.get('uv0', ())):
                 out.append(None)
                 continue
-            out.append({'node': nd['name'].lower(), 'state': st, 'moving': mv, 'corners': corners,
+            out.append({'node': keys[i], 'state': st, 'moving': mv, 'corners': corners,
                         'zero': tri_area2(pos, tri) == 0})
     return out
 
@@ -828,7 +842,8 @@ def _rl_compare(orig, comp):
             f['max_delta']['position'] = max(f['max_delta']['position'],
                                              max(abs(x['p'][k] - y['p'][k]) for k in range(3)))
             if 'uv0' in x:
-                f['max_delta']['uv0'] = max(f['max_delta']['uv0'], max(abs(x['uv0'][k] - y['uv0'][k]) for k in range(2)))
+                f['max_delta']['uv0'] = max(f['max_delta']['uv0'],
+                                            max(abs(x['uv0'][k] - y['uv0'][k]) for k in range(2)))
     f['moved'] = {k: sorted(v) for k, v in sorted(f['moved'].items())}
     return f
 
@@ -857,23 +872,25 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
     triangles than their faces (merged_list); `donor_candidates` the
     original's meshes with render 0, no index list and faces; `moved` the
     compiled nodes that draw triangles another node drew in the original,
-    with those nodes. `ambiguous` lists the node names used by more than one
-    node in either model that a name lookup here depends on: a parent, an
-    animated node, a receiver or a donor candidate."""
+    with those nodes. Nodes are named by node_keys (a name used twice gets
+    #2). `ambiguous` lists the node names used by more than one node in
+    either model that a lookup by name depends on: a parent or an animated
+    node."""
     rec, cand, deformed = [], [], 0
-    for nd in exp['nodes']:
+    for key, nd in zip(node_keys(exp), exp['nodes']):
         m = nd.get('mesh')
         if not m or nd['flags'] & mdlview.F_AABB:
             continue
         if merged_list(m):
-            rec.append(nd['name'].lower())
+            rec.append(key)
             if nd['flags'] & (mdlview.F_SKIN | mdlview.F_ANIM):
                 deformed += 1
         il = m.get('index_lists') or []
         if not m.get('render') and not (il and il[0]) and m.get('faces'):
-            cand.append(nd['name'].lower())
-    moving = {'original': animated_names(exp) | set(super_moving), 'compiled': animated_names(comp) | set(super_moving)}
-    used = set(rec) | set(cand) | moving['original'] | moving['compiled']
+            cand.append(key)
+    moving = {'original': animated_names(exp) | set(super_moving),
+              'compiled': animated_names(comp) | set(super_moving)}
+    used = moving['original'] | moving['compiled']
     dup = set()
     for view in (exp, comp):
         names = [n['name'].lower() for n in view['nodes']]

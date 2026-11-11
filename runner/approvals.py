@@ -83,11 +83,12 @@ finding):
   every shadow face paired one to one, apart from original triangles of zero
   area; the same drawing state, animation and corner attributes per pair,
   bad original tangents and baked ones needing nan-tangent-fill and
-  tangents-baked; no node name used twice where a parent, an animated node,
-  a receiver or a donor is looked up by it; every supermodel found, no skin
-  or animmesh receiver; every node that now draws another's triangles a render-0 mesh
-  without an index list in the original, drawing a receiver's), the donors'
-  render findings and the receivers' and donors' triangles and vertex_count
+  tangents-baked; no node name used twice that is a parent or animated
+  (other nodes sharing a name are told apart as #2, #3 ..., as the
+  comparison names them); every supermodel found, no skin
+  or animmesh receiver; every node that now draws another's triangles a
+  render-0 mesh without an index list in the original, drawing a
+  receiver's), the donors' render findings and the receivers' and donors' triangles and vertex_count
   findings, in the decompile and the compile. A receiver's mesh facts pair
   the compile with its own faces only (the start of its index list), so its
   other findings go through the checks above, and a decompile finding of
@@ -137,7 +138,7 @@ PLANE = re.compile(r'^(nodes\[[^\]]*\])\.aabb\[\d+\]\.plane$')
 TREE_BLOCKERS = ('.tree', '.parent', '.name')
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
-MESH_NODE = re.compile(r'^nodes\[([^\]#]*)\]\.mesh$')
+MESH_NODE = re.compile(r'^nodes\[([^\]]*)\]\.mesh$')
 MERGE_LEAVES = ('render', 'triangles', 'vertex_count')
 
 
@@ -238,8 +239,9 @@ def merged_render_lists(rf):
     """(receivers, donors, checks relied on) when a model's merged render
     lists draw and cast shadows as in the original (`compile
     model.render_lists`, mdlconf.render_list_facts), else None. Receivers
-    and donors are lower-case node names; donors are the meshes that now
-    draw triangles a receiver drew."""
+    and donors are node keys (mdlconf.node_keys: lower-case names, #k for a
+    name's k-th node); donors are the meshes that now draw triangles a
+    receiver drew."""
     if not rf or rf.get('error') or not rf.get('receivers') or rf.get('ambiguous', True):
         return None
     if rf.get('supermodel_missing') or rf.get('receivers_deformed'):
