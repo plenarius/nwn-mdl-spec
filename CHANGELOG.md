@@ -149,6 +149,39 @@ Corrections after the first draft:
   still need their own entries. A receiver's mesh facts pair the compile
   with its own faces, the start of its index list. On run 6's 1,177
   render-list models (cleanmodels 3003980) it holds on 998.
+- Runner, round 3 of the approvals (James 2026-11-11, MDL pipeline Phase 2):
+  `merged-render-lists` also covers what cleanmodels #141 writes, still only
+  where the world-space comparison finds the drawing unchanged: a restored
+  donor's own `normal`, `tangent` and `handedness` and the drawing settings
+  and alpha/selfillumcolor controllers it takes from its receiver (its own
+  were never drawn); a folded donor's `render` and `shadow`, its shadow now
+  cast from the receiver's copies where they are drawn (as many faces as it
+  lost); a receiver's `face_count` and shifted per-corner findings when it
+  draws folded copies as faces; and a tree whose only difference is
+  restored donors re-sorted by the transparencyhint they took. The fold and
+  restore rules are written as decompiler guidance after MDL-BIN-053. `dead-face-vertices` also covers
+  vertices a dropped zero-area face used first, which the second compile
+  orders by the kept faces (MDL-MESH-011, MDL-MESH-020), and finds meshes by
+  their 31-character names. New: `emitter-texture-junk` (a chunk emitter's
+  texture field holding bytes no ASCII can, left by an old compiler) and
+  `aabb-stale-tree` (an original walkmesh tree with more leaves than faces,
+  MDL-MESH-024, against a whole compiled tree). Checker fixes: nodes pair by
+  their path from the root (names cut to 31 characters; siblings of one name
+  by node type and transform where that tells them apart without doubt,
+  else in order), in the comparison, the render-list facts and the
+  node-number facts (which now also cut names to 31);
+  animations of one name pair in order; an emitter with no texture line is
+  the binary's empty texture; light texture names compare without case;
+  dangly constraints compare per drawn corner in the compile too;
+  `tree-sorted` compares each differing parent's children with their own
+  sort, not the whole tree re-sorted; a mesh whose NaN, zero or junk
+  tangents are all on vertices only dropped zero-area faces use has those
+  tangents left out of its merge key and its slot-3 stream read by the kept
+  vertices (MDL-BIN-048). On the haks (nwn-haks 8689391302):
+  the 1,177 render-list models of run 6 with cleanmodels 83c1922 (#141):
+  1,122 pass-approved, 27 unstable, 28 fail; the 985 other models these
+  items touch (cleanmodels 3003980): 852 pass-approved, 53 pass, 45
+  unstable, 35 fail.
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when

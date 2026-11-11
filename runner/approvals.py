@@ -45,8 +45,23 @@ Then each finding gets the check that explains it:
   (MDL-BIN-007) when no other node of the original has the cut name, and a
   tree finding whose only difference is such names.
 
+Per node, from the facts the comparison records:
+
+- `emitter-texture-junk`: an emitter's texture (decompile and compile) when
+  its chunk name is not empty and the original's texture field holds a byte
+  outside 0x20-0x7e before its first NUL (mdlconf.emitter_facts);
+- `aabb-stale-tree`: an aabb node's entry count, in the compile, when the
+  original's tree has more leaves than its mesh has faces (MDL-MESH-024),
+  and the compile's tree names each of its faces once, with each leaf's box
+  its face's and each inner box its children's union, and the face count is
+  the same (nodefacts.aabb_stale_facts).
+
 Per model, from the facts of runner/nodefacts.py (recorded as `compile
-model.nodes` when the compile has a node number, tree or count finding):
+model.nodes` when the compile has a node number, tree or count finding).
+Names are cut to 31 characters (MDL-BIN-007), and nodes that share a name
+are told apart by their parent and their order among its children of that
+name (nodefacts.unique_labels), unless a shared name is a parent or the
+model has a supermodel ("unique names" below means that):
 
 - `renumbered`: node and animation node numbers (`nodes[X].number`,
   `animations[A].nodes[X].number`) when, with unique node names, the same
@@ -64,9 +79,10 @@ model.nodes` when the compile has a node number, tree or count finding):
   count is not the size of its animation tree, the compile's is (MDL-NODE-042),
   and both trees have the same nodes;
 - `tree-sorted`: nodes.tree when, with unique names and the same nodes and
-  parents, the compiled tree is the original's stored tree with the
-  transparency sort applied (MDL-NODE-012, nodefacts.engine_sort), and every
-  node whose children differ held them out of sort order in the original
+  parents, every node whose children differ has as compiled children its
+  original children with the transparency sort applied (MDL-NODE-012,
+  nodefacts.engine_sort; parent by parent, so that a parent left as stored
+  is not re-sorted), and held them out of sort order in the original
   (no ASCII gives them; the fact `ties_moved` counts those where std::sort
   also moves equal children, past 16, and is reported, not a condition);
 - `aabb-plane-tie`: aabb[j].plane when the aabb trees have the same boxes and
@@ -75,24 +91,33 @@ model.nodes` when the compile has a node number, tree or count finding):
 
 Per model, from the facts of mdlconf.render_list_facts (recorded as
 `compile model.render_lists` when the original has merged render lists,
-MDL-BIN-053, and the round trip has a render, triangles or vertex_count
-finding):
+MDL-BIN-053, and the round trip has a render, triangles, vertex_count,
+face_count or shadow finding):
 
-- `merged-render-lists`: when the whole model draws and casts shadows as
-  the original does, compared in world space (every drawn triangle and
-  every shadow face paired one to one, apart from original triangles of zero
-  area; the same drawing state, animation and corner attributes per pair,
-  bad original tangents and baked ones needing nan-tangent-fill and
-  tangents-baked; no node name used twice that is a parent or animated
-  (other nodes sharing a name are told apart as #2, #3 ..., as the
-  comparison names them); every supermodel found, no skin
-  or animmesh receiver; every node that now draws another's triangles a
-  render-0 mesh without an index list in the original, drawing a
-  receiver's), the donors' render findings and the receivers' and donors' triangles and vertex_count
-  findings, in the decompile and the compile. A receiver's mesh facts pair
-  the compile with its own faces only (the start of its index list), so its
-  other findings go through the checks above, and a decompile finding of
-  these meshes that is not one of those three leaves the mesh failed.
+- `merged-render-lists` (merged_render_lists, merged_node_check): when the
+  whole model draws as the original does, compared in world space (every
+  drawn triangle paired one to one, apart from original triangles of zero
+  area, with the same drawing state, animation and corner attributes; bad
+  original tangents and baked ones needing nan-tangent-fill and
+  tangents-baked), and casts its shadows as before or from what it now
+  draws (a restored donor's shadow may follow the alpha it took; a folded
+  donor's faces may cast no shadow, or cast it from a receiver where the
+  receiver draws them, as many as lost); no node name used twice that is a
+  parent or animated; every supermodel found, no skin or animmesh receiver;
+  every node that now draws another's triangles a render-0 mesh without an
+  index list in the original, drawing a receiver's. Then, in the decompile
+  and the compile: a restored donor's render, triangles, vertex_count,
+  normal, tangent, handedness and drawing settings (DONOR_SETTINGS) and its
+  alpha and selfillumcolor controllers (its own values were never drawn;
+  the copies' are what the condition compares); a folded donor's render,
+  shadow and beaming; a receiver's triangles and vertex_count, and, when it
+  draws folded copies as faces, its face_count and per-corner findings; and
+  nodes.tree when restored donors re-sorted by the transparencyhint they
+  took are the only difference. A restored donor's other findings are
+  checked with its normal, tangent and handedness left out of its facts; a
+  receiver's mesh facts pair the compile with its own faces only (the start
+  of its index list). A decompile finding of these meshes that is not one
+  of those leaves the mesh failed.
 
 And one per model, about the second compile rather than a finding: a model
 whose MUST findings are all approved and whose second compile differs from
@@ -107,8 +132,11 @@ results made before it have only `unstable_adjacency_only`):
   component;
 - `dead-face-vertices` (dead_vertices): vertices no face of the first compile
   uses, each at a corner of a zero-area triangle of the original, which the
-  second compile does not have (the rest renumbered in order, the meshes'
-  box, average and radius following from their vertices).
+  second compile does not have, and vertices at such corners that the second
+  compile puts where the kept faces first use them (the first compile kept
+  them where the dropped face used them first); every other vertex keeps its
+  order, the meshes' box, average and radius following from their vertices.
+  Meshes are found in the original by their names cut to 31 characters.
 
 Byte-level kinds (the first three) need the two files to be the same length
 and byte for byte the same apart from them. The model passes as
@@ -124,22 +152,35 @@ FORMAT = 'mdlconf-approvals/1'
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
           'water-texanim-169', 'name-cut-31', 'renumbered', 'supermodel-count', 'anim-header-count',
           'tree-sorted', 'aabb-plane-tie', 'unstable-adjacency-only', 'signed-zero', 'bounds-ulp',
-          'dead-face-vertices', 'merged-render-lists')
+          'dead-face-vertices', 'merged-render-lists', 'emitter-texture-junk', 'aabb-stale-tree')
 STABILITY = ('stability', 'binary2')  # the approved finding of an approved instability
 UNSTABLE = {  # kind in unstable_explained: (check, message)
     'adjacency': ('unstable-adjacency-only', 'the adjacency of %d faces'),
     'signed_zero': ('signed-zero', '%d float(s) 0.0 in one compile and -0.0 in the other'),
     'bounds_ulp': ('bounds-ulp', '%d model bounding box float(s), by 1 ulp'),
-    'dead_vertices': ('dead-face-vertices', '%d vertices only zero-area faces of the original used'),
+    'dead_vertices': ('dead-face-vertices', '%d vertices zero-area faces of the original used, left unused '
+                                            'or first used by them'),
 }
 NUMBER = re.compile(r'^(nodes|animations\[[^\]]*\]\.nodes)\[[^\]]*\]\.number$')
 ANIM_COUNT = re.compile(r'^animations\[(.*)\]\.node_count$')
 PLANE = re.compile(r'^(nodes\[[^\]]*\])\.aabb\[\d+\]\.plane$')
+EMITTER_TEXTURE = re.compile(r'^(nodes\[[^\]]*\]\.emitter)\.texture$')
+AABB_COUNT = re.compile(r'^(nodes\[[^\]]*\])\.aabb$')
 TREE_BLOCKERS = ('.tree', '.parent', '.name')
 CORNER = ('position', 'uv0', 'uv1', 'uv2', 'uv3', 'normal', 'tangent', 'handedness', 'color')
 MESH_PATH = re.compile(r'^(.*\.mesh)\.([A-Za-z0-9_.]+)$')
 MESH_NODE = re.compile(r'^nodes\[([^\]]*)\]\.mesh$')
 MERGE_LEAVES = ('render', 'triangles', 'vertex_count')
+# A donor's own normals and tangents were never drawn (render 0); what the
+# game drew is the receiver's copy, which the world-space facts compare.
+DONOR_CORNERS = ('normal', 'tangent', 'handedness')
+# The drawing settings a restored donor takes from its receiver (cleanmodels
+# #141): never drawn with its own; compared in world space as drawn.
+DONOR_SETTINGS = ('diffuse', 'ambient', 'specular', 'shininess', 'transparencyhint', 'renderhint', 'tilefade',
+                  'rotatetexture', 'textures', 'beaming')
+# A folded donor: render 0 kept, its shadow cast from the receiver's copies
+FOLDED_LEAVES = ('render', 'shadow', 'beaming')
+DONOR_CONTROLLER = re.compile(r'^nodes\[([^\]]*)\]\.controllers\[(alpha|selfillumcolor)\](\.keys\[\d+\]\.\w+)?$')
 
 
 class ApprovalsError(ValueError):
@@ -236,34 +277,87 @@ def mesh_checks(leaves, f):
 
 
 def merged_render_lists(rf):
-    """(receivers, donors, checks relied on) when a model's merged render
-    lists draw and cast shadows as in the original (`compile
-    model.render_lists`, mdlconf.render_list_facts), else None. Receivers
-    and donors are node keys (mdlconf.node_keys: lower-case names, #k for a
-    name's k-th node); donors are the meshes that now draw triangles a
-    receiver drew."""
+    """The meshes merged-render-lists covers when a model's merged render
+    lists draw as in the original and cast shadows as in the original or
+    from what is drawn (`compile model.render_lists`,
+    mdlconf.render_list_facts), else None: {'receivers', 'donors' (restored:
+    they now draw triangles a receiver drew), 'folded' (donor candidates
+    still at render 0 in the compile, their copies drawn by a receiver),
+    'folding' (receivers that draw more triangles than their own faces in
+    the compile), 'needs'}, as node labels (mdlconf.node_labels: lower-case
+    names, #k for a name's k-th node).
+
+    Drawn triangles must pair one to one with nothing else different. Shadow
+    faces must pair the same, with one exception: a folded donor's faces may
+    cast no shadow any more, or cast it from the receiver, with the
+    receiver's state, where the receiver now draws them (extra shadow faces
+    of receivers, every one on a triangle the original draws)."""
     if not rf or rf.get('error') or not rf.get('receivers') or rf.get('ambiguous', True):
         return None
     if rf.get('supermodel_missing') or rf.get('receivers_deformed'):
         return None
     d, s = rf['draw'], rf['shadow']
-    for x in (d, s):
-        if any(x['unreadable']) or x['lost_nonzero'] or x['extra'] or x['state_differ'] or x['moving_differ']:
-            return None
+    if any(d['unreadable']) or d['lost_nonzero'] or d['extra'] or d['state_differ'] or d['moving_differ']:
+        return None
     if d['corner_differ']:
         return None
     rec, cand = set(rf['receivers']), set(rf['donor_candidates'])
     moved = d['moved']
     if any(n not in cand or not set(src) <= rec for n, src in moved.items()):
         return None
+    comp = rf.get('donors_compiled')
+    folded = {k for k, v in (comp or {}).items() if not v[0]} if comp is not None else set()
+    if any(s['unreadable']):
+        return None
+    # A restored donor's shadow follows the alpha it took from its receiver
+    # (GetProjectsShadows compares the part's alpha with the cut-off,
+    # MDL-MESH-067); nothing else of a shadow may change on the same node.
+    if 'same_node_differ_by' in s:
+        if any(n not in moved or set(by) - {'alpha'} for n, by in s['same_node_differ_by'].items()):
+            return None
+    elif s.get('same_node_differ', s['state_differ'] or s['moving_differ']):
+        return None
+    if comp is None:  # facts made before folding was known: no shadow may change
+        if s['lost_nonzero'] or s['extra'] or s['state_differ'] or s['moving_differ']:
+            return None
+    else:
+        if any(n not in rec or not set(src) <= folded for n, src in s['moved'].items()):
+            return None
+        if not set(s.get('lost_nodes', {})) <= folded:
+            return None
+        # replaced, not added: as many new faces as the folded donors lost
+        if s['extra'] and (not set(s.get('extra_nodes', {})) <= rec or s.get('extra_on_drawn') != s['extra']
+                           or s['extra'] != s['extra_nonzero']
+                           or s['extra'] != sum(s.get('lost_nodes', {}).values())):
+            return None
+    tri = rf.get('receiver_triangles') or {}
+    folding = {k for k, (own, _, got) in tri.items() if got > own}
     needs = {'merged-render-lists'}
     if d['bad_tangent']:
         needs.add('nan-tangent-fill')
     if d['tangent_baked']:
         needs.add('tangents-baked')
-    if d['lost'] or s['lost']:
+    if d['lost'] or s['lost'] > s.get('lost_nonzero', 0):
         needs.add('dropped-zero-area-faces')
-    return rec, set(moved), needs
+    return {'receivers': rec, 'donors': set(moved), 'folded': folded & cand, 'folding': folding & rec,
+            'needs': needs}
+
+
+def merged_node_check(path, mr, mf):
+    """merged-render-lists on a node finding: a restored donor's alpha or
+    selfillumcolor controller (it takes the receiver's, which drew its
+    copies), and a tree whose only difference is restored donors re-sorted
+    by the transparencyhint they took (nodefacts.model_facts:
+    `hint_changed`, `declared_resorted`)."""
+    m = DONOR_CONTROLLER.match(path)
+    if m and m.group(1).lower() in mr['donors']:
+        return 'merged-render-lists'
+    if path == 'nodes.tree':
+        t = mf.get('tree') or {}
+        if mf.get('unique') and mf.get('same_nodes') and t.get('declared_resorted') and \
+                t.get('hint_changed') and set(t['hint_changed']) <= mr['donors']:
+            return 'merged-render-lists'
+    return None
 
 
 def renumbered(mf):
@@ -290,11 +384,19 @@ def anim_header_count(mf, anim):
 
 def tree_sorted(mf):
     t = mf.get('tree') or {}
-    return bool(mf.get('unique') and mf.get('same_nodes') and t.get('resorted_equals_compile')
-                and t.get('differing_parents', 0) > 0 and t.get('differing_unsorted') == t['differing_parents'])
+    n = t.get('differing_parents', 0)
+    # per parent where the facts have it; results made before compare the
+    # whole tree resorted
+    resorted = t['differing_resorted'] == n if 'differing_resorted' in t else t.get('resorted_equals_compile')
+    return bool(mf.get('unique') and mf.get('same_nodes') and resorted
+                and n > 0 and t.get('differing_unsorted') == n)
 
 
 def node_check(test, path, facts):
+    m = EMITTER_TEXTURE.match(path)
+    if m:
+        e = facts.get('%s %s' % (test, m.group(1))) or {}
+        return 'emitter-texture-junk' if e.get('chunkname') and e.get('texture_junk') else None
     f = facts.get('%s %s' % (test, path))
     if f and f.get('unique'):
         if path.endswith('.tree') and f.get('names_cut_only'):
@@ -313,6 +415,13 @@ def node_check(test, path, facts):
     m = ANIM_COUNT.match(path)
     if m:
         return 'anim-header-count' if anim_header_count(mf, m.group(1)) else None
+    m = AABB_COUNT.match(path)
+    if m:
+        a = facts.get('compile %s.aabb' % m.group(1)) or {}
+        lv, fc = a.get('leaves') or [0, 0], a.get('faces') or [0, 0]
+        if lv[0] > fc[0] and a.get('complete') and a.get('boxes_fit') and fc[0] == fc[1]:
+            return 'aabb-stale-tree'
+        return None
     m = PLANE.match(path)
     if m:
         a = facts.get('compile %s.aabb' % m.group(1)) or {}
@@ -334,18 +443,42 @@ def apply(res, approvals):
     facts = res.get('facts', {})
     entries = approvals['entries'] if approvals else {}
     merged = merged_render_lists(facts.get('compile model.render_lists')) if entries else None
-    rec, donors, merged_needs = merged or (set(), set(), set())
+    mr = merged or {'receivers': set(), 'donors': set(), 'folded': set(), 'folding': set(), 'needs': set()}
+
+    def label(mesh):
+        m = MESH_NODE.match(mesh)
+        return m.group(1).lower() if m else None
 
     def involved(mesh):
-        m = MESH_NODE.match(mesh)
-        return m.group(1).lower() in rec | donors if m else False
+        return label(mesh) in mr['receivers'] | mr['donors'] | mr['folded']
+
+    def donor(mesh):
+        return label(mesh) in mr['donors']
 
     def merge_leaf(mesh, leaf):
         # the findings merged-render-lists covers on this mesh
-        if leaf == 'render':
-            m = MESH_NODE.match(mesh)
-            return bool(m) and m.group(1).lower() in donors
-        return leaf in MERGE_LEAVES and involved(mesh)
+        n = label(mesh)
+        if n in mr['donors']:
+            # restored: its own values were never drawn; what it draws now
+            # is what its copies were drawn with (compared in world space)
+            return leaf in MERGE_LEAVES or leaf in DONOR_CORNERS or leaf in DONOR_SETTINGS
+        if n in mr['folded']:
+            return leaf in FOLDED_LEAVES
+        if n in mr['folding']:
+            # the folded copies are its faces now, after its own: the
+            # in-order comparison of its corners shifts
+            return leaf in MERGE_LEAVES or leaf == 'face_count' or leaf in CORNER
+        return leaf in ('triangles', 'vertex_count') and n in mr['receivers']
+
+    def mesh_facts(mesh):
+        # a donor's facts without the corner attributes the world-space
+        # comparison has already found the same where they were drawn
+        f = facts.get('compile ' + mesh)
+        if f and donor(mesh):
+            f = dict(f, differ={k: n for k, n in f['differ'].items() if k not in DONOR_CORNERS},
+                     differ_bad_tangent={k: n for k, n in f['differ_bad_tangent'].items()
+                                         if k not in DONOR_CORNERS})
+        return f
 
     meshes = {}
     for i, (test, path, msg) in enumerate(findings):
@@ -359,9 +492,9 @@ def apply(res, approvals):
         for mesh, items in meshes.items():
             merge = {i for i, _, leaf in items if merge_leaf(mesh, leaf)}
             leaves, needs = mesh_checks([leaf for i, t, leaf in items if i not in merge and t == 'compile'],
-                                        facts.get('compile ' + mesh))
+                                        mesh_facts(mesh))
             if merge:
-                needs = needs | merged_needs
+                needs = needs | mr['needs']
             v = {i: 'merged-render-lists' if i in merge else leaves[leaf] if t == 'compile' else None
                  for i, t, leaf in items}
             if any(c is None or c not in entries for c in v.values()) or not needs <= set(entries):
@@ -371,6 +504,8 @@ def apply(res, approvals):
         for i, (test, path, msg) in enumerate(findings):
             if verdict[i] is None and not MESH_PATH.match(path):
                 c = node_check(test, path, facts)
+                if c is None and merged:
+                    c = merged_node_check(path, mr, facts.get('compile model.nodes') or {})
                 verdict[i] = c if c in entries else None
         # Numbers are approved only on the same tree: none of the tree, name,
         # parent or missing-node findings may be left.

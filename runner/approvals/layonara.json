@@ -127,10 +127,11 @@
    "check": "dead-face-vertices",
    "rules": [
     "MDL-MESH-020",
-    "MDL-MESH-050"
+    "MDL-MESH-050",
+    "MDL-MESH-011"
    ],
-   "description": "The original draws faces with two identical corners. The compile drops them as the game does, but the vertices they added stay in the binary; no ASCII describes vertices no face uses, so the second compile does not have them (James, 2026-11-10).",
-   "condition": "On the model: every MUST finding is approved; the two compiles have the same nodes; the second compile is the first without the vertices no face record or index list of the first uses (streams, skin weights, dangly constraints and animmesh sets; the other vertices renumbered in order in the faces and index lists), and has no such vertices itself; each of those vertices is at the position of a corner of a zero-area triangle the original draws in the same mesh; in a mesh that lost vertices the bounding box, average and radius may differ (MDL-MESH-050 computes them from the vertices) and each compile's box is exactly that of its own vertices; face adjacency may differ (with unstable-adjacency-only, counted). Everything else is the same, floats exactly. Approves the model's instability (`stability binary2`)."
+   "description": "The first compile kept vertices of faces it dropped as zero-area (it merges first, then drops, MDL-MESH-020); the ASCII lists no such face, so the second compile leaves out the vertices only those faces used and orders the ones they used first by the faces it keeps (James, 2026-11-10; vertices used first, 2026-11-11).",
+   "condition": "On the model: every MUST finding is approved; per mesh, the second compile is the first without the vertices no face or index list of the first uses, and with the vertices at the position of a corner of a zero-area triangle the original draws put where the first compile's face records first use them (every other vertex keeps its order); every dropped or moved vertex is at such a corner; the meshes' boxes, averages and radii are those of their own vertices; face adjacency may differ (counted, needs unstable-adjacency-only). Meshes are found in the original by their names cut to 31 characters. Every other byte stays exact. Approves the model's instability (`stability binary2`)."
   },
   {
    "id": "bounds-ulp",
@@ -158,8 +159,27 @@
     "MDL-BIN-053",
     "MDL-MESH-023"
    ],
-   "description": "The original was compiled by a tool that merged meshes' render lists: a receiver's index list also draws copies of other meshes' triangles, and each donor has render 0 and no index list. ASCII has no index lists, so the round trip draws each donor's triangles from the donor itself. Approved where the whole model draws and casts shadows exactly as before (James, 2026-11-11).",
-   "condition": "On the model (mdlconf.render_list_facts, `compile model.render_lists`): the original has a receiver (an index list longer than its faces); every triangle the original draws (render != 0, from the index list) and every triangle the compile draws are paired one to one in world space (first keys of position, orientation and scale up the parent chain; corners within 1 mm and 1e-4 in UV0, winding kept), apart from original triangles of zero area; per pair the drawing mesh's textures 0-3, diffuse, ambient, specular, shininess, transparencyhint, renderhint, tilefade, beaming, rotatetexture, triangle mode, node type and first alpha and selfillumcolor keys are the same, an animation (the model's or its supermodel's) moves or fades the drawing node in both or in neither, and every corner keeps UV1-3, normal, tangent, handedness and colour (a corner whose original tangent is NaN, infinite or zero, or that has tangents only in the compile, needs nan-tangent-fill or tangents-baked); the shadow faces (shadow or beaming != 0, from the face list) pair the same way with the same shadow, beaming and alpha and animation; no node name used twice is a parent or animated (other nodes sharing a name are told apart by their order, as the comparison does); every supermodel is found; no receiver is a skin or animmesh; and every compiled node that draws a triangle another node drew is a render-0 mesh without an index list in the original, drawing triangles a receiver drew. Approves, on those receivers and donors only, the render findings of the donors and the triangles and vertex_count findings of both, in the decompile and the compile; every other finding of those meshes must pass by its own entry, and the mesh is approved all together or not at all."
+   "description": "The original was compiled by a tool that merged meshes' render lists: a receiver's index list also draws copies of other meshes' triangles, and each donor has render 0 and no index list. ASCII has no index lists, so the round trip restores each donor (render 1, drawing with what its copies were drawn with) or folds its copies into the receiver's faces (spec/binary.md, the guidance after MDL-BIN-053). Approved where the whole model draws exactly as before and casts its shadows as before or from what it now draws (James, 2026-11-11, with cleanmodels #141).",
+   "condition": "On the model (mdlconf.render_list_facts, `compile model.render_lists`): the original has a receiver (an index list longer than its faces); every triangle the original draws (render != 0, from the index list) and every triangle the compile draws are paired one to one in world space (first keys of position, orientation and scale up the parent chain; corners within 1 mm and 1e-4 in UV0, winding kept; coincident triangles paired by all their attributes first), apart from original triangles of zero area; per pair the drawing mesh's textures 0-3, diffuse, ambient, specular, shininess, transparencyhint, renderhint, tilefade, beaming, rotatetexture, triangle mode, node type and first alpha and selfillumcolor keys are the same, an animation (the model's or its supermodel's) moves or fades the drawing node in both or in neither, and every corner keeps UV1-3, normal, tangent, handedness and colour (a corner whose original tangent is NaN, infinite or zero, or that has tangents only in the compile, needs nan-tangent-fill or tangents-baked); every compiled node that draws a triangle another node drew is a render-0 mesh without an index list in the original (a restored donor), drawing triangles a receiver drew; the shadow faces (shadow or beaming != 0, from the face list) pair the same way with the same shadow, beaming, alpha and animation, except that a restored donor's shadow may follow the alpha it took, and that the faces of a folded donor (render 0 in the compile) may cast no shadow or cast it from a receiver where the receiver now draws them, as many new faces as lost, every one on a triangle the original draws; no node name used twice is a parent or animated; every supermodel is found; no receiver is a skin or animmesh. Approves, on those meshes only, in the decompile and the compile: a restored donor's render, triangles, vertex_count, normal, tangent, handedness and drawing settings (diffuse, ambient, specular, shininess, transparencyhint, renderhint, tilefade, rotatetexture, textures, beaming) and its alpha and selfillumcolor controllers; a folded donor's render, shadow and beaming; a receiver's triangles and vertex_count, and, when it draws folded copies as faces, its face_count and per-corner findings (the in-order comparison shifts); and nodes.tree when the only difference is restored donors re-sorted by the transparencyhint they took (the ASCII's declaration sorted by the original's keys gives the original's children and by the compile's the compile's, for every differing parent). Every other finding of those meshes must pass by its own entry (a restored donor's with its normal, tangent and handedness left out of the corner match), and the mesh is approved all together or not at all."
+  },
+  {
+   "id": "emitter-texture-junk",
+   "check": "emitter-texture-junk",
+   "rules": [
+    "MDL-BIN-041"
+   ],
+   "description": "A chunk emitter's texture field holds bytes an old compiler left there (uninitialised memory such as ff ff ff ff); no ASCII can hold them, and a chunk emitter draws its chunk model, not the texture (James, 2026-11-11).",
+   "condition": "On the emitter: its chunk name is not empty, and the original's texture field holds a byte outside 0x20-0x7e before its first NUL. Approves the emitter's texture finding, in the decompile and the compile."
+  },
+  {
+   "id": "aabb-stale-tree",
+   "check": "aabb-stale-tree",
+   "rules": [
+    "MDL-MESH-024",
+    "MDL-MESH-051"
+   ],
+   "description": "The original's walkmesh tree has more leaves than faces: faces were deleted after it was built (MDL-MESH-024); the compile's tree covers its faces (James, 2026-11-11).",
+   "condition": "On the AABB node, in the compile: the original's tree has more leaves than its mesh has faces; the compile's tree is a tree whose leaves name each of its faces once, each leaf's box is its face's box and each inner box the union of its children's (within 1e-4); and the face count is the same in both. Approves the node's aabb entry-count finding."
   }
  ],
  "not_approved": [
@@ -172,7 +192,7 @@
    "why": "Fixable in cleanmodels (decompiler order, supermodel walk), being fixed there; they stay failures (James, 2026-11-10)."
   },
   {
-   "what": "merged render lists that draw differently (drawing state, tangents, animated or scaled donors), controller keys, node-pairing artifacts, unstable models whose second compile differs in anything no entry approves (vertex order above all)",
+   "what": "merged render lists whose round trip draws or shadows differently from the original (a triangle lost or added, as plc_candle3 with cleanmodels 83c1922), controller keys, node-pairing artifacts, unstable models whose second compile differs in anything no entry approves (vertex order above all)",
    "why": "Not approved (James, 2026-11-09 and 2026-11-10)."
   }
  ]

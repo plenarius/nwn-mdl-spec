@@ -353,6 +353,36 @@ Layonara's 1,158 models with merged meshes in round trip run 6, compared in
 world space, static): with the donors at render 1, the shadow faces pair
 one to one with the originals' in all of them.*
 
+*Guidance for decompilers (MDL-BIN-053; not engine behaviour).* So that a
+compile of the ASCII draws what the game drew, a decompiler puts each donor
+back in one of two ways:
+
+- **Restore** (the usual way): the donor gets render 1 and draws on its own.
+  It takes what its copies were drawn with, not its own values, which were
+  never drawn (MDL-MESH-066): the receiver's drawing settings (diffuse,
+  ambient, specular, shininess, textures 1 and 2, material, render hint,
+  transparency hint, tile fade, rotatetexture, alpha, self-illumination) and
+  the copies' normals, tangents and handedness. A donor has no index list,
+  so tangent clones (MDL-MESH-043) reach none of its faces: where its copies
+  disagree on a vertex, the faces of each other group need a vertex of their
+  own.
+- **Fold**: when the donor restored would draw something other than its
+  copies, write the copies as faces of the receiver (in index-list order),
+  and keep the donor at render 0. The donor folds when its vertices, placed
+  in world space, miss its copies (the merging tool baked them without the
+  donor's `scale`), when an animation moves a node on the donor's or the
+  receiver's parent chain below the nodes they share (doors the game drew
+  still, as part of the cabinet), or when an animation changes the alpha or
+  self-illumination of either away from the receiver's. If both cast
+  shadows, the donor gets `shadow 0`: the receiver's faces now cast the
+  copies' shadow (shadows come from face lists, MDL-MESH-067), so the shadow
+  follows what is drawn rather than the donor's own faces.
+
+Either way, the receiver's vertices that only the copies used are dropped:
+a compile computes bounds over every vertex (MDL-MESH-050). *From cleanmodels
+`DECOMPILE.md` ("Merged render lists", cleanmodels PR #141); the
+round trip checks it in world space (runner `merged-render-lists`).*
+
 ## Uninitialised fields
 
 **MDL-BIN-050** Besides MDL-BIN-030, the game's output holds uninitialised
