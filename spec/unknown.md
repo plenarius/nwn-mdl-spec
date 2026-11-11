@@ -85,9 +85,9 @@ what would settle it.
 - **Merged meshes (MDL-BIN-053).** Which compiler wrote them is not known:
   the base game ships them and this build's compiler does not make them,
   which points at BioWare's earlier compiler; no older compiler was run.
-  Settled in code (2026-11-11, E69, MDL-MESH-065): a render-0 mesh is never
+  Settled in code (2026-11-11, E69, MDL-MESH-066): a render-0 mesh is never
   drawn, whatever its index list holds, and shadows follow `shadow` and
-  `beaming` and the face list, not `render` (MDL-MESH-066). Not checked in
+  `beaming` and the face list, not `render` (MDL-MESH-067). Not checked in
   game: an in-game probe with render 0 and a full index list, and one with
   render 0 and shadow 1, would confirm both.
 

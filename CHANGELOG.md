@@ -127,7 +127,7 @@ Corrections after the first draft:
   `mdlconf.explain_unstable`. The >16-children shuffle, numbers a
   part-number declaration reproduces and the supermodel -1 walk stay
   failures.
-- MDL-MESH-065, MDL-MESH-066 (new) and E69, read in the client's
+- MDL-MESH-066, MDL-MESH-067 (new) and E69, read in the client's
   disassembly (not checked in game): a mesh with render 0 is never drawn,
   whatever its index list holds (`PartTriMesh::IsPartRenderable`, called by
   every draw path); a shadow volume is gated by `shadow` and `beaming`, not

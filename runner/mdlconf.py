@@ -854,8 +854,8 @@ def render_list_facts(exp, comp, super_moving=frozenset()):
     world space (for the approval merged-render-lists, runner/approvals.py).
 
     Every drawn triangle (meshes with render != 0, from the index list,
-    MDL-MESH-065) and every shadow face (meshes with shadow or beaming != 0,
-    from the face list, whatever render says: MDL-MESH-066) of each model is
+    MDL-MESH-066) and every shadow face (meshes with shadow or beaming != 0,
+    from the face list, whatever render says: MDL-MESH-067) of each model is
     placed in world space (first keys of position, orientation and scale up
     the parent chain) and paired one to one with a triangle of the other
     model at the same place (_rl_pair). Per pair the drawing state

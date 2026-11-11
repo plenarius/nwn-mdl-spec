@@ -324,9 +324,9 @@ whose vertices are appended to its own; each donor keeps its faces but has
 render 0 and an empty index list. The engine draws index lists
 (MDL-BIN-049), so such a model looks whole while its faces are not what it
 draws. A reader that writes ASCII, which holds faces only, MUST NOT lose the
-copies. A donor is not drawn (render 0, MDL-MESH-065) but casts its own
+copies. A donor is not drawn (render 0, MDL-MESH-066) but casts its own
 faces' shadow when its `shadow` or `beaming` is set, and a receiver's copies
-cast none (shadows are built from face lists, MDL-MESH-066). Writing each
+cast none (shadows are built from face lists, MDL-MESH-067). Writing each
 donor whose triangles are all among a receiver's copies with render 1 draws
 the same triangles, as a mesh of its own, and leaves the shadows as they
 were. Their normals are the copy's, not the donor's: where a donor's back-to-back faces

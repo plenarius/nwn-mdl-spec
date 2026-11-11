@@ -272,13 +272,13 @@ transparencyhint > 0 and a material that cannot be blended. *Confirmed:
 
 ## Drawn and shadowed
 
-**MDL-MESH-065** A mesh with `render` 0 is never drawn, whatever its index
+**MDL-MESH-066** A mesh with `render` 0 is never drawn, whatever its index
 list (MDL-BIN-049) holds; a mesh with `render` non-zero draws its index
-list. `render` does not decide shadows (MDL-MESH-066). *Confirmed (code,
+list. `render` does not decide shadows (MDL-MESH-067). *Confirmed (code,
 not checked in game): `PartTriMesh::IsPartRenderable` 0x450e60, called by
 every draw path, E69.*
 
-**MDL-MESH-066** A mesh casts a shadow volume when `shadow` or `beaming` is
+**MDL-MESH-067** A mesh casts a shadow volume when `shadow` or `beaming` is
 non-zero, whatever `render` says, and the volume is built from its face list
 (and stored adjacency, E68), not its index list: a render-0 mesh with
 `shadow 1` casts its faces' shadow, and triangles an index list draws beyond
