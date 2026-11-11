@@ -19,6 +19,21 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-NODE-044 (new probe zspec_animnogeo): an animation node the geometry
+  lacks is written as the type its own type word names, whatever keys it
+  has. `node trimesh` gives 0x21 and an empty mesh header (with
+  `alphakey`, with `selfillumcolorkey`, and with only `positionkey`),
+  `node light` 0x3 with a light header, `node emitter` 0x5, `node dummy`
+  0x1. Its controllers are the keys its type reads, in ASCII order, the
+  shared position, orientation and scale keys included; a key its type
+  does not read (`alphakey` on a dummy) is dropped. cleanmodels main
+  (917bc87) drops the alpha, selfillumcolor, light and emitter keys of
+  such nodes in compile and decompile (MUST). Its PR #143 (af4aba8), which
+  types a node trimesh only when it has `alphakey` or `selfillumcolorkey`,
+  fixes the mesh nodes but still drops the light's `colorkey` and
+  `radiuskey` and the emitter's `birthratekey`, and compiles the light,
+  the emitter and the key-less trimesh as dummies (SHOULD); the game goes
+  by the type word. MDL-BIN-071 and MDL-NODE-041 point to the new rule.
 - MDL-MESH-065 (new probe zspec_animnrm): an animation's animmesh node is a
   mesh of its own, and the game's compiler reads its `normals`. Given, they
   are kept as written and the node keeps the geometry node's 4 vertices;

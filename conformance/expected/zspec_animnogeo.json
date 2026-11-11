@@ -1,0 +1,611 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_animnogeo",
+ "build": "89.8193.37-17",
+ "golden_sha256": "7c42b0613fc88f50502e900c8c6ac8d30c5c0ac3d1a9a7257b412dd6c5aab313",
+ "volatile": [],
+ "model": {
+  "name": "zspec_animnogeo",
+  "classification": 8,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 2,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_animnogeo",
+   "parent": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "m",
+   "parent": "zspec_animnogeo",
+   "type": "trimesh",
+   "flags": 33,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [],
+   "mesh": {
+    "bmin": [
+     -1,
+     -1,
+     0
+    ],
+    "bmax": [
+     1,
+     1,
+     0
+    ],
+    "radius": 1.4142135,
+    "average": [
+     0,
+     0,
+     0
+    ],
+    "diffuse": [
+     1,
+     1,
+     1
+    ],
+    "ambient": [
+     1,
+     1,
+     1
+    ],
+    "specular": [
+     0,
+     0,
+     0
+    ],
+    "shininess": 1,
+    "shadow": 1,
+    "beaming": 0,
+    "render": 1,
+    "transparencyhint": 0,
+    "renderhint": 0,
+    "textures": [
+     "zspec_t0",
+     "",
+     "",
+     ""
+    ],
+    "tilefade": 0,
+    "vertex_indices_count": 0,
+    "leftover_faces_count": 0,
+    "index_lists": [
+     [
+      0,
+      1,
+      2,
+      0,
+      2,
+      3
+     ]
+    ],
+    "triangle_mode": 3,
+    "vertex_count": 4,
+    "texture_count": 1,
+    "vertices": {
+     "position": [
+      [
+       -1,
+       -1,
+       0
+      ],
+      [
+       1,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       0
+      ],
+      [
+       -1,
+       1,
+       0
+      ]
+     ],
+     "uv0": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       0
+      ],
+      [
+       1,
+       1
+      ],
+      [
+       0,
+       1
+      ]
+     ],
+     "normal": [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       0,
+       1
+      ]
+     ]
+    },
+    "rotatetexture": 0,
+    "face_count": 2,
+    "faces": [
+     {
+      "v": [
+       0,
+       1,
+       2
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       -1,
+       -1,
+       1
+      ]
+     },
+     {
+      "v": [
+       0,
+       2,
+       3
+      ],
+      "material": 0,
+      "normal": [
+       0,
+       0,
+       1
+      ],
+      "distance": 0,
+      "adjacent": [
+       0,
+       -1,
+       -1
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "animations": [
+  {
+   "name": "open",
+   "length": 1,
+   "transtime": 0.25,
+   "animroot": "zspec_animnogeo",
+   "events": [],
+   "node_count": 9,
+   "nodes": [
+    {
+     "name": "zspec_animnogeo",
+     "parent": null,
+     "type": "dummy",
+     "flags": 1,
+     "number": 0,
+     "controllers": []
+    },
+    {
+     "name": "m",
+     "parent": "zspec_animnogeo",
+     "type": "trimesh",
+     "flags": 33,
+     "number": 1,
+     "controllers": [
+      {
+       "id": 128,
+       "name": "alpha",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0.5
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "x",
+     "parent": "zspec_animnogeo",
+     "type": "trimesh",
+     "flags": 33,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0,
+          0,
+          1
+         ]
+        }
+       ]
+      },
+      {
+       "id": 128,
+       "name": "alpha",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0
+         ]
+        }
+       ]
+      },
+      {
+       "id": 20,
+       "name": "orientation",
+       "columns": 4,
+       "bezier": false,
+       "colbyte": 4,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          0,
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0,
+          0,
+          0.6816388,
+          0.73168886
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "y",
+     "parent": "zspec_animnogeo",
+     "type": "light",
+     "flags": 3,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 76,
+       "name": "color",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          0,
+          0,
+          1
+         ]
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          1,
+          0,
+          2
+         ]
+        }
+       ]
+      },
+      {
+       "id": 88,
+       "name": "radius",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          5
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          10
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "z",
+     "parent": "zspec_animnogeo",
+     "type": "trimesh",
+     "flags": 33,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 100,
+       "name": "selfillumcolor",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          1,
+          0.5,
+          0.25
+         ]
+        }
+       ]
+      },
+      {
+       "id": 36,
+       "name": "scale",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          1
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          2
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "w",
+     "parent": "zspec_animnogeo",
+     "type": "dummy",
+     "flags": 1,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          2,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          2,
+          0,
+          3
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "v",
+     "parent": "zspec_animnogeo",
+     "type": "trimesh",
+     "flags": 33,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          3,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          3,
+          0,
+          4
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "u",
+     "parent": "zspec_animnogeo",
+     "type": "emitter",
+     "flags": 5,
+     "number": -1,
+     "controllers": [
+      {
+       "id": 88,
+       "name": "birthrate",
+       "columns": 1,
+       "bezier": false,
+       "colbyte": 1,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          10
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          20
+         ]
+        }
+       ]
+      },
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          4,
+          0,
+          0
+         ]
+        },
+        {
+         "t": 1,
+         "v": [
+          4,
+          0,
+          5
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "t",
+     "parent": "zspec_animnogeo",
+     "type": "dummy",
+     "flags": 1,
+     "number": -1,
+     "controllers": []
+    }
+   ]
+  }
+ ]
+}

@@ -258,6 +258,13 @@ same compile of a third-party creature omitted animation nodes that had no
 controllers (its six skin nodes, in every animation); the probes here kept
 such nodes (zspec_anim's root): what decides it is open.
 
+An animation node the geometry lacks takes the type of its own type word,
+whatever keys it has (`node trimesh` 0x21 with an empty mesh header, `node
+light` 0x3, `node emitter` 0x5, `node dummy` 0x1), and keeps the keys its
+type reads in ASCII order; a key its type does not read is dropped, and a
+dummy left with no controllers is still written. *Confirmed (data;
+zspec_animnogeo; MDL-NODE-044).*
+
 ## Resource priority, armour, loading (E29–E32)
 
 **E29 Resource priority.** Higher id wins. `CExoResMan::SetupDefaultSearchPath`

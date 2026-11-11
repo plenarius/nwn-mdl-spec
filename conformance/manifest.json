@@ -579,6 +579,16 @@
     "MDL-CTRL-034"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_animnogeo",
+   "isolates": "animation nodes the geometry lacks, declared trimesh, light, emitter and dummy with and without their type's keys: the flags, sub-headers and controllers the compiler writes",
+   "rules": [
+    "MDL-NODE-044",
+    "MDL-NODE-041",
+    "MDL-NODE-040"
+   ],
+   "golden": true
   }
  ]
 }

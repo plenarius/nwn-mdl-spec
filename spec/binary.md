@@ -455,7 +455,8 @@ time, char[32] name. *Confirmed: zspec_anim.*
 
 **MDL-BIN-071** An animation's nodes are full node structs with the flags
 of the geometry node of the same name (a trimesh in an animation is
-`0x21` with a mesh header). Only their name, part number, children,
+`0x21` with a mesh header), or, for a node the geometry lacks, of its own
+type word (MDL-NODE-044). Only their name, part number, children,
 controllers and, for animmesh nodes, the anim header and the vertex count
 are meaningful (MDL-BIN-050). *Confirmed: zspec_anim, cmbez01,
 zspec_animmesh; behaviour.md, "Animation blocks".*
