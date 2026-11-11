@@ -559,6 +559,26 @@
     "zspec_mid.mdl",
     "zspec_super.mdl"
    ]
+  },
+  {
+   "name": "zspec_animnrm",
+   "isolates": "normals in an animation's animmesh node, given in one node and left out in a twin: read, and what they do to the merge",
+   "rules": [
+    "MDL-MESH-065",
+    "MDL-MESH-062",
+    "MDL-BIN-045",
+    "MDL-BIN-050"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_dupctrl",
+   "isolates": "a single-value controller given twice in a node: shadowradius and radius on two lights (rising, falling), alpha on a mesh",
+   "rules": [
+    "MDL-CTRL-036",
+    "MDL-CTRL-034"
+   ],
+   "golden": true
   }
  ]
 }

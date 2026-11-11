@@ -46,6 +46,8 @@ Probe models, the game's compile of each, and the expected data. All CC0.
 | `zspec_kid4` | numbering against a supermodel of nodes it lacks, under a matched and an unmatched parent, declared out of tree order | MDL-NODE-020, MDL-NODE-030 | golden |
 | `zspec_mid` | a supermodel with its own supermodel: a node numbered -1 that has numbered children | MDL-NODE-020 | golden |
 | `zspec_kid5` | numbering below a supermodel node numbered -1: the walk goes on through it, or stops | MDL-NODE-020, MDL-NODE-030 | golden |
+| `zspec_animnrm` | normals in an animation's animmesh node, given in one node and left out in a twin: read, and what they do to the merge | MDL-MESH-065, MDL-MESH-062, MDL-BIN-045, MDL-BIN-050 | golden |
+| `zspec_dupctrl` | a single-value controller given twice in a node: shadowradius and radius on two lights (rising, falling), alpha on a mesh | MDL-CTRL-036, MDL-CTRL-034 | golden |
 | `zspec_chunk16` | an emitter chunkName of 16 characters, then twosidedtex 1 | MDL-BIN-006 | golden |
 | `zspec_name31` | a node name of 31 characters, the longest that leaves room for the NUL, with a child | MDL-BIN-007 | golden |
 | `zspec_name32` | a node name of exactly 32 characters, the field size | MDL-BIN-007 | golden |

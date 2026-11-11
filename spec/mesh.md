@@ -223,6 +223,27 @@ vertices (MDL-BIN-045). *Confirmed: zspec_animmesh, zspec_animtv (4 verts and
 5 tverts, one vertex split: 5 merged vertices, 3 sets of each kind);
 `NodeVertexAnim::operator==` 0x45a550.*
 
+**MDL-MESH-065** An animmesh node in an animation is a mesh of its own: its
+`verts`, `tverts`, `faces` and `normals` are read and processed like a
+geometry mesh's and stored in the animation node's mesh header. Its
+`normals` are kept as written (MDL-MESH-030); without them the engine
+computes them from the animation node's smoothing groups (MDL-MESH-031),
+whatever the geometry node gives. The merge (MDL-MESH-011, MDL-MESH-062)
+runs over the animation node's own data, so its vertex count, which sizes
+its sets (MDL-BIN-045), can differ from the geometry node's; the game's
+compiler does not check that they agree. A compiler MUST read the
+`normals` of an animation's animmesh node. A decompiler SHOULD write the
+animation node's normals: without them the game's compile of its output
+computes them, which can split vertices the original kept together.
+*Confirmed: zspec_animnrm (a folded quad, faces in smoothing groups 1 and
+2, normals 0.6 0 0.8 at every vertex in both geometry nodes. Node `given`
+repeats the normals in the animation: they are stored as written, 4
+vertices, as in the geometry node. Node `computed` does not: its animation
+node holds each face's own normal, vertices 0 and 2 are split, 6 vertices
+against the geometry node's 4, and each set list has 12 entries instead of
+8). What the game draws when the two counts differ is not observed (see
+[unknown.md](unknown.md)).*
+
 ## What shaders read
 
 **MDL-MESH-063** A mesh's UV set 1 (`tverts1`) reaches a shader as the

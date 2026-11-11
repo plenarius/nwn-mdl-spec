@@ -750,9 +750,15 @@ def _new_node(ntype, name):
     return nd
 
 
-def _set_ctrl(nd, cdef, keys, cols, bezier):
+def _set_ctrl(nd, cdef, keys, cols, bezier, append=False):
+    """Add a controller. A single-value line given again adds a second
+    controller of the same id (append, MDL-CTRL-036); a key list replaces
+    any earlier one (repeated key lists are not probed)."""
     c = {'id': cdef['id'], 'name': cdef['name'], 'columns': cols, 'bezier': bezier, 'keys': keys}
-    nd['controllers'] = [x for x in nd['controllers'] if x['id'] != cdef['id']] + [c]
+    if append:
+        nd['controllers'].append(c)
+    else:
+        nd['controllers'] = [x for x in nd['controllers'] if x['id'] != cdef['id']] + [c]
 
 
 def _key_rows(nd, cdef, rows, bezier):
@@ -830,7 +836,7 @@ def _node_field(nd, line, lines):
             fl = c_floats(rest, 10)
             if cdef['name'] == 'orientation' and len(fl) == 4:
                 fl = axis_angle_to_quat(*fl)
-            _set_ctrl(nd, cdef, [{'t': 0, 'v': nums(fl)}], len(fl), False)
+            _set_ctrl(nd, cdef, [{'t': 0, 'v': nums(fl)}], len(fl), False, append=True)
         return
     if mesh is not None:
         if k in MESH_LISTS:

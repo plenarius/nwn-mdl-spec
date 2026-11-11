@@ -574,12 +574,32 @@ def skipped_count(c):
 
 def compare_controllers(r, path, exp, act, profile, flags):
     tol = 1e-5 if profile == 'compile' else 1e-4
-    amap = {}
+    # A node may hold several controllers of one id (a keyword given twice,
+    # MDL-CTRL-036). The engine applies them in order, so the last one's
+    # value is what the node keeps: the last of each side is compared in
+    # full, the earlier ones only as SHOULD.
+    amap, emap = {}, {}
     for c in act:
-        amap.setdefault(c['id'], c)
+        amap.setdefault(c['id'], []).append(c)
     for c in exp:
-        p = '%s.controllers[%s]' % (path, c['name'])
-        a = amap.pop(c['id'], None)
+        emap.setdefault(c['id'], []).append(c)
+    pairs = []
+    for cid, es in emap.items():
+        as_ = amap.pop(cid, [])
+        p = '%s.controllers[%s]' % (path, es[0]['name'])
+        if len(es) > 1 or len(as_) > 1:
+            if len(es) != len(as_):
+                r.should(p, 'the golden has %d controllers of id %d, got %d; the last one is compared, '
+                            'which is the value the engine applies (MDL-CTRL-036)' % (len(es), cid, len(as_)))
+            else:
+                for i, (c, a) in enumerate(zip(es[:-1], as_[:-1])):
+                    ks = [(ek.get('v'), ak.get('v')) for ek, ak in zip(c['keys'], a['keys'])]
+                    if len(c['keys']) != len(a['keys']) or not all(vclose(x, y, tol) for x, y in ks):
+                        r.should('%s#%d' % (p, i), 'expected %s, got %s; only the last of them is applied '
+                                 '(MDL-CTRL-036)' % ([k.get('v') for k in c['keys']],
+                                                     [k.get('v') for k in a['keys']]))
+        pairs.append((es[-1], as_[-1] if as_ else None, p))
+    for c, a, p in pairs:
         if a is None:
             if skipped_count(c) and not c['bezier']:
                 r.should(p, 'dropped; its column count (%d) is one the engine skips (MDL-CTRL-014)' % c['columns'])
@@ -632,7 +652,8 @@ def compare_controllers(r, path, exp, act, profile, flags):
                 ok = (qclose if quat and part == 'v' else vclose)(ek[part], ak.get(part), tol)
                 if not ok:
                     r.must('%s.keys[%d].%s' % (p, i, part), 'expected %s, got %s' % (ek[part], ak.get(part)))
-    for cid, a in amap.items():
+    for cid, as_ in amap.items():
+        a = as_[-1]
         pth = '%s.controllers[%s]' % (path, a['name'])
         if is_default(flags, cid, a['keys'], tol):
             r.should(pth, 'not in the golden (id %d), with the default value' % cid)
