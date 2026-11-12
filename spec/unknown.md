@@ -55,6 +55,13 @@ what would settle it.
   declaration index (MDL-NODE-040). Whether the engine binds such a node to
   anything at run time (e.g. whether a door's `alphakey` on a node its
   geometry lacks fades anything) is not observed in game.
+- **Animations of one name and animroots that match nothing** (MDL-ASCII-062,
+  MDL-NODE-045): which copy of a repeated name plays, and that an animation
+  whose animroot matches no node moves every node it lists, were read in
+  code (E70, E71) and follow from the compiled trees; neither was watched
+  in game. A test module playing zspec_animdup's `swing` (the arm should
+  rise 1 unit in 1 s, not 2 in 2 s) and zspec_animroot's `missing` over a
+  running animation (its `leg` keys should still apply) would settle it.
 - **Overlong values.** A static controller line with more values than the
   controller's width (`scale 2 3 4`) was not probed: the probe line was in a
   node that dropped out of the tree. The engine reads up to some number of

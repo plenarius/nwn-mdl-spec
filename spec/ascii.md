@@ -193,6 +193,24 @@ crashed `nwmain-linux compilemodel` in `MdlNodeAnimMesh::InternalPostProcess`
 at 0x4578c9 (`idivl`); E54.* Its `normals`, when given, are read too
 (MDL-MESH-065), so it should repeat the geometry node's normals as well.
 
+**MDL-ASCII-062** Animation names need not be unique. The game's compiler
+keeps every `newanim` block in file order, each with its own length,
+transtime, events and nodes, whatever its name: it does not merge
+animations of one name or drop a repeat. The engine finds an animation by
+name in list order, case-insensitively, and takes the first match (in the
+model, then each supermodel, MDL-NODE-031), so the first animation of a
+name is the one that plays and later ones of the same name, in any case,
+never play. A compiler MUST write every animation, in the order of the
+ASCII, and MUST NOT merge, drop or reorder animations that share a name; a
+decompiler MUST write them in the binary's order. A tool SHOULD warn about
+a name used twice (compared case-insensitively), saying which copy plays.
+*Confirmed: zspec_animdup (`swing` 1 s, `idle`, `swing` 2 s, `SWING` 3 s:
+four animations written in that order, each with its own length,
+transtime, events and keys). Which copy plays: read in code (E70:
+`newanim` 0x447fe0 appends with no name check, the binary loader keeps the
+order, `FindAnimation` 0x497c30 returns the first `strcasecmp` match for
+`Gob::PlayAnimation` and `Gob::GetAnimation`); not watched in game.*
+
 ## Words the engine does not read
 
 **MDL-ASCII-070** These appear in ASCII models or are written by tools but no

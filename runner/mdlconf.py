@@ -1355,6 +1355,39 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
                     compare_skin(r, p + '.skin', e, a, len(exp_nodes))
 
 
+def root_matches(anim):
+    """Whether an animation's animroot names one of its nodes, case for case
+    (findnode's strcmp, MDL-NODE-045); None for no animroot or NULL."""
+    root = anim.get('animroot') or ''
+    if not root or root.upper() == 'NULL':
+        return None
+    return any(n.get('name') == root for n in anim.get('nodes', []))
+
+
+def root_wider(anim):
+    """Whether an animation's tree holds nodes outside its animroot's cut:
+    the path from the root to the node the animroot matches (findnode:
+    depth first, case for case) and that node's subtree. The game's compiler
+    prunes to the cut, so only a binary it did not compile can be wider
+    (MDL-NODE-045)."""
+    if not root_matches(anim):
+        return False
+    root = anim['animroot']
+    nodes = anim.get('nodes', [])
+    paths, stack, hit = [], [], None
+    for i, n in enumerate(nodes):  # depth first: rebuild each node's ancestors
+        if n.get('parent') is None:
+            stack = []
+        else:
+            while stack and nodes[stack[-1]].get('name') != n.get('parent'):
+                stack.pop()
+        paths.append(list(stack))
+        stack.append(i)
+        if hit is None and n.get('name') == root:
+            hit = i
+    return any(i != hit and i not in paths[hit] and hit not in paths[i] for i in range(len(nodes)))
+
+
 def compare(exp, act, profile, facts=False):
     r = Report(facts)
     volatile = set(exp.get('volatile', []))
@@ -1397,8 +1430,24 @@ def compare(exp, act, profile, facts=False):
         for k in ('length', 'transtime'):
             if not close(ea[k], aa.get(k), 1e-5):
                 r.must('%s.%s' % (p, k), 'expected %s, got %s' % (ea[k], aa.get(k)))
-        if (ea['animroot'] or '').lower() != (aa.get('animroot') or '').lower():
+        # The engine matches the animroot case-sensitively and prunes the
+        # animation to its cut when the ASCII is read (MDL-NODE-045): the
+        # output's animroot must make a compile give back the stored tree.
+        if root_wider(ea):
+            # A tree wider than its animroot's cut (not compiled by the game):
+            # only an animroot that matches no node keeps it whole.
+            if root_matches(aa):
+                r.must(p + '.animroot', '%r matches a node of the animation, so a compile would cut the '
+                       'stored tree, which is wider than the cut of the stored %r'
+                       % (aa.get('animroot'), ea['animroot']))
+        elif (ea['animroot'] or '').lower() != (aa.get('animroot') or '').lower():
             r.must(p + '.animroot', 'expected %r, got %r' % (ea['animroot'], aa.get('animroot')))
+        elif root_matches(ea) != root_matches(aa):
+            # a change of case that makes it match a node, or stop matching
+            # one, changes what a compile of this output prunes
+            r.must(p + '.animroot', '%r %s a node of the animation here, %r %s in the golden'
+                   % (aa.get('animroot'), 'matches' if root_matches(aa) else 'matches no',
+                      ea['animroot'], 'did' if root_matches(ea) else 'did not'))
         ev = [[e[0], e[1].lower()] for e in ea['events']]
         av = [[e[0], e[1].lower()] for e in aa.get('events', [])]
         if not vclose([x[0] for x in ev], [x[0] for x in av], 1e-5) or [x[1] for x in ev] != [x[1] for x in av]:

@@ -589,6 +589,22 @@
     "MDL-NODE-040"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_animdup",
+   "isolates": "animations that share a name: swing twice (different length, transtime, events and keys) with idle between, and SWING, differing only in case: how many the compiler writes, in which order",
+   "rules": [
+    "MDL-ASCII-062"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_animroot",
+   "isolates": "the animroot against the animation's own nodes: a node it has (pruning, the control), a name that exists nowhere, the name in another case, a node only the geometry has: the nodes written and the animroot stored",
+   "rules": [
+    "MDL-NODE-045"
+   ],
+   "golden": true
   }
  ]
 }

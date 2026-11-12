@@ -451,7 +451,9 @@ node +0x2b0..+0x32f to the runtime +0x320).*
 **MDL-BIN-070** An **animation header** (196 bytes): geometry header (type
 5; its root is the animation's own node tree), f4 length, f4 transition
 time, char[64] animation root, array of events. An event is 36 bytes: f4
-time, char[32] name. *Confirmed: zspec_anim.*
+time, char[32] name. The animation root is stored as the ASCII wrote it,
+whether or not it names a node (MDL-NODE-045). *Confirmed: zspec_anim,
+zspec_animroot.*
 
 **MDL-BIN-071** An animation's nodes are full node structs with the flags
 of the geometry node of the same name (a trimesh in an animation is

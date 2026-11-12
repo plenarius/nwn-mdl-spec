@@ -151,6 +151,48 @@ earlier compiler, stores its geometry-less `09_DWK_wg_closed` the same way
 (0x21, an alpha controller). What the engine does with such a node at run
 time is not observed (see [unknown.md](unknown.md)).*
 
+**MDL-NODE-045** An animation's `animroot` is looked up among the
+animation's own nodes, depth first from its root, by exact name (case
+counts). When a node matches, the compiler prunes the animation's tree to
+the path from the root to that node and the node's own subtree: every
+other child of each node on the path is dropped with its subtree. When no
+node matches (a name that exists nowhere, the name in another case, or a
+node only the geometry has), the engine logs `Model <model> animroot
+<name> node not matching existing node.` and keeps the whole tree, so the
+animation plays on all its nodes as if its animroot were the root. An
+animroot of `NULL` (any case) or none prunes nothing. Either way the
+animroot is stored as written (MDL-BIN-070), and the animation's node count
+stays that of the ASCII, before pruning (MDL-NODE-042). The pruning happens
+only when the ASCII is read: the binary loader does not repeat it and
+nothing at run time reads the animroot again, so a compiled animation
+plays the tree that was written. A compiler MUST prune this way, MUST keep
+the whole tree when the animroot matches no node, and MUST store the
+animroot as written, case included. A decompiler MUST write an animroot
+with which a compile gives back the stored animation tree. When the stored
+tree is the stored animroot's cut (the root, the path to the node it
+matches and that node's subtree), or the stored animroot matches no node,
+that is an animroot that matches the same node, case for case, or none:
+writing it as stored does that, while changing its case alone (`ARM` to
+`arm` over a node `arm`) makes a recompile prune. A binary compiled by the
+game is always this case, since its compiler stored the cut. When the
+stored tree is wider than the stored animroot's cut (a binary another
+compiler wrote, which the game plays as stored because the binary loader
+does not prune), it is an animroot that matches no node, so the compile
+keeps the whole tree; writing the stored one would cut the nodes outside
+it.
+A tool SHOULD warn when an animroot other than `NULL` matches no node of
+its animation. *Confirmed: zspec_animroot (geometry root, `arm` with
+`hand`, `leg`; `prune`, animroot `arm`: root, `arm`, `hand` written, `leg`
+dropped, node count 4; `missing` (`nosuchnode`), `case` (`ARM`) and
+`geomonly` (`leg`, which only the geometry has): every node written, the
+animroot stored as written, and the log message for each). Code: E71
+(`Animation::PostProcess` 0x453600, `findnode` 0x461600). Wider trees: 9
+Layonara binaries the game did not compile (`a_ogre` and its four variants,
+`a_skeleton`, `c_bugbeara`, `c_goblina`, `c_nasher`) keep animated nodes
+outside their animroot's cut (`headconjure`, `handconjure`, `ogre_hair`, a
+leg chain); cleanmodels PR #144 writes `ROOTDUMMY`, which matches no node,
+and their trees, part numbers and keys round-trip exactly.*
+
 ## Worn models
 
 **MDL-NODE-050** When a part-based creature wears a robe (its

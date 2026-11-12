@@ -696,3 +696,46 @@ MDL-BIN-043).
 Consistent with data, not a test of it: Layonara's 1,158 round-tripped
 models with merged meshes (MDL-BIN-053) project the same shadow faces in
 world space as the originals, donors at render 0 with shadow 1 included.*
+
+## Animations by name and animroot (E70–E71, new)
+
+**E70 Animations of one name.** `newanim` (0x447fe0) builds each
+`newanim` block into a new `Animation` and appends it to the model's list
+(model +0x98, count +0xa0) at 0x448058-0x448068, growing the array when
+full, with no compare against the names already there; `ImportMaxTree`,
+`Animation::PostProcess` and `MaxTree::SynchronizeTree` follow. The binary
+loader (0x4bee60, called from `IODispatcher::ReadSync` 0x4bf670) reads
+the animations back by index i into slot i (0x4bf118-0x4bf11f), copying
+name, length (+0x8c), transtime (+0x90) and the 64-byte animroot (+0x94),
+again with no name compare. `FindAnimation(Model*, char const*)`
+(0x497c30) walks the list from index 0 and returns the first animation
+whose name (+0x10) equals the asked name under `strcasecmp` (0x497c93);
+with none, it moves to the supermodel (+0xa8) and repeats, and past the
+last supermodel it looks for `default` (0x497cd4, the bytes of "default")
+in that last model only. `Gob::PlayAnimation` (0x49a750; calls at
+0x49a972, 0x49aae3) and `Gob::GetAnimation` (0x499eb0; 0x499f63, 0x499f78,
+after its own `strcasecmp` search of the animations already running) take
+what it returns. So of two animations with one name, compared
+case-insensitively, the first in the file plays and the later ones are
+never found. *Confirmed (code, read in the disassembly; Ghidra decompiles
+in nwmain-analysis `decompiled/anim-dup-animroot/`); the compile keeps all
+of them in order (zspec_animdup); not watched in game.*
+
+**E71 animroot.** `Animation::PostProcess` (0x453600) returns at once when
+the animroot (+0x94) is empty or `NULL` (`strcasecmp`, 0x45362e).
+Otherwise `findnode(MdlNode*, char const*)` (0x461600) searches the
+animation's own tree (+0x50) depth first, comparing each node's name
+(+0x38) with `strcmp` (0x461617), so case counts and the geometry is not
+searched. Found: from that node up to the root, every other child of each
+ancestor (children at +0x68, count +0x70) is removed and deleted
+(0x453670-0x453704), leaving the root, the path and the found node's
+subtree. Not found: `ExoLog::Emit` with "Model %s animroot %s node not
+matching existing node." (string at 0x12f04c8; logged by
+`aurpostprocess.cpp:102`) and nothing else, so the tree stays whole.
+`Animation::PostProcess` has one caller, `newanim` (0x448074): it runs
+when ASCII is read, and the binary loader (E70) does not call it. Outside
+the parser, the writer and that loader, no function reads Animation +0x94,
+so at run time an animation plays the nodes its tree holds, every one of
+them when the animroot matched nothing. *Confirmed (code; Ghidra
+decompiles as for E70); zspec_animroot (the pruned and the whole trees,
+and the log line for each animroot that matched nothing).*
