@@ -522,6 +522,40 @@ def check_node_facts():
     res = _node_result(exp, _tree(comp, 'sup', 7), _ascii(decl, 'sup'), None, full)
     if res['status'] != 'fail' or res.get('approved'):
         bad.append('a supermodel not found: %s %s' % (res['status'], res.get('approved')))
+    # stale-supermodel: a supermodel whose stored count was stale (2, compiled
+    # against an older supermodel) is ASCII now and counts 3; a free node
+    # (its parent `extra` is not in the supermodel) is numbered from the new
+    # count, 3 + 1 + 3, where the original had 2 + 1 + 3. The original's 6
+    # is reachable against the new count (6 - 4 = 2), so `renumbered` does
+    # not hold (c_orcchiefb)
+    orig = [('r', None, 0, d), ('arm', 'r', 1, d), ('extra', 'r', -1, d), ('plate', 'extra', 6, d)]
+    decl = [('r', None, d), ('arm', 'r', d), ('extra', 'r', d), ('plate', 'extra', d)]
+    for what, name, chain, plate, status, ids, entries in (
+            ('a stale supermodel, now ASCII', 'c_bugbeara', [['c_bugbeara', 'ascii']], 7, 'pass-approved',
+             {'stale-supermodel', 'supermodel-count'}, full),
+            ('a stale supermodel deeper in the chain', 'c_kid', [['c_kid', 'ascii'], ['c_orca', 'ascii']], 7,
+             'pass-approved', {'stale-supermodel', 'supermodel-count'}, full),
+            ('a stale supermodel still binary', 'c_bugbeara', [['c_bugbeara', 'binary']], 7, 'fail',
+             {'supermodel-count'}, full),
+            ('below a binary supermodel', 'c_kid', [['c_kid', 'binary']], 7, 'fail', {'supermodel-count'}, full),
+            ('a supermodel not listed', 'c_other', [['c_other', 'ascii']], 7, 'fail', {'supermodel-count'}, full),
+            ('a stale supermodel, numbers not by the rule', 'c_bugbeara', [['c_bugbeara', 'ascii']], 9, 'fail',
+             {'supermodel-count'}, full),
+            ('a stale supermodel, without the entry', 'c_bugbeara', [['c_bugbeara', 'ascii']], 7, 'fail',
+             {'supermodel-count'},
+             dict(full, entries={k: v for k, v in full['entries'].items() if k != 'stale-supermodel'}))):
+        exp = mdlconf.normalise(_tree(orig, name, 2 + 4 + 1))
+        exp['volatile'] = []
+        sup.chain = chain
+        res = _node_result(exp, _tree(orig[:3] + [('plate', 'extra', plate, d)], name, 3 + 4 + 1),
+                           _ascii(decl, name), sup, entries)
+        got = {x[3] for x in res.get('approved', [])}
+        if res['status'] != status or got != ids:
+            bad.append('%s: %s %s, expected %s %s; left %s' % (what, res['status'], sorted(got), status,
+                                                               sorted(ids), res['must'][:3]))
+        if approvals.apply(json.loads(json.dumps(res)), entries) != res:
+            bad.append('%s: scoring the result again changes it' % what)
+    sup.chain = []
     # a name used twice in a model with a supermodel (c_kenku_b, packox):
     # labelled, and the supermodel walked by name (S2: the original numbered
     # against an older supermodel of 5 nodes, in an order no declaration

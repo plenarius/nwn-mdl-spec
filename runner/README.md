@@ -35,7 +35,7 @@ python3 runner/mdlconf.py run   --impl NAME --cmd COMMAND [--test compile|decomp
 python3 runner/mdlconf.py stock --impl NAME --cmd COMMAND [--root NWN_ROOT] [--json OUT] [-v]
 python3 runner/mdlconf.py expect [--second conformance/goldens/run2]
 python3 runner/mdlconf.py check-goldens DIR
-python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--max-memory GB] [--model-timeout S] [--partial FILE] [--approved FILE] [--json OUT] [-v] PATH ...
+python3 runner/mdlconf.py roundtrip --impl NAME --cmd COMMAND [--resource-dir DIR ...] [--workers N] [--max-memory GB] [--model-timeout S] [--partial FILE] [--own-dir-map ORIG=CONV] [--approved FILE] [--json OUT] [-v] PATH ...
 python3 runner/mdlconf.py approve --results ROUNDTRIP.json --approved FILE [--json OUT] [-v]
 python3 runner/mdlconf.py view FILE
 ```
@@ -74,6 +74,13 @@ python3 runner/mdlconf.py view FILE
   GB (default 4; the implementation it runs is not limited): a model that
   needs more is an `error`, not a crash. If a worker dies anyway, only its
   batch is lost, reported as errors. Progress goes to stderr.
+  `--own-dir-map ORIG=CONV` is for checking a tree converted in place
+  against copies of its originals kept under ORIG: a model's own folder
+  (searched first for its supermodels and materials, by the implementation
+  through `MDLCONF_RESOURCE_DIRS` and by the facts below) is then the same
+  place under CONV, where the converted siblings are, not the copies'
+  folder. The implementation's `decompile` of the copy is then expected to
+  hand back the converted file.
   `--model-timeout S` makes a model that takes longer than S seconds (all
   four calls and the comparison) an `error`; a batch in which no model
   finishes for that long plus 300 s (780 s without the option) is stopped
@@ -99,7 +106,9 @@ python3 runner/mdlconf.py view FILE
   the numbers follow MDL-NODE-010/020 from the ASCII's declaration order
   against the supermodel the implementation finds (the original's folder,
   then the `--resource-dir` folders, then the base game; an ASCII
-  supermodel numbered by the same rules), whether any declaration order
+  supermodel numbered by the same rules; `supermodel_chain`, that
+  supermodel and what each ASCII one names down to the first binary, each
+  `binary` or `ascii`), whether any declaration order
   gives the original's numbers and tree, whether the animations follow
   MDL-NODE-040 in both, the tree resorted by MDL-NODE-012, and the header
   counts; and, when the original has merged render lists (MDL-BIN-053) and
@@ -139,7 +148,8 @@ implements (`vertex-layout`, `dropped-zero-area-faces`, `nan-tangent-fill`,
 `supermodel-count`, `anim-header-count`, `tree-sorted`, `aabb-plane-tie`,
 `unstable-adjacency-only`, `signed-zero`, `bounds-ulp`,
 `dead-face-vertices`, `merged-render-lists`, `emitter-texture-junk`,
-`aabb-stale-tree`); `condition` says in
+`aabb-stale-tree`, `stale-supermodel`, whose entry also lists the names
+in `supermodels`); `condition` says in
 words what it checks. Leaving an entry out of the file leaves its findings
 failed, together with every other finding on the same mesh.
 [approvals/layonara.json](approvals/layonara.json) is Layonara's.

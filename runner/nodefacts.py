@@ -234,10 +234,15 @@ class Geo:
 
 class Super:
     """A supermodel's part numbers by path from its root (MDL-NODE-020) and
-    its header node count (MDL-NODE-030)."""
+    its header node count (MDL-NODE-030). `chain`: the supermodels whose
+    count this one's numbers depend on, [[name, 'binary' or 'ascii'], ...],
+    from this one down to the first binary (a binary's numbers and count are
+    stored, so what it names below does not change them); set by the runner
+    (mdlconf.find_supermodel), empty when unknown."""
 
-    def __init__(self, count, bypath):
+    def __init__(self, count, bypath, chain=None):
         self.count, self.bypath = count, bypath
+        self.chain = chain or []
 
     @classmethod
     def from_binary(cls, view):
@@ -625,6 +630,8 @@ def model_facts(exp, act, ascii_text, sup):
         f['animations'] = anims
     if sname:
         f['supermodel_count'] = sup.count if sup is not None else None
+        if sup is not None and sup.chain:
+            f['supermodel_chain'] = [list(x) for x in sup.chain]
     else:
         sup = None
     if labels is None:

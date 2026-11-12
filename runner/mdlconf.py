@@ -1750,12 +1750,25 @@ def roundtrip_one(job):
             signal.alarm(0)
 
 
+def own_folder(path, own_map=None):
+    """The folder searched first for a model's supermodels and materials: its
+    own, or with `own_map` (ORIG, CONV) and the model under ORIG, the same
+    place under CONV (--own-dir-map)."""
+    own = os.path.dirname(os.path.abspath(path))
+    if own_map:
+        orig, conv = own_map
+        if own == orig or own.startswith(orig + os.sep):
+            own = conv + own[len(orig):]
+    return own
+
+
 def _roundtrip_one(job):
     cmd, path, resource_dirs = job[:3]
     res = {'file': path, 'must': [], 'should': []}
     name = os.path.basename(path)
     env = dict(os.environ)
-    env['MDLCONF_RESOURCE_DIRS'] = os.pathsep.join([os.path.dirname(os.path.abspath(path))] + resource_dirs)
+    env['MDLCONF_RESOURCE_DIRS'] = os.pathsep.join([own_folder(path, job[4] if len(job) > 4 else None)]
+                                                   + resource_dirs)
     tmp = tempfile.mkdtemp(prefix='mdlconf-rt-')
     try:
         orig = open(path, 'rb').read()
@@ -1884,12 +1897,14 @@ def find_supermodel(name, dirs, depth=0):
     sup = None
     if data and data[:4] == b'\0\0\0\0':
         sup = nodefacts.Super.from_binary(mdlview.read_binary(data))
+        sup.chain = [[name, 'binary']]
     elif data:
         text = data.decode('latin-1')
         parent = nodefacts.ascii_supermodel(text)
         psup = find_supermodel(parent, dirs, depth + 1) if parent else None
         if not parent or psup is not None:
             sup = nodefacts.Super.from_ascii(text, psup)
+            sup.chain = [[name, 'ascii']] + (psup.chain if psup is not None else [])
     _SUPERS[key] = sup
     return sup
 
@@ -2186,7 +2201,14 @@ def cmd_roundtrip(a):
                     continue  # a line cut short when the run was stopped
                 done[r['file']] = r
     partial = open(a.partial, 'a') if a.partial else None
-    jobs = [(a.cmd, f, rdirs, a.model_timeout) for f in files if f not in done]
+    own_map = None
+    if a.own_dir_map:
+        orig, sep, conv = a.own_dir_map.partition('=')
+        if not sep or not orig or not conv or not os.path.isdir(conv):
+            print('--own-dir-map: expected ORIG=CONV with CONV a folder, got %r' % a.own_dir_map, file=sys.stderr)
+            return 2
+        own_map = (os.path.abspath(orig), os.path.abspath(conv))
+    jobs = [(a.cmd, f, rdirs, a.model_timeout, own_map) for f in files if f not in done]
     if done:
         print('roundtrip: %d of %d models already in %s' % (len(files) - len(jobs), len(files), a.partial),
               file=sys.stderr, flush=True)
@@ -2386,6 +2408,10 @@ def main():
     rt.add_argument('-v', '--verbose', action='store_true')
     rt.add_argument('--approved', help='an approvals file (runner/approvals/): findings it covers are reported apart, '
                                        'and a model with only those passes as pass-approved')
+    rt.add_argument('--own-dir-map', metavar='ORIG=CONV',
+                    help='search a model under ORIG for its supermodels and materials at the same place under CONV '
+                         'instead of its own folder (the first MDLCONF_RESOURCE_DIRS folder and the facts\' '
+                         'lookups): for checking a tree converted in place against copies of its originals')
     rt.add_argument('paths', nargs='+')
     ap_ = sub.add_parser('approve')
     ap_.add_argument('--results', required=True, help='a roundtrip --json file')
