@@ -245,6 +245,20 @@ Corrections after the first draft:
   cleanmodels prototype of the same analysis, 2 fail (the two doors), 47
   pass-approved. 200 models that passed in run 7 (those these items touch
   and a random sample) are unchanged.
+- Runner: approval `stale-supermodel` (runner/approvals/layonara.json,
+  James 2026-11-12, MDL pipeline Phase 4). Seven creature supermodels in
+  Layonara's haks are binaries compiled against an older `a_ba` with 31
+  fewer nodes, so their stored header count is 31 too low. Converted to
+  ASCII, they are counted anew (MDL-NODE-030), and the models using them
+  number their own nodes from the new count (MDL-NODE-020); the game's own
+  compiler (`compilemodel`, this build) gives exactly cleanmodels' numbers
+  on three of them. The check is `renumbered` without its "no declaration
+  order gives the original's numbers" condition, for models whose
+  supermodel chain holds a listed name as an ASCII model; the facts now
+  record that chain (`supermodel_chain`). `roundtrip --own-dir-map
+  ORIG=CONV` checks a tree converted in place against copies of its
+  originals: the models' own folder, for the implementation and the facts'
+  supermodel lookups alike, is the converted one.
 - Runner: `run` checks a compile's face-record vertex indices against the
   golden (MDL-MESH-043, MDL-BIN-049; cleanmodels before PR #138 wrote tangent
   clones there), and accepts a decompile that leaves tangents out when

@@ -77,6 +77,17 @@ below means names told apart this way:
   MDL-NODE-040 against its own model's geometry in both (by name: of
   geometry siblings sharing a name, the first stored one's number); and no
   tree, name, parent or missing-node finding is left unapproved;
+- `stale-supermodel`: node and animation node numbers, under the same
+  conditions as `renumbered` except the last but one (here a declaration
+  order may give the original's numbers too), when the supermodel chain the
+  compile used (fact `supermodel_chain`: the supermodel, then what each ASCII
+  one names, down to the first binary) holds, as an ASCII model, one of the
+  names the entry lists in `supermodels`. For supermodels whose stored
+  header count is stale (compiled against an older version of their own
+  supermodel): once they are ASCII, the game's compiler counts them anew
+  (MDL-NODE-030) and numbers their users' own nodes from the new count
+  (MDL-NODE-020), so numbers that follow the rules against that ASCII
+  supermodel are what the game gives, whatever the original held;
 - `supermodel-count`: model.node_count when the compile's count is the
   supermodel's header count + the model's nodes + 1 (MDL-NODE-030) with the
   supermodel found, the node count is the same in both, and the original's
@@ -160,7 +171,9 @@ FORMAT = 'mdlconf-approvals/1'
 CHECKS = ('vertex-layout', 'dropped-zero-area-faces', 'nan-tangent-fill', 'tangents-baked',
           'water-texanim-169', 'name-cut-31', 'renumbered', 'supermodel-count', 'anim-header-count',
           'tree-sorted', 'aabb-plane-tie', 'unstable-adjacency-only', 'signed-zero', 'bounds-ulp',
-          'dead-face-vertices', 'merged-render-lists', 'emitter-texture-junk', 'aabb-stale-tree')
+          'dead-face-vertices', 'merged-render-lists', 'emitter-texture-junk', 'aabb-stale-tree',
+          'stale-supermodel')
+RENUMBERING = ('renumbered', 'stale-supermodel')  # approved only on the same tree
 STABILITY = ('stability', 'binary2')  # the approved finding of an approved instability
 UNSTABLE = {  # kind in unstable_explained: (check, message)
     'adjacency': ('unstable-adjacency-only', 'the adjacency of %d faces'),
@@ -214,6 +227,11 @@ def load(path):
                                  % (path, e['id'], e['check'], ', '.join(CHECKS)))
         if e['id'] in ids or e['check'] in entries:
             raise ApprovalsError('%s: approval %r: id or check used twice' % (path, e['id']))
+        if e['check'] == 'stale-supermodel' and not (
+                isinstance(e.get('supermodels'), list) and e['supermodels']
+                and all(isinstance(n, str) and n for n in e['supermodels'])):
+            raise ApprovalsError('%s: approval %r: stale-supermodel needs a list of names in "supermodels"'
+                                 % (path, e['id']))
         ids.add(e['id'])
         entries[e['check']] = e
     return {'file': path, 'name': doc.get('name', ''), 'sha256': hashlib.sha256(raw).hexdigest(),
@@ -375,6 +393,21 @@ def renumbered(mf):
                 and (not mf.get('supermodel') or mf.get('supermodel_count') is not None))
 
 
+def stale_supermodel(mf, entry):
+    """The model facts allow approving node numbers as numbered against an
+    ASCII supermodel the entry lists (`stale-supermodel`): `renumbered`
+    without the condition that no declaration order gives the original's."""
+    if not entry:
+        return False
+    stale = {n.lower() for n in entry.get('supermodels', [])}
+    chain = mf.get('supermodel_chain') or []
+    return bool(mf.get('unique') and mf.get('same_nodes') and mf.get('numbers_by_rule')
+                and mf.get('anim_mismatches') == [0, 0] and mf.get('supermodel')
+                and mf.get('supermodel_count') is not None
+                and any(isinstance(x, list) and len(x) == 2 and x[1] == 'ascii' and str(x[0]).lower() in stale
+                        for x in chain))
+
+
 def supermodel_count(mf):
     oc, cc, no, nc = (mf.get('node_count') or [None] * 4)
     sc = mf.get('supermodel_count')
@@ -400,7 +433,7 @@ def tree_sorted(mf):
                 and n > 0 and t.get('differing_unsorted') == n)
 
 
-def node_check(test, path, facts):
+def node_check(test, path, facts, entries=None):
     m = EMITTER_TEXTURE.match(path)
     if m:
         e = facts.get('%s %s' % (test, m.group(1))) or {}
@@ -417,7 +450,9 @@ def node_check(test, path, facts):
     if path == 'nodes.tree':
         return 'tree-sorted' if tree_sorted(mf) else None
     if NUMBER.match(path):
-        return 'renumbered' if renumbered(mf) else None
+        if renumbered(mf):
+            return 'renumbered'
+        return 'stale-supermodel' if stale_supermodel(mf, (entries or {}).get('stale-supermodel')) else None
     if path == 'model.node_count':
         return 'supermodel-count' if supermodel_count(mf) else None
     m = ANIM_COUNT.match(path)
@@ -511,7 +546,7 @@ def apply(res, approvals):
                 verdict[i] = c
         for i, (test, path, msg) in enumerate(findings):
             if verdict[i] is None and not MESH_PATH.match(path):
-                c = node_check(test, path, facts)
+                c = node_check(test, path, facts, entries)
                 if c is None and merged:
                     c = merged_node_check(path, mr, facts.get('compile model.nodes') or {})
                 verdict[i] = c if c in entries else None
@@ -519,7 +554,7 @@ def apply(res, approvals):
         # parent or missing-node findings may be left.
         if any(c is None and (path.endswith(TREE_BLOCKERS) or msg == 'missing')
                for (test, path, msg), c in zip(findings, verdict)):
-            verdict = [None if c == 'renumbered' else c for c in verdict]
+            verdict = [None if c in RENUMBERING else c for c in verdict]
     res['must'] = [x for x, c in zip(findings, verdict) if c is None]
     approved = [list(x) + [entries[c]['id']] for x, c in zip(findings, verdict) if c is not None]
     res.pop('reason', None)

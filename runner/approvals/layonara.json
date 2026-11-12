@@ -85,6 +85,25 @@
    "condition": "On the model: it names a supermodel and the supermodel was found; the original and the compile have the same number of nodes; the compile's header node count is the supermodel's header count + the model's nodes + 1; the original's count is its own node count (compiled without the supermodel) or more. Approves model.node_count."
   },
   {
+   "id": "stale-supermodel",
+   "check": "stale-supermodel",
+   "rules": [
+    "MDL-NODE-020",
+    "MDL-NODE-030"
+   ],
+   "supermodels": [
+    "a_ettercap",
+    "a_skeleton",
+    "c_bugbeara",
+    "c_goblina",
+    "c_orca",
+    "c_orcchiefa",
+    "c_orcwiza"
+   ],
+   "description": "Seven creature supermodels in the haks are binaries compiled against an older a_ba with 31 fewer nodes, so their stored header node count is 31 too low (c_bugbeara 193, where its nodes and today's a_ba give 224). Phase 4 converts them to ASCII; the game's compiler (and cleanmodels) then count them anew, and every model using them numbers its own nodes (those outside the supermodel's paths) 31 higher than its original did. Checked with the game's own compiler (nwmain-linux 89.8193.37-17 compilemodel, 2026-11-12) on c_orcchiefb, c_goblinb and c_skel_war01 against the converted chain: node counts and every node number equal cleanmodels' (c_orcchiefb back_plate 258, original 227). The numbers stay consistent with the supermodel that ships with them; `renumbered` already approves most of these models (28 of 29 converted ones); this covers the ones whose original numbers happen to be reachable against the new count (c_orcchiefb). James, 2026-11-12.",
+   "condition": "On the model (runner/nodefacts.py, facts `compile model.nodes`): the conditions of `renumbered` (unique names as it defines them, the same nodes and parents, the supermodel found, the compile's numbers exactly what MDL-NODE-010/020 give the ASCII's declaration order against the supermodel the compile found, every animation node numbered by MDL-NODE-040 in both, no tree, name, parent or missing-node finding left), except that a declaration order may also give the original's numbers; and the supermodel chain the compile used (fact `supermodel_chain`, from the supermodel down to the first binary) holds one of the names in `supermodels` as an ASCII model, i.e. converted. Node and animation node numbers only; the header count is `supermodel-count`'s."
+  },
+  {
    "id": "anim-header-count",
    "check": "anim-header-count",
    "rules": [
