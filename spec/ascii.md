@@ -178,6 +178,16 @@ of `verts` (not per corner): `tangents` rows are x y z handedness.
 *Confirmed: zspec_merge (normals), zspec_tanfile (tangents),
 zspec_trimesh (colors).*
 
+**MDL-ASCII-054** A mesh list given twice in one node: a second `verts`
+or `tverts` list replaces the first, and a second `faces` list is ignored
+(the first is kept). A compiler MUST do the same for these three. The other
+vertex lists are read by the same function as `verts` (`Parse<Vector>`
+0x44eb40: `normals`, `colors`, `tverts1`-`tverts3`), so presumably a second
+one replaces the first too; not probed. *Confirmed: zspec_twolists (node
+`twice`: the second list's positions and UVs, the first list's face;
+`facestwice`: the first face; `vertstwice`: the second list's positions).
+Seen in Layonara's `tn_sdoor_02`, whose animmesh repeats all three lists.*
+
 ## Animations
 
 **MDL-ASCII-060** `newanim <name> <model>` starts an animation, read like the

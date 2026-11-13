@@ -5,8 +5,9 @@ Nights: Enhanced Edition, with tests any implementation can run.
 
 **Status:** draft, read on engine build 89.8193.37-17 (Linux
 `nwmain-linux`, commit 26c6e573). Nothing here is official: it is what the
-game was seen to do, with the evidence for each claim. 58 probes have engine
-goldens; one (a skinned mesh) is pending.
+game was seen to do, with the evidence for each claim. 66 probes have engine
+goldens; one (a skinned mesh) is pending, and one (two roots and a lost
+parent) crashes the game's compiler, which is its result.
 
 ## Why
 

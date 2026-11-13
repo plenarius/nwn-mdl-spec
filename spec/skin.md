@@ -16,6 +16,18 @@ pairs `bone weight`, bone a node name. A counted list skips only truly
 empty lines (MDL-ASCII-050): a line of spaces is a vertex with no weights.
 *Confirmed: `Parse<SkinVertexWeight>` 0x44fd00, E28.*
 
+**MDL-SKIN-002** A `weights` row is read with
+`sscanf("%s %f %s %f %s %f %s %f")`: the first four `bone weight` pairs, in
+order. Anything after them on the row is not read, and the engine does not
+sort or renormalise the four it keeps. A compiler MUST keep the first four
+pairs, in their order, with their weights as written; it SHOULD warn about
+the pairs it drops. Keeping the four heaviest, or renormalising, changes how
+the vertex deforms. *Confirmed (code): `Parse(char const*,
+SkinVertexWeight&)` 0x446d40, the format string at 0x12ef41c, the pair
+count stored as sscanf's result / 2 (0x446e08); E74. A skin cannot be
+compiled without an in-game rig (zspec_skin), so there is no golden. Seen
+in Layonara's robes `p*_robe238`–`240`, with five pairs on some rows.*
+
 ## When and against what a skin is bound
 
 **MDL-SKIN-010** An ASCII skin is bound at the first draw of the first

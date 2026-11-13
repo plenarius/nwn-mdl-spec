@@ -37,6 +37,16 @@ equal to this face's, the first such face wins, and a face with no such
 neighbour gets three new vertices. *Confirmed: zspec_aabb (8 vertices where
 a global merge gives 6); `MdlNodeAABB::InternalGenVertices` 0x454920, E1.*
 
+**MDL-MESH-013** What a vertex carries stays with it when merging
+reorders the vertices (MDL-MESH-011). A danglymesh's constraints are
+written one per compiled vertex, each the constraint of the source vertex
+that compiled vertex came from; so are its colours and UVs. A compiler MUST
+NOT write the constraints in the file's order when the compiled order
+differs. *Confirmed: zspec_dangord (node `flap`: the faces use vertices 3 4
+0 first, so the compiled order is 3 4 0 1 5 2, and the constraints are 140
+100 10 20 180 30 for the file's 10 20 30 140 100 180; node `split`: both
+copies of a vertex split by its UVs keep its constraint).*
+
 ## Degenerate faces and face records
 
 **MDL-MESH-020** After merging, faces are walked from last to first and a
@@ -112,6 +122,28 @@ Smoothing group 0 never joins another face. Normalisation is
 `Vector::Normalize` (MDL-MESH-032). The result depends on face order.
 *Confirmed: zspec_normals (pyramid, back-to-back faces, shared and unshared
 bits, unequal areas, group 0); `ProcessVerts` 0x454dd0, E8.*
+
+**MDL-MESH-033** The face normal of MDL-MESH-031 is `cross(p1 − p0,
+p2 − p1)`, p0 p1 p2 the face's corners in file order, in float32: with
+a = p1 − p0 and b = p2 − p1, x = a.y·b.z − b.y·a.z, y = a.z·b.x − a.x·b.z,
+z = a.x·b.y − a.y·b.x, each product rounded before the subtraction. The
+face's unit normal (for the −0.99 test and the zero fallback) is that vector
+through `Vector::Normalize` (MDL-MESH-032). The smoothing group is the whole
+32-bit integer (MDL-ASCII-052): groups 1 and 16777217 share bit 0. Where the
+normals cancel, as on a triangle drawn from both sides in one group, what
+is left is rounding: another formula for the same cross product (`(p1 − p0)
+× (p2 − p0)`), or the group read through a float, gives another normal, up
+to the opposite one. A compiler MUST use this formula to match the game.
+The face records' normals (MDL-MESH-021) are the same: `NormalOf`
+(0x5b3b00) takes `cross(p1 − p0, p2 − p1)` through `normalize` (0x5b37d0),
+the same rule as `Vector::Normalize`; dividing by the length instead
+differs in the last bit. *Confirmed: zspec_nrmcross (`twosideA`,
+`twosideB`: the normals this formula gives, where `(p1 − p0) × (p2 − p0)`
+gives the opposite, and the face records' normals to the bit; `bigsg`:
+groups 1 and 16777217 are smoothed together); `ProcessVerts` 0x454dd0
+calls `cross` (0x5b3aa0) with (p1 − p0, p2 − p1) at 0x455137 and
+0x4553df; `BuildNeighborLists` 0x453870 calls `NormalOf` at 0x4538e1;
+E73.*
 
 **MDL-MESH-032** `Vector::Normalize` returns a vector whose squared length is
 within 1e-5 of 1 unchanged, turns the zero vector into (1, 0, 0), and

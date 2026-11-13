@@ -6,6 +6,45 @@
 Its tree is stored depth-first through the children arrays (MDL-BIN-021).
 *Confirmed: every golden.*
 
+**MDL-NODE-002** A `parent` line names its node's parent by name, compared
+case-insensitively. The engine looks the name up when it reads the line, in
+the tree built so far: depth first from the root, each node's children in
+the order they were added, and the first node of that name wins. Where a
+name is used twice, a child therefore joins the copy that comes first in
+that walk, which need not be the nearest copy declared before it:
+- of two copies under two siblings, the one under the earlier sibling wins,
+  whichever copy was declared first;
+- of a node and a child of the same name (`head` under `head`), the outer
+  one wins, since the walk visits a parent before its children.
+
+The same holds for an animation's nodes, looked up in the animation's own
+tree. Only nodes declared before the child are in the tree when its line
+is read, so a copy declared after the child is never its parent. A
+compiler MUST resolve parents this way. A
+decompiler SHOULD write nodes so that this lookup gives back the stored
+parents, and SHOULD say so when no order can (a child under a copy the walk
+always reaches second). *Confirmed: zspec_dupparent (geometry and animation
+`move`: `c1` joins the `hook` under `armL`, declared second; `c2` the `grip`
+under `armL`, declared first, though the one under `armR` is nearer; `c3`
+the outer `head`); `FindMdlNode(MaxTree*, char const*)` 0x447520 starts at
+the root (tree +0x50), `FindMdlNode(MdlNode*, char const*)` 0x4474a0
+compares with `strcasecmp` (0x4474bd) and recurses through the children
+(+0x68, count +0x70) in order, returning the first match; E42, E72.*
+
+**MDL-NODE-003** Several `parent NULL` nodes: each makes itself the tree's
+root when its `parent` line is read, so the last one is the root and the
+trees under the earlier ones are not written. Their nodes still take part
+numbers (MDL-NODE-010) and count in the header's node count. A node
+declared after the last root whose parent is only in a dropped tree, or
+whose parent exists nowhere, is not found, and the game's compiler crashes
+on it. A compiler MUST write only the last root's tree, numbered as
+declared, and SHOULD warn that the earlier trees are dropped; it MAY refuse
+a model whose parent lookup fails, which the game cannot compile. *Confirmed:
+zspec_root2 (root `second`, nodes 2 and 3 written, node count 4);
+zspec_root2b (a node whose parent is under the first root, declared after
+the second) crashes `compilemodel` in `MdlNode::InternalParseField`
+(+0x3da, 0x448f8a, the unchecked `FindMdlNode` result); E42, E72.*
+
 ## Part numbers
 
 **MDL-NODE-010** Without a supermodel, a compiler MUST number nodes in the

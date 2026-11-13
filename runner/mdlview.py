@@ -385,7 +385,7 @@ def _skin(b, base, nv, node_names):
     return s
 
 
-def _node(b, off, parent, out, depth, seen, anim):
+def _node(b, off, parent, out, depth, seen, anim, parent_index=None):
     if off in seen or depth > 512 or not b.ok(off, 112):
         b.warnings.append('bad node pointer %#x' % off)
         return
@@ -394,6 +394,9 @@ def _node(b, off, parent, out, depth, seen, anim):
     nd = {
         'name': b.s(off + 32, 32),
         'parent': parent,
+        # The parent's index in the node list: a name can be used twice
+        # (MDL-NODE-002), so the name alone does not say which node it is.
+        'parent_index': parent_index,
         'type': NODE_TYPES.get(flags, 'flags%#x' % flags),
         'flags': flags,
         'number': b.i32(off + 28),
@@ -482,9 +485,10 @@ def _node(b, off, parent, out, depth, seen, anim):
         nd['aabb'] = entries
         p += 4
     out.append(nd)
+    me = len(out) - 1
     cptr, ccount = children_def
     for i in range(min(ccount, 4096)):
-        _node(b, b.mptr(b.u32(b.mptr(cptr) + 4 * i)), nd['name'], out, depth + 1, seen, anim)
+        _node(b, b.mptr(b.u32(b.mptr(cptr) + 4 * i)), nd['name'], out, depth + 1, seen, anim, me)
 
 
 def read_binary(data):
@@ -752,9 +756,12 @@ def _new_node(ntype, name):
 
 def _set_ctrl(nd, cdef, keys, cols, bezier, append=False):
     """Add a controller. A single-value line given again adds a second
-    controller of the same id (append, MDL-CTRL-036); a key list replaces
-    any earlier one (repeated key lists are not probed)."""
+    controller of the same id (append, MDL-CTRL-036), and so does a key list
+    given again (MDL-CTRL-037); a key list after a single value of its id
+    replaces it (not probed)."""
     c = {'id': cdef['id'], 'name': cdef['name'], 'columns': cols, 'bezier': bezier, 'keys': keys}
+    if not append and cdef['id'] in nd.setdefault('_keylists', set()):
+        append = True
     if append:
         nd['controllers'].append(c)
     else:
@@ -773,6 +780,7 @@ def _key_rows(nd, cdef, rows, bezier):
         parsed.append(fl)
     if not parsed:
         _set_ctrl(nd, cdef, [], cdef['columns'], bezier)
+        nd['_keylists'].add(cdef['id'])
         return
     n0 = len(parsed[0])
     if bezier:
@@ -783,6 +791,7 @@ def _key_rows(nd, cdef, rows, bezier):
         cols = n0 - 1
         keys = [{'t': num(fl[0]), 'v': nums(fl[1:1 + cols])} for fl in parsed]
     _set_ctrl(nd, cdef, keys, cols, bezier)
+    nd['_keylists'].add(cdef['id'])
 
 
 def _aabb_tree(first_rest, lines):
@@ -840,7 +849,11 @@ def _node_field(nd, line, lines):
         return
     if mesh is not None:
         if k in MESH_LISTS:
-            mesh['_lists'][k] = lines.rows(rest)
+            # Given twice, a list replaces the first, except faces: the
+            # first faces list is kept (MDL-ASCII-054, zspec_twolists).
+            rows = lines.rows(rest)
+            if k != 'faces' or 'faces' not in mesh['_lists']:
+                mesh['_lists'][k] = rows
             return
         if k in ('diffuse', 'ambient', 'specular'):
             fl = c_floats(rest, 3)
@@ -874,7 +887,9 @@ def _node_field(nd, line, lines):
             ws = []
             for r in lines.rows(rest):
                 tok, infl = r.split(), []
-                for j in range(0, len(tok) - 1, 2):
+                # sscanf("%s %f %s %f %s %f %s %f"): four pairs at most, the
+                # rest of the row is not read (MDL-SKIN-002)
+                for j in range(0, min(len(tok) - 1, 8), 2):
                     fl = c_floats(tok[j + 1], 1)
                     if fl:
                         infl.append([tok[j], num(fl[0])])
@@ -1039,16 +1054,35 @@ def _read_tree(lines, nodes_out, anim):
                     anim[k] = num(fl[0])
             elif k == 'animroot':
                 anim['animroot'] = c_word(rest)
-    # The tree: the root is the node whose parent is NULL (the last one, if
-    # several); nodes whose parent keyword was not read are not in it.
-    roots = [n for n in nodes if n['_parent_set'] and n['parent'] is None]
-    if not roots:
-        return
-    root = roots[-1]
-    kids = {}
+    # The tree, built as the engine reads the lines (MdlNode::InternalParseField
+    # 0x448bb0): "parent NULL" makes the node the tree's root, replacing any
+    # earlier root and dropping its tree (MDL-NODE-003); any other parent is
+    # looked up with FindMdlNode (0x447520) in the tree built so far, depth
+    # first from the root, children in the order they were added, names
+    # compared case-insensitively, the first match winning (MDL-NODE-002).
+    # A node whose parent keyword was not read is in no tree; one whose
+    # parent is not found crashes the engine's compiler and is left out here.
+    root, kids = None, {}
+
+    def find(n, name):
+        stack = [n]
+        while stack:
+            x = stack.pop()
+            if x['name'].lower() == name.lower():
+                return x
+            stack.extend(reversed(kids.get(id(x), [])))
+        return None
     for n in nodes:
-        if n['_parent_set'] and n['parent'] is not None:
-            kids.setdefault(n['parent'].lower(), []).append(n)
+        if not n['_parent_set']:
+            continue
+        if n['parent'] is None:
+            root = n
+            continue
+        p = find(root, n['parent']) if root is not None else None
+        if p is not None:
+            kids.setdefault(id(p), []).append(n)
+    if root is None:
+        return
     # MdlNode::ReorderChildren (0x458120, MDL-NODE-012): where a child mesh
     # has transparencyhint > 0, the children are sorted: other nodes first,
     # then meshes by ascending hint (signed). std::sort is stable only up to
@@ -1061,17 +1095,20 @@ def _read_tree(lines, nodes_out, anim):
             lst.sort(key=lambda c: (0, 0) if 'mesh' not in c else (1, hint(c)))
     seen = set()
 
-    def walk(n, parent):
+    def walk(n, parent, parent_index):
         if id(n) in seen:
             return
         seen.add(id(n))
         n['parent'] = parent
+        n['parent_index'] = parent_index
         nodes_out.append(n)
-        for c in kids.get(n['name'].lower(), []):
-            walk(c, n['name'])
-    walk(root, None)
+        me = len(nodes_out) - 1
+        for c in kids.get(id(n), []):
+            walk(c, n['name'], me)
+    walk(root, None, None)
     for n in nodes_out:
         n.pop('_parent_set', None)
+        n.pop('_keylists', None)
 
 
 def read_ascii(text):

@@ -19,6 +19,35 @@ First draft:
   suite's own interpreter.
 
 Added:
+- MDL-NODE-002 (new probe zspec_dupparent) and E72: a `parent` name is
+  looked up in the tree built so far, depth first from the root, the first
+  match winning (`FindMdlNode`). Of two nodes of one name, a child joins
+  the one first in that walk, not the nearest declared before it; the same
+  in animations.
+- MDL-NODE-003 (new probes zspec_root2, zspec_root2b): of several `parent
+  NULL` nodes the last is the root and the earlier trees are not written
+  (their nodes keep their numbers and count); a parent left in a dropped
+  tree crashes the game's compiler.
+- MDL-MESH-013 (new probe zspec_dangord): a danglymesh's constraints follow
+  their vertices when merging reorders them.
+- MDL-MESH-033 (new probe zspec_nrmcross) and E73: the face normal for
+  smoothing is `cross(p1 − p0, p2 − p1)` in float32, and the smoothing group
+  a 32-bit integer; on faces drawn from both sides the rounding decides the
+  normal. The face records take the same vector through the game's
+  normalise (`NormalOf`), not a division by the length.
+- MDL-ASCII-054 (new probe zspec_twolists): a second `verts` or `tverts`
+  list replaces the first; a second `faces` list is ignored.
+- MDL-CTRL-037 (new probe zspec_twokeys): a key list given twice makes two
+  controllers, like a single value (MDL-CTRL-036).
+- MDL-SKIN-002 and E74: a `weights` row is read as four pairs at most, the
+  rest of the row ignored, nothing sorted or renormalised.
+- Runner: the view records each node's `parent_index`, the ASCII reader
+  builds the tree the engine's way (MDL-NODE-002, -003, MDL-ASCII-054,
+  MDL-CTRL-037, MDL-SKIN-002), and the comparison pairs nodes and checks
+  parents by it. Before, a child moved between two nodes of one name kept
+  its parent's name and its place in the depth-first name list, and a
+  round trip passed it. Expected files hold `parent_index` only where a name
+  repeats (zspec_kid4, zspec_super gain it).
 - MDL-ASCII-062 (new probe zspec_animdup) and E70: animations that share a
   name are all kept, in file order, each with its own data (the compiler's
   `newanim` and the binary loader compare no names). The engine's

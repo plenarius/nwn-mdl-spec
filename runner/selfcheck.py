@@ -1195,6 +1195,73 @@ def check_tangents_and_faces():
     return bad
 
 
+def check_dup_parent():
+    """MDL-NODE-002: a child moved between two nodes of one name keeps its
+    parent's name and its place in the depth-first name list; the round trip
+    must still see it (the 8 Layonara weapons of 2026-11-12). And the ASCII
+    reader must build the tree the engine's way."""
+    bad = []
+
+    def node(name, parent, pidx):
+        return {'name': name, 'parent': parent, 'parent_index': pidx, 'type': 'dummy', 'flags': 1, 'number': 0,
+                'inheritcolor': 0, 'controllers': []}
+
+    def model(nodes):
+        return {'model': {'name': 'w', 'classification': 0, 'fog': 1, 'animationscale': 1, 'supermodel': 'NULL',
+                          'node_count': len(nodes), 'bmin': [0, 0, 0], 'bmax': [0, 0, 0], 'radius': 0},
+                'nodes': nodes, 'animations': [], 'volatile': []}
+    # w { h { d, h, k } } against w { h { d, h { k } } }: the same names in
+    # the same depth-first order, k's parent named h either way
+    e = model([node('w', None, None), node('h', 'w', 0), node('d', 'h', 1), node('h', 'h', 1), node('k', 'h', 1)])
+    a = model([node('w', None, None), node('h', 'w', 0), node('d', 'h', 1), node('h', 'h', 1), node('k', 'h', 3)])
+    rep = mdlconf.compare(mdlconf.normalise(e), a, 'compile')
+    if not [p for lvl, p, _ in rep.items if lvl == 'must' and p.endswith('[k].parent')]:
+        bad.append('a child moved to the other node of its parent\'s name: not found: %s' % rep.items)
+    rep = mdlconf.compare(mdlconf.normalise(e), e, 'compile')
+    if [p for lvl, p, _ in rep.items if lvl == 'must']:
+        bad.append('the same tree: %s' % rep.items)
+    # the ASCII reader: first in tree order, not the nearest before
+    text = """newmodel t
+setsupermodel t NULL
+beginmodelgeom t
+node dummy t
+  parent NULL
+endnode
+node dummy a
+  parent t
+endnode
+node dummy b
+  parent t
+endnode
+node dummy g
+  parent a
+endnode
+node dummy g
+  parent b
+endnode
+node dummy c
+  parent g
+endnode
+node dummy h
+  parent t
+endnode
+node dummy h
+  parent h
+endnode
+node dummy c2
+  parent h
+endnode
+endmodelgeom t
+donemodel t
+"""
+    v = mdlview.read_ascii(text)
+    got = [(n['name'], n['parent_index']) for n in v['nodes']]
+    want = [('t', None), ('a', 0), ('g', 1), ('c', 2), ('b', 0), ('g', 4), ('h', 0), ('h', 6), ('c2', 6)]
+    if got != want:
+        bad.append('ASCII parents: expected %s, got %s' % (want, got))
+    return bad
+
+
 def main():
     failed = False
     for name, fn in (('tables', check_tables), ('rule references', check_rules),
@@ -1202,6 +1269,7 @@ def main():
                      ('node facts', check_node_facts), ('stability', check_stability),
                      ('tangents, faces', check_tangents_and_faces), ('render lists', check_render_lists),
                      ('round 3', check_round3), ('animroot', check_animroot),
+                     ('dup parents', check_dup_parent),
                      ('ksy', check_ksy)):
         bad = fn()
         print('%-16s %s' % (name, 'ok' if not bad else 'FAIL'))

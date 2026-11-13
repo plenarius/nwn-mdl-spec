@@ -1,0 +1,520 @@
+{
+ "format": "mdl-expected/1",
+ "probe": "zspec_dupparent",
+ "build": "89.8193.37-17",
+ "golden_sha256": "1690a2a0b2a4526cb96e9973a9a2ded1af594b1529298ac68c4059056f0aa61d",
+ "volatile": [],
+ "model": {
+  "name": "zspec_dupparent",
+  "classification": 4,
+  "fog": 1,
+  "animationscale": 1,
+  "supermodel": "NULL",
+  "node_count": 12,
+  "bmin": [
+   -5,
+   -5,
+   -1
+  ],
+  "bmax": [
+   5,
+   5,
+   10
+  ],
+  "radius": 7
+ },
+ "nodes": [
+  {
+   "name": "zspec_dupparent",
+   "parent": null,
+   "parent_index": null,
+   "type": "dummy",
+   "flags": 1,
+   "number": 0,
+   "inheritcolor": 0,
+   "controllers": []
+  },
+  {
+   "name": "armL",
+   "parent": "zspec_dupparent",
+   "parent_index": 0,
+   "type": "dummy",
+   "flags": 1,
+   "number": 1,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        -1,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "hook",
+   "parent": "armL",
+   "parent_index": 1,
+   "type": "dummy",
+   "flags": 1,
+   "number": 4,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        2,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "c1",
+   "parent": "hook",
+   "parent_index": 2,
+   "type": "dummy",
+   "flags": 1,
+   "number": 5,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        1
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "grip",
+   "parent": "armL",
+   "parent_index": 1,
+   "type": "dummy",
+   "flags": 1,
+   "number": 6,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        3,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "c2",
+   "parent": "grip",
+   "parent_index": 4,
+   "type": "dummy",
+   "flags": 1,
+   "number": 8,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        2
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "armR",
+   "parent": "zspec_dupparent",
+   "parent_index": 0,
+   "type": "dummy",
+   "flags": 1,
+   "number": 2,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        1,
+        0,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "hook",
+   "parent": "armR",
+   "parent_index": 6,
+   "type": "dummy",
+   "flags": 1,
+   "number": 3,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        1,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "grip",
+   "parent": "armR",
+   "parent_index": 6,
+   "type": "dummy",
+   "flags": 1,
+   "number": 7,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        4,
+        0
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "head",
+   "parent": "zspec_dupparent",
+   "parent_index": 0,
+   "type": "dummy",
+   "flags": 1,
+   "number": 9,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        5
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "head",
+   "parent": "head",
+   "parent_index": 9,
+   "type": "dummy",
+   "flags": 1,
+   "number": 10,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        0.5
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "c3",
+   "parent": "head",
+   "parent_index": 9,
+   "type": "dummy",
+   "flags": 1,
+   "number": 11,
+   "inheritcolor": 0,
+   "controllers": [
+    {
+     "id": 8,
+     "name": "position",
+     "columns": 3,
+     "bezier": false,
+     "colbyte": 3,
+     "keys": [
+      {
+       "t": 0,
+       "v": [
+        0,
+        0,
+        3
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "animations": [
+  {
+   "name": "move",
+   "length": 1,
+   "transtime": 0.25,
+   "animroot": "zspec_dupparent",
+   "events": [],
+   "node_count": 12,
+   "nodes": [
+    {
+     "name": "zspec_dupparent",
+     "parent": null,
+     "type": "dummy",
+     "flags": 1,
+     "number": 0,
+     "controllers": [],
+     "parent_index": null
+    },
+    {
+     "name": "armL",
+     "parent": "zspec_dupparent",
+     "type": "dummy",
+     "flags": 1,
+     "number": 1,
+     "controllers": [],
+     "parent_index": 0
+    },
+    {
+     "name": "hook",
+     "parent": "armL",
+     "type": "dummy",
+     "flags": 1,
+     "number": 4,
+     "controllers": [],
+     "parent_index": 1
+    },
+    {
+     "name": "c1",
+     "parent": "hook",
+     "type": "dummy",
+     "flags": 1,
+     "number": 5,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          1
+         ]
+        }
+       ]
+      }
+     ],
+     "parent_index": 2
+    },
+    {
+     "name": "grip",
+     "parent": "armL",
+     "type": "dummy",
+     "flags": 1,
+     "number": 6,
+     "controllers": [],
+     "parent_index": 1
+    },
+    {
+     "name": "c2",
+     "parent": "grip",
+     "type": "dummy",
+     "flags": 1,
+     "number": 8,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          2
+         ]
+        }
+       ]
+      }
+     ],
+     "parent_index": 4
+    },
+    {
+     "name": "armR",
+     "parent": "zspec_dupparent",
+     "type": "dummy",
+     "flags": 1,
+     "number": 2,
+     "controllers": [],
+     "parent_index": 0
+    },
+    {
+     "name": "hook",
+     "parent": "armR",
+     "type": "dummy",
+     "flags": 1,
+     "number": 3,
+     "controllers": [],
+     "parent_index": 6
+    },
+    {
+     "name": "grip",
+     "parent": "armR",
+     "type": "dummy",
+     "flags": 1,
+     "number": 7,
+     "controllers": [],
+     "parent_index": 6
+    },
+    {
+     "name": "head",
+     "parent": "zspec_dupparent",
+     "type": "dummy",
+     "flags": 1,
+     "number": 9,
+     "controllers": [],
+     "parent_index": 0
+    },
+    {
+     "name": "head",
+     "parent": "head",
+     "type": "dummy",
+     "flags": 1,
+     "number": 10,
+     "controllers": [],
+     "parent_index": 9
+    },
+    {
+     "name": "c3",
+     "parent": "head",
+     "type": "dummy",
+     "flags": 1,
+     "number": 11,
+     "controllers": [
+      {
+       "id": 8,
+       "name": "position",
+       "columns": 3,
+       "bezier": false,
+       "colbyte": 3,
+       "keys": [
+        {
+         "t": 0,
+         "v": [
+          0,
+          0,
+          3
+         ]
+        }
+       ]
+      }
+     ],
+     "parent_index": 9
+    }
+   ]
+  }
+ ]
+}
