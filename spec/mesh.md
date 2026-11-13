@@ -134,11 +134,16 @@ normals cancel, as on a triangle drawn from both sides in one group, what
 is left is rounding: another formula for the same cross product (`(p1 − p0)
 × (p2 − p0)`), or the group read through a float, gives another normal, up
 to the opposite one. A compiler MUST use this formula to match the game.
-*Confirmed: zspec_nrmcross (`twosideA`, `twosideB`: the normals this
-formula gives, where `(p1 − p0) × (p2 − p0)` gives the opposite; `bigsg`:
+The face records' normals (MDL-MESH-021) are the same: `NormalOf`
+(0x5b3b00) takes `cross(p1 − p0, p2 − p1)` through `normalize` (0x5b37d0),
+the same rule as `Vector::Normalize`; dividing by the length instead
+differs in the last bit. *Confirmed: zspec_nrmcross (`twosideA`,
+`twosideB`: the normals this formula gives, where `(p1 − p0) × (p2 − p0)`
+gives the opposite, and the face records' normals to the bit; `bigsg`:
 groups 1 and 16777217 are smoothed together); `ProcessVerts` 0x454dd0
 calls `cross` (0x5b3aa0) with (p1 − p0, p2 − p1) at 0x455137 and
-0x4553df; E73.*
+0x4553df; `BuildNeighborLists` 0x453870 calls `NormalOf` at 0x4538e1;
+E73.*
 
 **MDL-MESH-032** `Vector::Normalize` returns a vector whose squared length is
 within 1e-5 of 1 unchanged, turns the zero vector into (1, 0, 0), and

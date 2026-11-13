@@ -761,8 +761,14 @@ two difference vectors are built from the face's three corner indices
 face's own normal (then `Vector::Normalize`, 0x455155) and at 0x4553df for
 each later face added with `Vector::operator+=` (0x5b3e40). `cross` computes
 each component as two `mulss` and one `subss` (x = a.y·b.z − b.y·a.z, y =
-a.z·b.x − a.x·b.z, z = a.x·b.y − a.y·b.x). *Confirmed (code);
-zspec_nrmcross.*
+a.z·b.x − a.x·b.z, z = a.x·b.y − a.y·b.x). The face records (E19) take
+the same vector: `BuildNeighborLists` calls `NormalOf(p0, p1, p2)`
+(0x5b3b00) at 0x4538e1, which builds p1 − p0 and p2 − p1, calls `cross`
+and then `normalize(Vector const&)` (0x5b37d0), a copy of
+`Vector::Normalize` that returns the result (E18); the plane distance is
+−((n.x·p0.x + n.y·p0.y) + n.z·p0.z), each product rounded
+(0x45393c-0x453962). *Confirmed (code); zspec_nrmcross (vertex normals
+and face records to the bit).*
 
 **E74 Skin weights row.** `Parse(char const*, SkinVertexWeight&)`
 (0x446d40) allocates four 32-byte name buffers, sets names 2-4 to `ROOT`

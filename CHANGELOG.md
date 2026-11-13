@@ -33,7 +33,8 @@ Added:
 - MDL-MESH-033 (new probe zspec_nrmcross) and E73: the face normal for
   smoothing is `cross(p1 − p0, p2 − p1)` in float32, and the smoothing group
   a 32-bit integer; on faces drawn from both sides the rounding decides the
-  normal.
+  normal. The face records take the same vector through the game's
+  normalise (`NormalOf`), not a division by the length.
 - MDL-ASCII-054 (new probe zspec_twolists): a second `verts` or `tverts`
   list replaces the first; a second `faces` list is ignored.
 - MDL-CTRL-037 (new probe zspec_twokeys): a key list given twice makes two
