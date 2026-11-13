@@ -70,6 +70,10 @@ python3 runner/mdlconf.py view FILE
   out, with how many models each affects and an example. Exit status 1
   unless all passed. The original is whatever compiled it: a difference can
   be the implementation's or a defect the original already had.
+  Nodes are paired by their path from the root, and each node's parent is
+  the node at its `parent_index` in the view, not the latest node of its
+  parent's name: where a name is used twice, a child moved from one copy to
+  the other is a `.parent` failure (MDL-NODE-002).
   Models are taken in batches of 256. Each worker may use `--max-memory`
   GB (default 4; the implementation it runs is not limited): a model that
   needs more is an `error`, not a crash. If a worker dies anyway, only its

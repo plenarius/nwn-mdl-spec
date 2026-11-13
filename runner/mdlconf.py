@@ -82,6 +82,14 @@ def flat(o, p=''):
         yield p, o
 
 
+def names_repeat(nodes):
+    """Whether two nodes share a name (case-insensitively). Only then does a
+    node's parent need its index as well as its name (MDL-NODE-002), so the
+    expected files carry `parent_index` only for such trees."""
+    names = [n['name'].lower() for n in nodes]
+    return len(set(names)) != len(names)
+
+
 def normalise(view):
     """The expected-file form of a decoded golden."""
     m = view['model']
@@ -89,7 +97,7 @@ def normalise(view):
                                        'node_count', 'bmin', 'bmax', 'radius')},
            'nodes': [], 'animations': []}
     for n in view['nodes']:
-        nn = {k: v for k, v in n.items()}
+        nn = {k: v for k, v in n.items() if k != 'parent_index' or names_repeat(view['nodes'])}
         if 'mesh' in nn:
             nn['mesh'] = {k: v for k, v in nn['mesh'].items() if k not in ALWAYS_VOLATILE}
         out['nodes'].append(nn)
@@ -100,6 +108,8 @@ def normalise(view):
             # In an animation only these mean anything: the type-specific
             # headers hold uninitialised memory (E55).
             nn = {k: n[k] for k in ('name', 'parent', 'type', 'flags', 'number', 'controllers')}
+            if names_repeat(a['nodes']) and 'parent_index' in n:
+                nn['parent_index'] = n['parent_index']
             if 'animmesh' in n:
                 nn['animmesh'] = n['animmesh']
             aa['nodes'].append(nn)
@@ -1256,6 +1266,21 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
     # 31 (MDL-BIN-007). Findings name a node by the original's name and its
     # occurrence in the whole list (`#2`).
     pairing = nodefacts.pair_nodes(exp_nodes, act_nodes)
+    # A node that pairs with nothing but has a namesake on the other side,
+    # under a node of its parent's name that is another node (a name used
+    # twice, MDL-NODE-002), is reported as hanging under the wrong one. Its
+    # parent's name alone is the same on both sides.
+    unpaired = set(range(len(act_nodes))) - set(pairing)
+    elabels, alabels = node_labels(exp_nodes, act_nodes)
+
+    def moved(e):
+        for j in sorted(unpaired):
+            a = act_nodes[j]
+            if (a['name'].lower() == e['name'].lower()
+                    and (a.get('parent') or '').lower() == (e.get('parent') or '').lower()
+                    and isinstance(a.get('parent_index'), int) and isinstance(e.get('parent_index'), int)):
+                return j
+        return None
     seen = {}
     for i, e in enumerate(exp_nodes):
         k = seen[node_key(e)] = seen.get(node_key(e), 0) + 1
@@ -1268,7 +1293,15 @@ def compare_nodes(r, base, exp_nodes, act_nodes, profile, volatile, anim):
             if r.facts is not None and name_cut(e['name'], a['name']):
                 r.facts[profile + ' ' + p + '.name'] = {'name_cut': [e['name'], a['name']], 'unique': True}
         if a is None:
-            r.must(p, 'missing')
+            j = moved(e)
+            if j is not None:
+                unpaired.discard(j)
+                ap = act_nodes[j]['parent_index']
+                r.must(p + '.parent', 'expected under %s (node %d), got under %s (node %d): a name used twice, '
+                       'the parent is the first of that name in tree order (MDL-NODE-002)'
+                       % (elabels[e['parent_index']], e['parent_index'], alabels[ap], ap))
+            else:
+                r.must(p, 'missing')
             continue
         ep, ap = (e.get('parent') or '').lower(), (a.get('parent') or '').lower()
         if ep != ap:

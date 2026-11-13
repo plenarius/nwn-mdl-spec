@@ -739,3 +739,34 @@ so at run time an animation plays the nodes its tree holds, every one of
 them when the animroot matched nothing. *Confirmed (code; Ghidra
 decompiles as for E70); zspec_animroot (the pruned and the whole trees,
 and the log line for each animroot that matched nothing).*
+
+## Parent lookup, face normals, skin weights (E72–E74, new)
+
+**E72 Parent lookup.** `FindMdlNode(MaxTree*, char const*)` (0x447520)
+returns 0 for a null tree and otherwise calls `FindMdlNode(MdlNode*, char
+const*)` (0x4474a0) on the tree's root (+0x50). That compares the node's
+name (+0x38) with `strcasecmp` (0x4474bd), returns the node on a match,
+and otherwise recurses into each child (array +0x68, count +0x70) in order,
+returning the first non-null result. `MdlNode::InternalParseField`
+(0x448bb0) calls it when it reads a `parent` line, so the search covers the
+nodes added so far, from the current root, depth first; `parent NULL`
+replaces the root. The result is used without a check: a lookup that finds
+nothing crashes at 0x448f8a (+0x3da). *Confirmed (code); zspec_dupparent,
+zspec_root2, zspec_root2b (the crash, with that backtrace).*
+
+**E73 Face normals.** In `ProcessVerts` (0x454dd0), each face's normal for
+the smoothing sums is `cross(p1 − p0, p2 − p1)`: at 0x4550a6-0x455132 the
+two difference vectors are built from the face's three corner indices
+(face +0, +4, +8) and `cross` (0x5b3aa0) is called at 0x455137 for the
+face's own normal (then `Vector::Normalize`, 0x455155) and at 0x4553df for
+each later face added with `Vector::operator+=` (0x5b3e40). `cross` computes
+each component as two `mulss` and one `subss` (x = a.y·b.z − b.y·a.z, y =
+a.z·b.x − a.x·b.z, z = a.x·b.y − a.y·b.x). *Confirmed (code);
+zspec_nrmcross.*
+
+**E74 Skin weights row.** `Parse(char const*, SkinVertexWeight&)`
+(0x446d40) allocates four 32-byte name buffers, sets names 2-4 to `ROOT`
+and weights 2-4 to 0, and reads the row with `sscanf` and the format
+`%s %f %s %f %s %f %s %f` (0x12ef41c); it stores sscanf's result / 2 as
+the number of pairs (+0x40). A fifth pair on the row is never read.
+*Confirmed (code); not compiled (skins need a rig).*

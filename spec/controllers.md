@@ -207,8 +207,19 @@ controllers, in order); the order of application in code:
 (0x499180) hands over to it, and at `Gob::Reset` (0x499bd0) the blend
 weight is 1.0 (the float at 0x12ee9e4), so each one stores its value
 outright. The light's radius on screen was not observed in game. Repeated
-key lists, and repeated lines in an animation, are not probed (see
-[unknown.md](unknown.md)).*
+key lists: MDL-CTRL-037. Repeated single values in an animation are not
+probed (see [unknown.md](unknown.md)).*
+
+**MDL-CTRL-037** A key list given twice in one node (`positionkey`, and
+later `positionkey` again) makes two controllers of that id, like a single
+value given twice (MDL-CTRL-036): both are written, in the order of their
+lines, each with its own keys. The keys are not merged. The rules of
+MDL-CTRL-036 apply: a compiler SHOULD write both and MAY write only the
+last; it MUST NOT merge their keys into one controller (its times would run
+backwards) or keep only the first. *Confirmed: zspec_twokeys (animation
+`move`: `positionkey` with 2 keys, then 3 others; `orientationkey` with the
+same 2 keys twice, as Layonara's `plc_10l` has them: four controllers, in
+line order).*
 
 ## Evaluation (informative)
 

@@ -36,10 +36,12 @@ what would settle it.
   weight; during a transition (weight below 1) both would then contribute,
   so writing only the last could change the blend. Inferred from
   `MdlNode::InternalControl` (0x4990c0); not probed.
-- **A key list given twice** (`positionkey` twice in a node), or a key list
-  and a single value of one id: `AddGenericController` (0x4488d0) appends
-  to the node's list, so presumably both are kept, like single values
-  (MDL-CTRL-036). Not probed.
+- **A key list and a single value of one id** in a node (a key list given
+  twice is MDL-CTRL-037): `AddGenericController` (0x4488d0) appends to the
+  node's list, so presumably both are kept. Not probed.
+- **Other mesh lists given twice** (`normals`, `colors`, `tverts1`-`3`,
+  `constraints`, `weights`): MDL-ASCII-054 covers `verts`, `tverts` and
+  `faces` only.
 
 ## ASCII
 
@@ -78,11 +80,10 @@ what would settle it.
   animation; not probed.
 - **Comment lines inside counted lists** are read as rows (from the list
   parsers' skip rule, MDL-ASCII-003); not probed for vertex lists.
-- **Several `parent NULL` nodes**: each makes itself the root in turn
-  (`MdlNode::InternalParseField` sets the tree's root), so the last one is
-  presumably the root and the others drop out. Not probed.
-- **A `parent` naming a node that does not exist**: `FindMdlNode`'s result is
-  used without a check (0x448bb0); presumably a crash. Not probed.
+- **A `parent` naming a node that exists nowhere**: `FindMdlNode`'s result
+  is used without a check (0x448bb0). A parent left in a dropped tree
+  crashes the compiler (MDL-NODE-003, zspec_root2b), and this is the same
+  path, so presumably it crashes too; not probed on its own.
 - **Node names longer than 32 characters, model and texture names longer
   than their fields**: truncation and collisions not probed.
 

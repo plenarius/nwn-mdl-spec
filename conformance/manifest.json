@@ -605,6 +605,64 @@
     "MDL-NODE-045"
    ],
    "golden": true
+  },
+  {
+   "name": "zspec_dupparent",
+   "isolates": "duplicate node names as parents: a dummy declared twice under two siblings in both orders, and a dummy with a child of its own name; which copy a later child joins, in the geometry and in an animation",
+   "rules": [
+    "MDL-NODE-002"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_dangord",
+   "isolates": "a danglymesh whose faces use its vertices out of order, with a constraint and colour per vertex, and one with a vertex split by UVs: which constraint each compiled vertex gets",
+   "rules": [
+    "MDL-MESH-013"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_root2",
+   "isolates": "two nodes with parent NULL, each with a child: which tree is written",
+   "rules": [
+    "MDL-NODE-003"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_nrmcross",
+   "isolates": "normals from smoothing groups where rounding decides: a triangle drawn from both sides (two coordinate sets), and two faces whose groups share bit 0 but differ above bit 23",
+   "rules": [
+    "MDL-MESH-031",
+    "MDL-MESH-033"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_twolists",
+   "isolates": "a mesh whose verts, tverts and faces lists are each given twice with other values and counts",
+   "rules": [
+    "MDL-ASCII-054"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_twokeys",
+   "isolates": "an animation node with positionkey given twice (2 keys, then 3 others) and orientationkey given twice (the same 2 keys)",
+   "rules": [
+    "MDL-CTRL-037"
+   ],
+   "golden": true
+  },
+  {
+   "name": "zspec_root2b",
+   "isolates": "zspec_root2 plus a node declared after the second root whose parent is under the first root",
+   "rules": [
+    "MDL-NODE-003"
+   ],
+   "golden": false,
+   "pending": "the game's compilemodel crashes on it (the parent lookup finds nothing, MDL-NODE-003): the crash is the result"
   }
  ]
 }

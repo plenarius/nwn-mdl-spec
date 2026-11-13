@@ -432,17 +432,23 @@ def node_paths(nodes):
     """Each node's path from the root: a tuple of (name, k), names
     lower-cased and cut to 31 characters as the game's compiler stores them
     (MDL-BIN-007), k the node's occurrence among its parent's children of
-    that name. A node's parent is the latest node of its parent name before
-    it (in stored depth-first order, or in declaration order, a parent comes
-    before its children). A node whose parent is not found is placed under
-    ('?', 1)."""
+    that name. A node's parent is the node at its `parent_index` when the
+    view has one (a decoded binary, an ASCII read the engine's way, an
+    expected file whose names repeat): with a name used twice, the name does
+    not say which node is meant (MDL-NODE-002). Otherwise it is the latest
+    node of its parent name before it (in stored depth-first order, or in
+    declaration order, a parent comes before its children). A node whose
+    parent is not found is placed under ('?', 1)."""
     latest, count, out = {}, {}, []
     for i, n in enumerate(nodes):
         nm = n['name'].lower()[:31]
         par = n.get('parent')
         par = par.lower()[:31] if par and par.upper() != 'NULL' else None
+        pidx = n.get('parent_index')
         if par is None:
             base = ()
+        elif isinstance(pidx, int) and 0 <= pidx < i:
+            base = out[pidx]
         else:
             pi = latest.get(par)
             base = out[pi] if pi is not None else (('?', 1),)
