@@ -125,8 +125,9 @@ is normative; the rest is in [spec/unknown.md](spec/unknown.md).
 
 ### Versioning and governance
 
-The spec is tagged per engine build, with a changelog of behaviour that
-changed between builds ([CHANGELOG.md](CHANGELOG.md)). A change to
+Releases follow semantic versioning, and each names the engine build it was
+read on; the changelog records behaviour that changed between builds
+([CHANGELOG.md](CHANGELOG.md)). A change to
 normative text needs evidence: a golden, or an engine citation with the
 build. The repository is meant to belong to no single tool, with maintainers
 from several projects.
